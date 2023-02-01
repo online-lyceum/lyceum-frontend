@@ -37,7 +37,7 @@ export default {
     },
     methods: {
         async loadSchools() {
-            const res = await fetch("https://dev.lava-land.ru/api/schools");
+            const res = await fetch("https://lyceumland.ru/api/schools");
             if (res.status === 200) {
                 const json_res = await res.json();
                 this.schools = json_res['schools'];

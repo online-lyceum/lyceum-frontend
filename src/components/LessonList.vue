@@ -36,7 +36,7 @@ export default {
         async showList() {
             let res = {}
             if (this.weekday !== null){
-                res = await axios.get("https://dev.lava-land.ru/api/lessons",
+                res = await axios.get("https://lyceumland.ru/api/lessons",
                     {
                         subgroup_id: this.$store.state.subgroup_id,
                         weekday: this.weekday

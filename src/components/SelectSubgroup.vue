@@ -70,7 +70,7 @@ export default {
                 }
             }
             if (class_id !== "") {
-                const subgroups_res = await fetch("https://dev.lava-land.ru/api/subgroups?class_id=" + class_id);
+                const subgroups_res = await fetch("https://lyceumland.ru/api/subgroups?class_id=" + class_id);
                 if (subgroups_res.status === 200) {
                     const json_subgroup_res = await subgroups_res.json();
                     this.subgroupsForClass = json_subgroup_res['subgroups'];
@@ -95,7 +95,7 @@ export default {
             this.$router.push('/home');
         },
         async loadSchools() {
-            const res = await fetch("https://dev.lava-land.ru/api/schools");
+            const res = await fetch("https://lyceumland.ru/api/schools");
             if (res.status === 200) {
                 const json_res = await res.json();
                 this.schools = json_res['schools'];
