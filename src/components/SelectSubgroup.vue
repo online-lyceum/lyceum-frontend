@@ -2,20 +2,50 @@
     <div class="my-card">
         <form @submit.prevent>
             <div class="input_box">
-                <input class="input" @input="selectClass" type="number" placeholder="10" v-model="class_number">
-                <input class="input" @input="selectClass" type="text" placeholder="Б" v-model="class_letter">
-                <!--                <p class="input">{{ class_number }}</p>-->
-                <!--                <p class="input">{{ class_letter }}</p>-->
+                <input
+                        class="input"
+                        @input="selectClass"
+                        :min="min_class_number"
+                        :max="max_class_number"
+                        type="number"
+                        placeholder=""
+                        v-model="class_number"
+                >
+                <input
+                        class="input"
+                        @input="selectClass"
+                        type="text"
+                        placeholder=""
+                        v-model="class_letter"
+                >
             </div>
-            <select name="select_subgroup" v-model="subgroup_id" v-if="need_to_select_subgroup">
+            <select
+                    name="select_subgroup"
+                    v-model="subgroupID"
+                    v-if="need_to_select_subgroup"
+            >
                 <option disabled value="">Подгруппа</option>
-                <option v-for="subgroup in subgroupsForClass" :key="subgroup.subgroup_id" :value="subgroup.subgroup_id">
+                <option
+                        v-for="subgroup in subgroupsForClass"
+                        :key="subgroup.subgroup_id"
+                        :value="subgroup.subgroup_id"
+                >
                     {{ subgroup.name }}
                 </option>
             </select>
 
         </form>
-        <my-button @click="selectSubgroup" :disabled="subgroup_id === ''" class="select-button">Выбрать</my-button>
+        <my-button
+                @click="selectSubgroup"
+                :disabled="subgroupID === null"
+                class="select-button"
+        >
+            {{
+                subgroupID === null ?
+                  'Выбирите класс и подгруппу' :
+                  'Выбрать'
+            }}
+        </my-button>
     </div>
 </template>
 
@@ -29,79 +59,97 @@ export default {
     },
     data() {
         return {
-            schools: [],
+            max_class_number: 100,
+            min_class_number: 1,
             class_number: "",
             class_letter: "",
-            subgroup_id: "",
+            subgroupID: null,
+            schoolID: this.$route.params.schoolID,
             need_to_select_subgroup: false,
             subgroupsForClass: [],
+            classes: [],
+            subgroups: []
         }
     },
-    props: {
-        school_id: {
-            type: Number,
-            required: true
-        }
-    },
-    computed: {
-        async subgroups() {
-            try {
-                const res = await axios.get("https://lava-land.ru/api/classes?school_id=" + this.school_id);
-                return res.data.subgroups;
-            } catch (e) {
-                alert('Error');
-            }
-            return []
-        }
+    mounted() {
+        this.loadClasses();
+        this.loadSubgroups();
+        this.selectClass();
     },
     methods: {
         async selectClass() {
-            const res = await fetch("https://lava-land.ru/api/classes?school_id=" + this.school_id);
-            let class_id = ""
-            this.subgroup_id = ""
+            let class_id = "";
+            this.subgroupID = null;
             this.need_to_select_subgroup = false;
-            if (res.status === 200) {
-                const json_res = await res.json();
-                const classes = json_res['classes'];
-                for (let i = 0; i < classes.length; i++) {
-                    if ((this.class_number === classes[i]['number']) && (this.class_letter.toUpperCase() === classes[i]['letter'].toUpperCase())) {
-                        class_id = classes[i]['class_id'];
-                    }
-                }
-            }
-            if (class_id !== "") {
-                const subgroups_res = await fetch("https://lyceumland.ru/api/subgroups?class_id=" + class_id);
-                if (subgroups_res.status === 200) {
-                    const json_subgroup_res = await subgroups_res.json();
-                    this.subgroupsForClass = json_subgroup_res['subgroups'];
-                    if (this.subgroupsForClass.length === 1) {
-                        this.subgroup_id = this.subgroupsForClass[0].subgroup_id;
-                        this.need_to_select_subgroup = false;
-                    } else if (this.subgroupsForClass.length > 1) {
-                        this.subgroup_id = "";
-                        this.need_to_select_subgroup = true;
-                    } else {
-                        this.subgroup_id = "";
-                    }
-                } else {
-                    this.subgroup_id = "";
-                    this.subgroupsForClass = [];
-                }
-            }
+            console.log('classes:', this.classes);
 
+            for (let i = 0; i < this.classes.length; i++) {
+                if ((this.class_number === this.classes[i].number) &&
+                    (this.class_letter.toUpperCase() ===
+                        this.classes[i].letter.toUpperCase())) {
+                    class_id = this.classes[i].class_id;
+                }
+            }
+            console.log('class_id:', class_id);
+            if (class_id !== "" && class_id !== undefined) {
+                console.log('subgroups: ', this.subgroups);
+                const flt = (subgroup) => (subgroup.class_id === class_id)
+                this.subgroupsForClass = this.subgroups.filter(flt)
+                if (this.subgroupsForClass.length === 1) {
+                    this.subgroupID = this.subgroupsForClass[0].subgroup_id;
+                    this.need_to_select_subgroup = false;
+                } else if (this.subgroupsForClass.length > 1) {
+                    this.subgroupID = null;
+                    this.need_to_select_subgroup = true;
+                } else {
+                    this.subgroupID = null;
+                }
+            } else {
+                this.subgroupID = null;
+                this.subgroupsForClass = [];
+            }
+        },
+        async loadClasses() {
+            try {
+                const res = await axios.get(
+                    "https://lyceumland.ru/api/classes",
+                    {
+                        params: {school_id: this.schoolID}
+                    }
+                );
+                this.classes = res.data.classes;
+            } catch (e) {
+                alert('Error');
+                this.classes = []
+            }
+            this.max_class_number = 1;
+            this.min_class_number = 100;
+            for (let i = 0; i < this.classes.length; i++){
+                this.max_class_number = Math.max(
+                    this.max_class_number, this.classes[i].number
+                );
+                this.min_class_number = Math.min(
+                    this.min_class_number, this.classes[i].number
+                );
+            }
+        },
+        async loadSubgroups() {
+            try {
+                const res = await axios.get(
+                    "https://lyceumland.ru/api/subgroups",
+                    {params: {school_id: this.schoolID}}
+                );
+                this.subgroups = res.data.subgroups;
+            } catch (e) {
+                alert('Error');
+                this.subgroups = []
+            }
         },
         async selectSubgroup() {
-            this.$store.commit('setSubgroupID', this.subgroup_id);
+            this.$store.commit('setSubgroupID', this.subgroupID);
             this.$router.push('/home');
-        },
-        async loadSchools() {
-            const res = await fetch("https://lyceumland.ru/api/schools");
-            if (res.status === 200) {
-                const json_res = await res.json();
-                this.schools = json_res['schools'];
-            }
         }
-    }
+    },
 }
 </script>
 
@@ -116,7 +164,8 @@ export default {
     /*margin: 50px;*/
     position: center;
     margin: 0 auto;
-    width: 100px;
+    width: 2em;
+    text-align: center;
     font-size: 64px;
     font-weight: 100;
 }

@@ -1,15 +1,18 @@
 <template>
-    <nav>
-        <router-link to="/">Home</router-link>
-        |
-        <router-link to="/about">About</router-link>
-    </nav>
+    <my-header/>
+    <MyButton/>
     <router-view/>
 </template>
 
 <script>
+import MyHeader from "@/components/UI/MyHeader.vue";
+
+import MyButton from "@/components/UI/MyButton.vue";
+
+
 export default {
     name: "App",
+    components: {MyButton, MyHeader},
     beforeMount() {
         this.$store.commit('initialiseVars')
         if (this.$store.state.subgroup_id !== undefined &&
@@ -30,7 +33,6 @@ export default {
 }
 
 body {
-    padding: 12px;
     padding-top: 0;
     margin: 0;
     background-color: #0C3B2E;

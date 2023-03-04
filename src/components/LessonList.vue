@@ -38,7 +38,7 @@ export default {
             if (this.weekday !== null){
                 res = await axios.get("https://lyceumland.ru/api/lessons",
                     {
-                        subgroup_id: this.$store.state.subgroup_id,
+                        subgroupID: this.$store.state.subgroup_id,
                         weekday: this.weekday
                     });
             }
