@@ -2,7 +2,7 @@ FROM ubuntu:22.04 as builder
 WORKDIR /build
 RUN apt-get update && apt-get install -y npm
 RUN npm install -g @vue/cli
-COPY ./app ./ 
+COPY ./src/app ./
 RUN npm init -y
 RUN npm install 
 RUN npm run build
