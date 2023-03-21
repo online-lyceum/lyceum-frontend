@@ -27,9 +27,7 @@ export default {
 .field-btn {
     display: flex;
     flex-direction: column;
-    background-color: white;
     border-radius: 16px;
-    margin: 30px 12px;
     text-align: center;
 }
 .btn:disabled{
