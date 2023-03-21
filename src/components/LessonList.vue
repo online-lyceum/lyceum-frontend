@@ -1,68 +1,69 @@
 <template>
-    <div>
-        <div class="my-card">
-            <h3>{{ weekday_names[weekday] }}</h3>
-            <ul>
-                <li v-for="lesson in lesson_list.filter(l => l.weekday === weekday)" :key="lesson.lesson_id">
-                    <p>
-                        {{ lesson.name }}
-                        {{
-                            lesson.start_time.hour
-                        }}:{{ (lesson.start_time.minute < 10 ? '0' : '') + lesson.start_time.minute }} -
-                        {{
-                            lesson.end_time.hour
-                        }}:{{ (lesson.end_time.minute < 10 ? '0' : '') + lesson.end_time.minute }}
-                    </p>
-                </li>
-            </ul>
-        </div>
-
+  <div>
+    <div class="my-card">
+      <h3>{{ weekday_names[currentWeekday] }}</h3>
+      <ul>
+        <li v-for="lesson in lesson_list" :key="lesson.lesson_id">
+<!--          <p :style="new Date().getHours() >= lesson.start_time.hour &&-->
+<!--          new Date().getHours() <= lesson.end_time.hour &&-->
+<!--          new Date().getMinutes() >= lesson.start_time.minute &&-->
+<!--          new Date().getMinutes() <= lesson.end_time.minute ? '{color: #ccc}' : '{color: #000}'"-->
+<!--          >-->
+          <p>
+            {{ lesson.name }}
+            {{
+              lesson.start_time.hour
+            }}:{{
+              (lesson.start_time.minute < 10 ? '0' : '') + lesson.start_time.minute
+            }} -
+            {{
+              lesson.end_time.hour
+            }}:{{
+              (lesson.end_time.minute < 10 ? '0' : '') + lesson.end_time.minute
+            }}
+          </p>
+        </li>
+      </ul>
     </div>
+
+  </div>
 </template>
 
 <script>
 import axios from "axios";
 
-
 export default {
-    data() {
-        return {
-            lesson_list: [],
-            weekdays: [0, 1, 2, 3, 4, 5, 6],
-            weekday_names: ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"],
-        }
-    },
-    methods: {
-        async showList() {
-            let res = {}
-            if (this.weekday !== null){
-                res = await axios.get("https://lyceumland.ru/api/lessons",
-                    {
-                        subgroupID: this.$store.state.subgroup_id,
-                        weekday: this.weekday
-                    });
-            }
-            if (res.status === 200) {
-                const json_res = await res.json();
-
-                this.lesson_list = json_res.lessons;
-            } else {
-                this.lesson_list = [];
-            }
-            console.log(this.lesson_list);
-        }
-    },
-    props: {
-        weekday: {
-            type: [Number, null],
-            default: null
-        }
-    },
-    mounted() {
-        this.showList();
+  data() {
+    return {
+      lesson_list: [],
+      weekday_names: ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"],
+      currentWeekday: null
     }
+  },
+  methods: {
+    async showList() {
+      await axios.get("https://lyceumland.ru/api/lessons/today",
+          {
+            params: {
+              subgroup_id: this.$store.state.subgroupID
+            }
+          })
+          .then(
+              async (res) => {
+                this.lesson_list = await res.data.lessons
+              })
+      this.lesson_list.length !== 0 ? this.currentWeekday = this.lesson_list[0].weekday : this.currentWeekday = null
+    }
+  },
+  props: {},
+  mounted() {
+    this.showList();
+  }
 }
 </script>
 
-<style>
+<style scoped>
+.my-card {
+  color: #ffffff;
+}
 </style>

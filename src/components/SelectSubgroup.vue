@@ -81,7 +81,6 @@ export default {
             let class_id = "";
             this.subgroupID = null;
             this.need_to_select_subgroup = false;
-            console.log('classes:', this.classes);
 
             for (let i = 0; i < this.classes.length; i++) {
                 if ((this.class_number === this.classes[i].number) &&
@@ -90,9 +89,7 @@ export default {
                     class_id = this.classes[i].class_id;
                 }
             }
-            console.log('class_id:', class_id);
             if (class_id !== "" && class_id !== undefined) {
-                console.log('subgroups: ', this.subgroups);
                 const flt = (subgroup) => (subgroup.class_id === class_id)
                 this.subgroupsForClass = this.subgroups.filter(flt)
                 if (this.subgroupsForClass.length === 1) {

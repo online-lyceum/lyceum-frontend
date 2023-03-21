@@ -7,7 +7,7 @@ export default createStore({
   getters: {
     isLogin(state){
       return state.subgroupID !== null
-    }
+    },
   },
   mutations: {
     initialiseVars(state) {

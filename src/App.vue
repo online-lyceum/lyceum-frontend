@@ -1,6 +1,5 @@
 <template>
     <my-header/>
-    <MyButton/>
     <router-view/>
 </template>
 
