@@ -1,4 +1,4 @@
-<template>
+ <template>
     <my-header/>
     <router-view/>
 </template>
