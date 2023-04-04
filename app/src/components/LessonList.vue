@@ -7,12 +7,9 @@
             </div>
             <ul>
                 <li v-for="lesson in lesson_list" :key="lesson.lesson_id">
-                    <!--          <p :style="new Date().getHours() >= lesson.start_time.hour &&-->
-                    <!--          new Date().getHours() <= lesson.end_time.hour &&-->
-                    <!--          new Date().getMinutes() >= lesson.start_time.minute &&-->
-                    <!--          new Date().getMinutes() <= lesson.end_time.minute ? '{color: #ccc}' : '{color: #000}'"-->
-                    <!--          >-->
-                    <p :class="(checkCurrentTime(start_time.hour, start_time.minute, end_time.hour, end_time.minute)) ? 'realtime-subject' : 'subject'">
+                    <p :class="(checkCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
+                            lesson.end_time.hour, lesson.end_time.minute)) ?
+                            'realtime-subject' : 'subject'">
                         {{ lesson.name }}
                         {{
                         lesson.start_time.hour
@@ -28,26 +25,16 @@
                 </li>
             </ul>
         </div>
-        <div class>
-            <a href="#events">
-                <aside>
-                    <img src="https://s3-alpha-sig.figma.com/img/3d56/7617/598afec0bc99ffb9631493d09615fec4?Expires=1680480000&Signature=AzzsNmkCUfvxydCVtCF6GbM5agRYVeBQl~xDDjAVHJ~B~B3T5HaV2VaC7uylwrFwh7VDuVHtpZH-~GEPAtoWB27fNAKSg9He27m9g3Bsa7U0TlL4hv9SQhiHm9FWylpyVcMDFgvb3rbjaKf-c5cO7yTbon0tzg8qQUTsMs7rREnCxc0m~gMRlx6SypY0xfiXe0Kjg13IiVwGx5nwH6tjPEQGWfaE9S2~vBZ10ydU-Yo7lS25fkOryiV9d8sdBhz6PLHsa06aUPMTKpd8aT4WpKjcx~epAdiYRBmuoozP8QD0vB~-qjl6RgImIICH6J2xiAmfH98Fe5ODD-T0fAYSJQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4" alt="school">
-                    <h3>ТЕКСТ Обычный учебный день</h3>
-                    <p>ТЕКСТ До каникул 21 день</p>
-                    <div class="events">
-                        ССЫЛКА Мероприятия
-                    </div>
-                </aside>
-            </a>
-        </div>
-
+        <MyEvent></MyEvent>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import MyEvent from "@/components/UI/MyEvent.vue";
 
 export default {
+    components: {MyEvent},
     data() {
         return {
             lesson_list: [],
@@ -69,7 +56,6 @@ export default {
                     })
             this.lesson_list.length !== 0 ? this.currentWeekday = this.lesson_list[0].weekday : this.currentWeekday = null
         },
-
         checkCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
             let currentDate = new Date();
             return currentDate.getHours() >= startTimeHours &&
@@ -194,6 +180,10 @@ main {
 
     padding: 16px 14px 5px 14px;
 
+    color: black;
+    border-radius: 16px;
+    background-color: #FFFFFF;
+
     justify-content: space-between;
 }
 
@@ -243,14 +233,4 @@ aside img {
 aside p {
     margin: 12px 0 19px;
 }
-
-.events {
-    padding: 10px;
-
-    color: white;
-    border-radius: 16px;
-    background-color: #6d9773;
-}
-
-
 </style>
