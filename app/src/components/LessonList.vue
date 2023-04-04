@@ -7,11 +7,6 @@
             </div>
             <ul>
                 <li v-for="lesson in lesson_list" :key="lesson.lesson_id">
-                    <!--          <p :style="new Date().getHours() >= lesson.start_time.hour &&-->
-                    <!--          new Date().getHours() <= lesson.end_time.hour &&-->
-                    <!--          new Date().getMinutes() >= lesson.start_time.minute &&-->
-                    <!--          new Date().getMinutes() <= lesson.end_time.minute ? '{color: #ccc}' : '{color: #000}'"-->
-                    <!--          >-->
                     <p :class="(checkCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
                     lesson.end_time.hour, lesson.end_time.minute)) ? 'realtime-subject' : 'subject'">
                         {{ lesson.name }}

@@ -2,7 +2,7 @@
     <div class="events">
         <a>
             <aside>
-                <img src="src/assets/image.png" alt="school">
+<!--                <img src="src/assets/image.png" alt="school">-->
                 <h3>Обычный учебный день</h3>
                 <p>До каникул 21 день</p>
                 <div
