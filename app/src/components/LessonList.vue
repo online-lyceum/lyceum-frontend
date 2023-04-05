@@ -5,24 +5,30 @@
                 <div class="day-of-week" style="color: #000">{{ weekday_names[currentWeekday] }}</div>
                 <a href="#schedule" class="schedule">Расписание</a>
             </div>
-            <ul>
-                <li v-for="lesson in lesson_list" :key="lesson.lesson_id">
-                    <p :class="(checkCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
-                    lesson.end_time.hour, lesson.end_time.minute)) ? 'realtime-subject' : 'subject'">
-                        {{ lesson.name }}
-                        {{
-                        lesson.start_time.hour
-                        }}:{{
-                        (lesson.start_time.minute < 10 ? '0' : '') + lesson.start_time.minute
-                        }} -
-                        {{
-                        lesson.end_time.hour
-                        }}:{{
-                        (lesson.end_time.minute < 10 ? '0' : '') + lesson.end_time.minute
-                        }}
-                    </p>
-                </li>
-            </ul>
+            <main>
+                <ul>
+                    <li
+                            v-for="lesson in lesson_list" :key="lesson.lesson_id"
+                            :class="(checkCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
+                    lesson.end_time.hour, lesson.end_time.minute)) ? 'realtime-subject' : 'subject'"
+                    >
+                        <h3>{{ lesson.name }}</h3>
+                        <div>
+                            <time>{{
+                                lesson.start_time.hour
+                                }}:{{
+                                (lesson.start_time.minute < 10 ? '0' : '') + lesson.start_time.minute
+                                }} -
+                                {{
+                                lesson.end_time.hour
+                                }}:{{
+                                (lesson.end_time.minute < 10 ? '0' : '') + lesson.end_time.minute
+                                }}
+                            </time>
+                        </div>
+                    </li>
+                </ul>
+            </main>
         </div>
         <MyEvent></MyEvent>
     </div>
@@ -210,26 +216,5 @@ main {
     border-bottom: 1px solid #fff;
 
     justify-content: space-between;
-}
-
-/* 	aside */
-
-aside {
-    margin: 32px 14px 58px;
-
-    text-align: center;
-
-    border-radius: 16px;
-    background-color: #fff;
-}
-
-aside img {
-    width: 100%;
-
-    border-radius: 16px;
-}
-
-aside p {
-    margin: 12px 0 19px;
 }
 </style>
