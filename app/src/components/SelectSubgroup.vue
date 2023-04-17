@@ -109,7 +109,7 @@ export default {
     async loadClasses() {
       try {
         const res = await axios.get(
-            "https://lyceumland.ru/api/classes",
+            "https://" + process.env.VUE_APP_TIME_API_URL + "/classes",
             {
               params: {school_id: this.schoolID}
             }
