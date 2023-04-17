@@ -38,14 +38,14 @@ export default {
     },
     methods: {
         async loadSchools() {
-            const res = await fetch("https://" + process.env.VUE_APP_TIME_API_URL + "/schools")
+            const res = await fetch("https://lyceumland.ru/api/schools")
             if (res.status === 200) {
                 const json_res = await res.json()
                 this.schools = json_res['schools'];
             }
         },
         async isAPIworks() {
-            await fetch("https://" + process.env.VUE_APP_TIME_API_URL)
+            await fetch("https://lyceumland.ru/api")
                 .then(null, () => {
                     //Здесь будет заглушка
                     return '1'

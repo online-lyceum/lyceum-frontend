@@ -49,7 +49,7 @@ export default {
     },
     methods: {
         async showList() {
-            await axios.get("https://" + process.env.VUE_APP_TIME_API_URL + "/lessons/nearest_day",
+            await axios.get("https://lyceumland.ru/api/lessons/nearest_day",
                 {
                     params: {
                         subgroup_id: this.$store.state.subgroupID
