@@ -9,15 +9,9 @@ pipeline {
         timestamps()
     }
     stages {
-        stage("Build image") {
+        stage("Build and up") {
             steps {
-                sh 'docker build -t web-app:${JOB_NAME} .'
+                sh 'docker compose up -d --build --remove-orphans'
             }
-        }
-        stage("Run images") {
-            steps {
-                sh 'docker-compose -f ./docker-compose.prod.yml up -d'
-            }
-        }
     }
 }
