@@ -24,8 +24,14 @@ const routes = [
     component: () => import('@/views/SchoolView.vue')
   },
   {
+    path: '/schedule',
+    name: 'schedule',
+    component: () => import('@/views/ScheduleView.vue')
+  },
+  {
     path: '/home',
-    component: HomeView
+    name: 'home',
+    component: () => import('@/views/HomeView.vue')
   }
 ]
 

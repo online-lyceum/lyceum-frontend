@@ -1,10 +1,6 @@
 <template>
     <div>
         <div class="my-card">
-            <div class="upper-block">
-                <div class="day-of-week" style="color: #000">{{ weekday_names[currentWeekday] }}</div>
-                <a href="#schedule" class="schedule">Расписание</a>
-            </div>
             <main>
                 <ul>
                     <li
@@ -30,16 +26,17 @@
                 </ul>
             </main>
         </div>
-        <MyEvent></MyEvent>
     </div>
 </template>
 
 <script>
 import axios from "axios";
 import MyEvent from "@/components/UI/MyEvent.vue";
+import MyButton from "@/components/UI/MyButton.vue";
+import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
 
 export default {
-    components: {MyEvent},
+    components: {MyUpperBlock, MyButton, MyEvent},
     data() {
         return {
             lesson_list: [],
@@ -49,7 +46,7 @@ export default {
     },
     methods: {
         async showList() {
-            await axios.get("https://lyceumland.ru/api/lessons/nearest_day",
+            await axios.get(`${this.$store.state.TIME_API}/nearest_day`,
                 {
                     params: {
                         subgroup_id: this.$store.state.subgroupID
@@ -59,14 +56,15 @@ export default {
                     async (res) => {
                         this.lesson_list = await res.data.lessons
                     })
-            this.lesson_list.length !== 0 ? this.currentWeekday = this.lesson_list[0].weekday : this.currentWeekday = null
         },
+        //TODO: make this fun work
         checkCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
             let currentDate = new Date();
-            return currentDate.getHours() >= startTimeHours &&
+            let res =  currentDate.getHours() >= startTimeHours &&
                 currentDate.getHours() <= endTimeHours &&
                 currentDate.getMinutes() >= startTimeMinutes &&
-                currentDate.getMinutes() <= endTimeMinutes
+                currentDate.getMinutes() <= endTimeMinutes;
+            return res;
         },
     },
     props: {},
@@ -138,7 +136,7 @@ header {
 
 .schedule {
     width: 50%;
-    padding: 10px 10px;
+    padding: 0 10px;
 
     text-align: center;
 

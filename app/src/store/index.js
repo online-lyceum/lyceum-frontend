@@ -2,7 +2,8 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    subgroupID: null
+    subgroupID: null,
+    TIME_API: process.env.VUE_APP_TIME_API_URL
   },
   getters: {
     isLogin(state){
