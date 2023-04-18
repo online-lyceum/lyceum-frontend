@@ -12,5 +12,4 @@ RUN npm run build
 FROM runner
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
-CMD npx http-server dist -gb --log-ip --port 80
-
+CMD npx http-server dist --proxy https://${VUE_APP_TIME_API_URL} -gb --log-ip --port 80
