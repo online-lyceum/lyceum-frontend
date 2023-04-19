@@ -87,8 +87,11 @@ export default {
     },
     methods: {
         async getClassNumsLetters() {
-            // TODO: change school_id
-            const res = await fetch(`${this.$store.state.TIME_API}/classes?school_id=1`)
+            let res = await fetch(`${this.$store.state.TIME_API}/subgroups/${this.$store.state.subgroupID}`)
+            let classID = (await res.json()).class_id
+            res = await fetch(`${this.$store.state.TIME_API}/classes/${classID}`)
+            let schoolID = (await res.json()).school_id
+            res = await fetch(`${this.$store.state.TIME_API}/classes?school_id=${schoolID}`)
             const jsonRes = await res.json()
             for (let i = 0; i < jsonRes.classes.length; i++) {
                 this.classNums.add(jsonRes.classes[i].number)

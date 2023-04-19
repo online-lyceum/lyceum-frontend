@@ -1,33 +1,26 @@
 <template>
     <div>
-        <button
-                class="btn"
-                @click="$router.back()"
-        >
-            Назад
-        </button>
-
         <div class="upper-block">
-<!--            TODO: window to choose class-->
-            <div class="current-class" style="color: #000">10 B</div>
+            <!--            TODO: window to choose class-->
+            <div class="current-class" style="color: #000">Class</div>
             <button
                     class="other-class"
-                    @click="$router.push('/about')"
             >
                 Другие классы
             </button>
         </div>
         <div class="choose-day">
-            <button @click="this.chosenDay = 0; showList()">Пн</button>
-            <button @click="this.chosenDay = 1; showList()">Вт</button>
-            <button @click="this.chosenDay = 2; showList()">Ср</button>
-            <button @click="this.chosenDay = 3; showList()">Чт</button>
-            <button @click="this.chosenDay = 4; showList()">Пт</button>
-            <button @click="this.chosenDay = 5; showList()">Сб</button>
+            <button class="btnDay" @click="this.chosenDay = 0; showList()">Пн</button>
+            <button class="btnDay" @click="this.chosenDay = 1; showList()">Вт</button>
+            <button class="btnDay" @click="this.chosenDay = 2; showList()">Ср</button>
+            <button class="btnDay" @click="this.chosenDay = 3; showList()">Чт</button>
+            <button class="btnDay" @click="this.chosenDay = 4; showList()">Пт</button>
+            <button class="btnDay" @click="this.chosenDay = 5; showList()">Сб</button>
         </div>
-        <div>
+        <main>
             <ul style="margin-top: 20px">
-                <li v-for="lesson in lesson_list" :key="lesson.lesson_id">
+                <li v-for="lesson in lesson_list" :key="lesson.lesson_id"
+                    class="subject">
                     <h3>{{ lesson.name }}</h3>
                     <div>
                         <time>{{
@@ -44,10 +37,13 @@
                     </div>
                 </li>
             </ul>
-
-
-<!--            <lesson-list style="margin-top: 20px"></lesson-list>-->
-        </div>
+        </main>
+        <button
+                class="btn"
+                @click="$router.back()"
+        >
+            Назад
+        </button>
     </div>
 </template>
 
@@ -61,18 +57,18 @@ export default {
     data() {
         return {
             chosenDay: null,
-            lesson_list: []
+            lesson_list: [],
+            weekday_names: ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
         }
     },
     methods: {
-        getWeekDay(){
+        getWeekDay() {
             let a = new Date()
             this.chosenDay = a.getDay()
 
         },
         async showList() {
-            console.log(`${this.$store.state.TIME_API}/lessons?weekday=${this.chosenDay}`)
-            await axios.get(`${this.$store.state.TIME_API}/lessons?subgroup_id=15&weekday=${this.chosenDay}`,
+            await axios.get(`${this.$store.state.TIME_API}/lessons?subgroup_id=15&weekday=${this.chosenDay - 1}`,
                 {
                     params: {
                         subgroup_id: this.$store.state.subgroupID
@@ -105,10 +101,38 @@ export default {
     box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 }
 
+.btnDay {
+    margin: 10px;
+    width: 50%;
+    padding: 10px 10px;
+
+    text-align: center;
+
+    color: #fff;
+    border-radius: 16px;
+    background-color: #6d9773;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+}
+
+.btnDay:focus {
+    background-color: #405b44;
+}
+
+.choose-day {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    margin: 0 0 20px 0;
+    text-align: center;
+
+    border-radius: 16px;
+    background-color: white;
+}
+
 .upper-block {
     display: flex;
 
-    margin: 0 12px 32px;
+    margin: 20px 12px 20px;
 
     border-radius: 16px;
     background-color: #fff;
@@ -139,15 +163,88 @@ export default {
     box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 }
 
-.choose-day {
-    width: 50%;
-    padding: 10px 0;
-    display: flex;
-    margin: auto;
+
+/* Global */
+
+body {
+    font-family: sans-serif;
+
+    margin: 0;
+
+    background-color: #0c3b2e;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+/* Main Page */
+/* header */
+
+header {
+    font-size: 16px;
+
+    height: 50px;
+    margin: 0 12px 30px;
+
     text-align: center;
 
-    border-radius: 16px;
-    background-color: white;
+    border-radius: 0 0 16px 16px;
+    background-color: #fff;
 }
+
+/* Content */
+/* main */
+
+h3 {
+    font-size: 20px;
+    font-weight: normal;
+
+    margin: 0;
+}
+
+time {
+    font-size: 19px;
+}
+
+h2 {
+    font-size: 16px;
+    font-weight: normal;
+
+    margin: 0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+
+    height: auto;
+    margin: 0 12px;
+
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+}
+
+.subject {
+    display: flex;
+
+    padding: 16px 14px 5px 14px;
+
+    color: black;
+    border-radius: 16px;
+    background-color: #FFFFFF;
+
+    justify-content: space-between;
+}
+
+/*.description-subject {*/
+/*    display: flex;*/
+
+/*    border-bottom: 1px solid #fff;*/
+
+/*    justify-content: space-between;*/
+/*}*/
 
 </style>

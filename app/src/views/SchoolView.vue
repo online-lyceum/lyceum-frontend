@@ -1,9 +1,9 @@
 <template>
-    <div class="buttons_store">
-        <my-button class="button" @click="$router.back()">Назад</my-button>
-    </div>
-    <div class="home">
+    <div class="home" style="margin-top: 20px">
         <select-subgroup :school_id="$route.params.school_id"/>
+    </div>
+    <div class="buttons_store">
+        <my-button @click="$router.back()">Назад</my-button>
     </div>
 </template>
 

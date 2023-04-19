@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="my-card">
+        <div>
             <main>
                 <ul>
                     <li
@@ -84,10 +84,6 @@ export default {
 </script>
 
 <style scoped>
-.my-card {
-    color: #ffffff;
-}
-
 /* Global */
 
 body {
@@ -119,42 +115,6 @@ header {
 }
 
 /* Content */
-/* upper-block */
-
-.upper-block {
-    display: flex;
-
-    margin: 0 12px 32px;
-
-    border-radius: 16px;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-
-    justify-content: space-between;
-}
-
-.day-of-week {
-    width: 50%;
-    padding: 10px 0;
-
-    text-align: center;
-
-    border-radius: 16px;
-    background-color: white;
-}
-
-.schedule {
-    width: 50%;
-    padding: 0 10px;
-
-    text-align: center;
-
-    color: #fff;
-    border-radius: 16px;
-    background-color: #6d9773;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-}
-
 /* main */
 
 h3 {
@@ -220,11 +180,11 @@ main {
     color: #ffc936;
 }
 
-.description-subject {
-    display: flex;
+/*.description-subject {*/
+/*    display: flex;*/
 
-    border-bottom: 1px solid #fff;
+/*    border-bottom: 1px solid #fff;*/
 
-    justify-content: space-between;
-}
+/*    justify-content: space-between;*/
+/*}*/
 </style>
