@@ -44,15 +44,13 @@ export default {
                 this.schools = json_res['schools'];
             }
         },
-        async isAPIworks() {
-            await fetch(`${this.$store.state.TIME_API}`)
-                .then(null, () => {
-                    //Здесь будет заглушка
-                    return '1'
-                })
-        },
-        selectSchool(event) {
-        }
+        // async isAPIworks() {
+        //     await fetch(`${this.$store.state.TIME_API}`)
+        //         .then(null, () => {
+        //             //Здесь будет заглушка
+        //             return '1'
+        //         })
+        // },
     }
 
 }

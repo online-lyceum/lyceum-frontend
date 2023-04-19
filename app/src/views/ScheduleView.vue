@@ -6,7 +6,6 @@
 
 <script>
 import MyButton from "@/App.vue";
-import LessonList from "@/components/LessonList.vue";
 import FullSchedule from "@/components/FullSchedule.vue";
 
 export default {

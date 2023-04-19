@@ -59,7 +59,6 @@
 <script>
 import MyButton from "@/components/UI/MyButton.vue";
 import axios from "axios";
-import router from "@/router";
 
 export default {
     components: {
