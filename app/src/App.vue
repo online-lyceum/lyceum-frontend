@@ -15,9 +15,9 @@ export default {
     beforeMount() {
         document.title = "Лицей в Цифре"
         this.$store.commit('initialiseVars')
-        if (this.$store.state.subgroup_id !== undefined &&
-            this.$store.state.subgroup_id !== "" &&
-            this.$store.state.subgroup_id !== null) {
+        if (this.$store.state.subgroupID !== undefined &&
+            this.$store.state.subgroupID !== "" &&
+            this.$store.state.subgroupID !== null) {
             this.$router.push('/home')
         }
     }
