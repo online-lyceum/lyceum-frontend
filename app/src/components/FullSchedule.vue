@@ -9,8 +9,7 @@
 
         <div class="upper-block">
 <!--            TODO: window to choose class-->
-            <div class="current-class" style="color: #000">1            console.log(this.class_id)
-0 B</div>
+            <div class="current-class" style="color: #000">10 B</div>
             <button
                     class="other-class"
                     @click="$router.push('/about')"
@@ -28,7 +27,7 @@
         </div>
         <div>
             <ul style="margin-top: 20px">
-                <li v-for="lesson in lesson_list" :key="lesson.lesson_id" \>
+                <li v-for="lesson in lesson_list" :key="lesson.lesson_id">
                     <h3>{{ lesson.name }}</h3>
                     <div>
                         <time>{{
@@ -66,8 +65,14 @@ export default {
         }
     },
     methods: {
+        getWeekDay(){
+            let a = new Date()
+            this.chosenDay = a.getDay()
+
+        },
         async showList() {
-            await axios.get(`${this.$store.state.TIME_API}/lessons?weekday=${this.chosenDay}`,
+            console.log(`${this.$store.state.TIME_API}/lessons?weekday=${this.chosenDay}`)
+            await axios.get(`${this.$store.state.TIME_API}/lessons?subgroup_id=15&weekday=${this.chosenDay}`,
                 {
                     params: {
                         subgroup_id: this.$store.state.subgroupID
@@ -80,6 +85,7 @@ export default {
         },
     },
     mounted() {
+        this.getWeekDay()
         this.showList()
     }
 }

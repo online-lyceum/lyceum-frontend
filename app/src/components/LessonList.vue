@@ -46,7 +46,7 @@ export default {
     },
     methods: {
         async showList() {
-            await axios.get("https://dev.lyceumland.ru/api/lessons/nearest_day",
+            await axios.get(`${this.$store.state.TIME_API}/lessons/nearest_day`,
                 {
                     params: {
                         subgroup_id: this.$store.state.subgroupID
@@ -62,14 +62,17 @@ export default {
         //TODO: make this fun work
         isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
             let currentDate = new Date()
+            console.log(startTimeHours)
+            console.log(endTimeHours)
+            console.log(startTimeMinutes)
+            console.log(endTimeMinutes+60)
             let res = currentDate.getHours() >= startTimeHours &&
                 currentDate.getHours() <= endTimeHours &&
                 currentDate.getMinutes() >= startTimeMinutes &&
-                currentDate.getMinutes() <= endTimeMinutes
+                currentDate.getMinutes() <= endTimeMinutes+60
             console.log(res)
             console.log((res) ? "realtime-subject" : "subject")
-            console.log((res) ? "subject" : "realtime-subject")
-            return (res) ? "subject" : "realtime-subject"
+            return (res) ? "realtime-subject" : "subject"
         },
     },
     props: {},
