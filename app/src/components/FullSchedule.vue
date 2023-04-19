@@ -2,14 +2,15 @@
     <div>
         <button
                 class="btn"
-                @click="check()"
+                @click="$router.back()"
         >
             Назад
         </button>
 
         <div class="upper-block">
 <!--            TODO: window to choose class-->
-            <div class="current-class" style="color: #000">10 B</div>
+            <div class="current-class" style="color: #000">1            console.log(this.class_id)
+0 B</div>
             <button
                     class="other-class"
                     @click="$router.push('/about')"
@@ -46,7 +47,7 @@
             </ul>
 
 
-            <lesson-list style="margin-top: 20px"></lesson-list>
+<!--            <lesson-list style="margin-top: 20px"></lesson-list>-->
         </div>
     </div>
 </template>
@@ -66,7 +67,7 @@ export default {
     },
     methods: {
         async showList() {
-            await axios.get(`https://dev.lyceumland.ru/api/lessons?weekday=${this.chosenDay}`,
+            await axios.get(`${this.$store.state.TIME_API}/lessons?weekday=${this.chosenDay}`,
                 {
                     params: {
                         subgroup_id: this.$store.state.subgroupID

@@ -17,10 +17,10 @@ export default createStore({
       }
     },
     setSubgroupID(state, subgroup_id){
-      state.subgroupID = subgroup_id;
+      state.subgroupID = subgroup_id
     },
     logout(state){
-      state.subgroupID = null;
+      state.subgroupID = null
     }
   },
   actions: {

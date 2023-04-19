@@ -4,9 +4,9 @@
 </template>
 
 <script>
-import MyHeader from "@/components/UI/MyHeader.vue";
+import MyHeader from "@/components/UI/MyHeader.vue"
 
-import MyButton from "@/components/UI/MyButton.vue";
+import MyButton from "@/components/UI/MyButton.vue"
 
 
 export default {

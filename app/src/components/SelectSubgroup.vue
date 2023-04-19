@@ -5,25 +5,23 @@
                 <div class="blocks">
                     <button @click="decreaseClassNum(); selectClass();">ТУДА</button>
                     <input
-                        class="input"
-                        @input="selectClass"
-                        :min="min_class_number"
-                        :max="max_class_number"
-                        type="number"
-                        v-model="class_number"
+                            class="input"
+                            @input="selectClass"
+                            type="number"
+                            v-model="class_number"
                     >
                     <button @click="increaseClassNum(); selectClass();">СЮДА</button>
                 </div>
 
                 <div class="blocks">
-                    <button @click="this.first_letter_index--; selectClass();">ТУДА</button>
+                    <button @click="decreaseClassLetter(); selectClass();">ТУДА</button>
                     <input
-                        class="input"
-                        @input="selectClass"
-                        type="text"
-                        v-model="class_letter"
+                            class="input"
+                            @input="selectClass"
+                            type="text"
+                            v-model="class_letter"
                     >
-                    <button @click="this.first_letter_index++; selectClass();">СЮДА</button>
+                    <button @click="increaseClassLetter(); selectClass();">СЮДА</button>
                 </div>
 
             </div>
@@ -46,7 +44,7 @@
 
         </form>
         <my-button
-                @click="selectSubgroup"
+                @click="selectSubgroup()"
                 class="select-button"
         >
             {{
@@ -61,6 +59,7 @@
 <script>
 import MyButton from "@/components/UI/MyButton.vue";
 import axios from "axios";
+import router from "@/router";
 
 export default {
     components: {
@@ -68,12 +67,11 @@ export default {
     },
     data() {
         return {
-            class_number: this.allowed_nums[this.first_num_index],
-            allowed_nums: [8, 9, 10, 11],
-            allowed_letters: "АБВ",
-            first_letter_index: 0,
-            first_num_index: 0,
-            class_letter: this.allowed_letters[this.first_letter_index],
+            classNums: new Set(),
+            classLetters: new Set(),
+            letterIndex: 0,
+            class_number: "",
+            class_letter: "",
             subgroupID: null,
             schoolID: this.$route.params.schoolID,
             need_to_select_subgroup: false,
@@ -86,24 +84,43 @@ export default {
     mounted() {
         this.loadClasses();
         this.loadSubgroups();
-        this.selectClass();
+        this.getClassNumsLetters()
     },
     methods: {
-        check() {
-            console.log(11)
+        async getClassNumsLetters() {
+            // TODO: change school_id
+            const res = await fetch(`${this.$store.state.TIME_API}/classes?school_id=1`)
+            const jsonRes = await res.json()
+            for (let i = 0; i < jsonRes.classes.length; i++) {
+                this.classNums.add(jsonRes.classes[i].number)
+                this.classLetters.add(jsonRes.classes[i].letter)
+            }
+            this.classNums = [...this.classNums]
+            this.classLetters = [...this.classLetters]
+            this.class_number = this.classNums[0]
+            this.class_letter = this.classLetters[this.letterIndex]
+            await this.selectClass()
         },
         increaseClassNum() {
-            if (this.class_number !== this.max_class_number) {
-                if (this.class_number === '') {
-                    this.class_number = this.min_class_number
-                } else {
-                    this.class_number++
-                }
+            if (this.class_number < this.classNums[this.classNums.length-1]){
+                this.class_number++
             }
         },
         decreaseClassNum() {
-            if (this.class_number !== this.min_class_number && this.class_number !== '') {
+            if (this.class_number > this.classNums[0]){
                 this.class_number--
+            }
+        },
+        increaseClassLetter() {
+            if (this.letterIndex < this.classLetters.length-1){
+                this.letterIndex++
+                this.class_letter = this.classLetters[this.letterIndex]
+            }
+        },
+        decreaseClassLetter() {
+            if (this.letterIndex > 0){
+                this.letterIndex--
+                this.class_letter = this.classLetters[this.letterIndex]
             }
         },
 
@@ -116,7 +133,7 @@ export default {
                 if ((this.class_number === this.classes[i].number) &&
                     (this.class_letter.toUpperCase() ===
                         this.classes[i].letter.toUpperCase())) {
-                    class_id = this.classes[i].class_id;
+                    class_id = this.classes[i].class_id
                 }
             }
             if (class_id !== "" && class_id !== undefined) {
@@ -135,6 +152,7 @@ export default {
                 this.subgroupID = null;
                 this.subgroupsForClass = [];
             }
+            console.log(this.classes.class_id)
         },
         async loadClasses() {
             try {
@@ -184,12 +202,13 @@ export default {
 
 <style scoped>
 
-.blocks{
+.blocks {
     display: inline-block;
-    height:100px;
+    height: 100px;
     width: 20%;
     margin: 50px 50px 0;
 }
+
 .input_box {
     flex-direction: row;
     margin: 0 25px;

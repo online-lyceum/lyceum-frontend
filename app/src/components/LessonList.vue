@@ -46,7 +46,7 @@ export default {
     },
     methods: {
         async showList() {
-            await axios.get(`${this.$store.state.TIME_API}/nearest_day`,
+            await axios.get("https://dev.lyceumland.ru/api/lessons/nearest_day",
                 {
                     params: {
                         subgroup_id: this.$store.state.subgroupID
