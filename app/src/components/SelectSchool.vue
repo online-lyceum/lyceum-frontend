@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p-w-a-prompt></p-w-a-prompt>
         <div class="title_box">
             <h1 class="title">Привет!</h1>
         </div>
@@ -22,10 +23,12 @@
 
 <script>
 import MyButton from "@/components/UI/MyButton.vue";
+import PWAPrompt from "@/components/PWAPrompt.vue";
 
 export default {
     components: {
-        MyButton
+        MyButton,
+        PWAPrompt
     },
     data() {
         return {

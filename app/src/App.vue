@@ -13,6 +13,7 @@ export default {
     name: "App",
     components: {MyButton, MyHeader},
     beforeMount() {
+        document.title = "Лицей в Цифре"
         this.$store.commit('initialiseVars')
         if (this.$store.state.subgroup_id !== undefined &&
             this.$store.state.subgroup_id !== "" &&
