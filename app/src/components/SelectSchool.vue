@@ -33,7 +33,6 @@ export default {
         }
     },
     mounted() {
-        this.isAPIworks()
         this.loadSchools()
     },
     methods: {
