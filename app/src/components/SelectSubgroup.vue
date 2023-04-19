@@ -152,7 +152,6 @@ export default {
                 this.subgroupID = null;
                 this.subgroupsForClass = [];
             }
-            console.log(this.classes.class_id)
         },
         async loadClasses() {
             try {

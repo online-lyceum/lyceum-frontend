@@ -5,8 +5,8 @@
                 <ul>
                     <li
                             v-for="lesson in lesson_list" :key="lesson.lesson_id"
-                            :class="(checkCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
-                    lesson.end_time.hour, lesson.end_time.minute)) ? 'realtime-subject' : 'subject'"
+                            :class="isCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
+                    lesson.end_time.hour, lesson.end_time.minute)"
                     >
                         <h3>{{ lesson.name }}</h3>
                         <div>
@@ -56,20 +56,26 @@ export default {
                     async (res) => {
                         this.lesson_list = await res.data.lessons
                     })
+
+
         },
         //TODO: make this fun work
-        checkCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
-            let currentDate = new Date();
-            let res =  currentDate.getHours() >= startTimeHours &&
+        isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+            let currentDate = new Date()
+            let res = currentDate.getHours() >= startTimeHours &&
                 currentDate.getHours() <= endTimeHours &&
                 currentDate.getMinutes() >= startTimeMinutes &&
-                currentDate.getMinutes() <= endTimeMinutes;
-            return res;
+                currentDate.getMinutes() <= endTimeMinutes
+            console.log(res)
+            console.log((res) ? "realtime-subject" : "subject")
+            console.log((res) ? "subject" : "realtime-subject")
+            return (res) ? "subject" : "realtime-subject"
         },
     },
     props: {},
     mounted() {
         this.showList()
+
     }
 }
 </script>
@@ -191,7 +197,10 @@ main {
 }
 
 .realtime-subject {
-    padding: 16px 14px 20px 14px;
+
+    display: flex;
+
+    padding: 16px 14px 5px 14px;
 
     color: white;
     border-radius: 16px;
@@ -200,9 +209,9 @@ main {
     justify-content: space-between;
 }
 
-.realtime-subject h3 {
-    color: #ffc936;
-}
+/*.realtime-subject h3 {*/
+/*    color: #ffc936;*/
+/*}*/
 
 .realtime-subject time span {
     color: #ffc936;
