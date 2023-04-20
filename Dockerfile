@@ -1,5 +1,5 @@
-FROM node:slim AS runner
-RUN npm install -g http-server
+FROM nginx AS runner
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 
 FROM node:lts-alpine AS builder
@@ -12,4 +12,3 @@ RUN npm run build
 FROM runner
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
-CMD npx http-server dist --proxy https://${VUE_APP_TIME_API_URL} -gb --log-ip --port 80

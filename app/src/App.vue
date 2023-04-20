@@ -4,20 +4,23 @@
 </template>
 
 <script>
-import MyHeader from "@/components/UI/MyHeader.vue";
+import MyHeader from "@/components/UI/MyHeader.vue"
 
-import MyButton from "@/components/UI/MyButton.vue";
+import MyButton from "@/components/UI/MyButton.vue"
 
 
 export default {
     name: "App",
     components: {MyButton, MyHeader},
     beforeMount() {
+        document.title = "Лицей в Цифре"
         this.$store.commit('initialiseVars')
-        if (this.$store.state.subgroup_id !== undefined &&
-            this.$store.state.subgroup_id !== "" &&
-            this.$store.state.subgroup_id !== null) {
+        if (this.$store.state.subgroupID !== undefined &&
+            this.$store.state.subgroupID !== "" &&
+            this.$store.state.subgroupID !== null) {
             this.$router.push('/home')
+        } else {
+            this.$router.push('/')
         }
     }
 }

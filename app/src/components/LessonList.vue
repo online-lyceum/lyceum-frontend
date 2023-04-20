@@ -1,16 +1,12 @@
 <template>
     <div>
-        <div class="my-card">
-            <div class="upper-block">
-                <div class="day-of-week" style="color: #000">{{ weekday_names[currentWeekday] }}</div>
-                <a href="#schedule" class="schedule">Расписание</a>
-            </div>
+        <div>
             <main>
                 <ul>
                     <li
                             v-for="lesson in lesson_list" :key="lesson.lesson_id"
-                            :class="(checkCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
-                    lesson.end_time.hour, lesson.end_time.minute)) ? 'realtime-subject' : 'subject'"
+                            :class="isCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
+                    lesson.end_time.hour, lesson.end_time.minute)"
                     >
                         <h3>{{ lesson.name }}</h3>
                         <div>
@@ -30,16 +26,17 @@
                 </ul>
             </main>
         </div>
-        <MyEvent></MyEvent>
     </div>
 </template>
 
 <script>
 import axios from "axios";
 import MyEvent from "@/components/UI/MyEvent.vue";
+import MyButton from "@/components/UI/MyButton.vue";
+import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
 
 export default {
-    components: {MyEvent},
+    components: {MyUpperBlock, MyButton, MyEvent},
     data() {
         return {
             lesson_list: [],
@@ -49,7 +46,7 @@ export default {
     },
     methods: {
         async showList() {
-            await axios.get("https://lyceumland.ru/api/lessons/nearest_day",
+            await axios.get(`${this.$store.state.TIME_API}/lessons/nearest_day`,
                 {
                     params: {
                         subgroup_id: this.$store.state.subgroupID
@@ -59,28 +56,38 @@ export default {
                     async (res) => {
                         this.lesson_list = await res.data.lessons
                     })
-            this.lesson_list.length !== 0 ? this.currentWeekday = this.lesson_list[0].weekday : this.currentWeekday = null
+
+
         },
-        checkCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
-            let currentDate = new Date();
-            return currentDate.getHours() >= startTimeHours &&
-                currentDate.getHours() <= endTimeHours &&
-                currentDate.getMinutes() >= startTimeMinutes &&
-                currentDate.getMinutes() <= endTimeMinutes
+        //TODO: make this fun work
+        isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+            let currentDate = new Date()
+            let hours = currentDate.getHours()
+            let minutes = currentDate.getMinutes()
+            let dateToday = new Date(`1995-12-17T03:${hours}:${minutes}`)
+            let lessonStarts = new Date(`1995-12-17T03:${startTimeHours}:${startTimeMinutes}`)
+            let lessonEnds = new Date(`1995-12-17T03:${endTimeHours}:${endTimeMinutes}`)
+            console.log(dateToday)
+            console.log(lessonStarts)
+            console.log(lessonEnds)
+            // let res = currentDate.getHours() >= startTimeHours &&
+            //     currentDate.getHours() <= endTimeHours &&
+            //     currentDate.getMinutes() >= startTimeMinutes &&
+            //     currentDate.getMinutes() <= endTimeMinutes+60
+            let res = (dateToday <= lessonStarts && dateToday >= lessonEnds)
+            console.log((res) ? "realtime-subject" : "subject")
+            return (res) ? "realtime-subject" : "subject"
         },
     },
     props: {},
     mounted() {
         this.showList()
+
     }
 }
 </script>
 
 <style scoped>
-.my-card {
-    color: #ffffff;
-}
-
 /* Global */
 
 body {
@@ -112,42 +119,6 @@ header {
 }
 
 /* Content */
-/* upper-block */
-
-.upper-block {
-    display: flex;
-
-    margin: 0 12px 32px;
-
-    border-radius: 16px;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-
-    justify-content: space-between;
-}
-
-.day-of-week {
-    width: 50%;
-    padding: 10px 0;
-
-    text-align: center;
-
-    border-radius: 16px;
-    background-color: white;
-}
-
-.schedule {
-    width: 50%;
-    padding: 10px 10px;
-
-    text-align: center;
-
-    color: #fff;
-    border-radius: 16px;
-    background-color: #6d9773;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-}
-
 /* main */
 
 h3 {
@@ -193,7 +164,10 @@ main {
 }
 
 .realtime-subject {
-    padding: 16px 14px 20px 14px;
+
+    display: flex;
+
+    padding: 16px 14px 5px 14px;
 
     color: white;
     border-radius: 16px;
@@ -202,19 +176,19 @@ main {
     justify-content: space-between;
 }
 
-.realtime-subject h3 {
-    color: #ffc936;
-}
+/*.realtime-subject h3 {*/
+/*    color: #ffc936;*/
+/*}*/
 
 .realtime-subject time span {
     color: #ffc936;
 }
 
-.description-subject {
-    display: flex;
+/*.description-subject {*/
+/*    display: flex;*/
 
-    border-bottom: 1px solid #fff;
+/*    border-bottom: 1px solid #fff;*/
 
-    justify-content: space-between;
-}
+/*    justify-content: space-between;*/
+/*}*/
 </style>

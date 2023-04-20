@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p-w-a-prompt></p-w-a-prompt>
         <div class="title_box">
             <h1 class="title">Привет!</h1>
         </div>
@@ -22,10 +23,12 @@
 
 <script>
 import MyButton from "@/components/UI/MyButton.vue";
+import PWAPrompt from "@/components/PWAPrompt.vue";
 
 export default {
     components: {
-        MyButton
+        MyButton,
+        PWAPrompt
     },
     data() {
         return {
@@ -33,26 +36,23 @@ export default {
         }
     },
     mounted() {
-        this.isAPIworks()
         this.loadSchools()
     },
     methods: {
         async loadSchools() {
-            const res = await fetch("https://lyceumland.ru/api/schools")
+            const res = await fetch(`${this.$store.state.TIME_API}/schools`)
             if (res.status === 200) {
                 const json_res = await res.json()
                 this.schools = json_res['schools'];
             }
         },
-        async isAPIworks() {
-            await fetch("https://lyceumland.ru/api")
-                .then(null, () => {
-                    //Здесь будет заглушка
-                    return '1'
-                })
-        },
-        selectSchool(event) {
-        }
+        // async isAPIworks() {
+        //     await fetch(`${this.$store.state.TIME_API}`)
+        //         .then(null, () => {
+        //             //Здесь будет заглушка
+        //             return '1'
+        //         })
+        // },
     }
 
 }
