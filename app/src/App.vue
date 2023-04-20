@@ -19,6 +19,8 @@ export default {
             this.$store.state.subgroupID !== "" &&
             this.$store.state.subgroupID !== null) {
             this.$router.push('/home')
+        } else {
+            this.$router.push('/')
         }
     }
 }
