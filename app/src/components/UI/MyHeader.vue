@@ -8,12 +8,12 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title">Лицей в цифре</h3>
-                        <a href="#close" title="Close" class="close">×</a>
+                        <a href="#" title="Close" class="close">×</a>
                     </div>
                     <div class="modal-body">
-                        <a class="links" @click="$router.push('/home')" href="#close">Главная</a><br><br><br>
-                        <a class="links" @click="$router.push('/schedule')" href="#close">Расписание</a><br><br><br>
-                        <a class="links" @click="$router.push('/')" href="#close">Сменить школу и класс</a>
+                        <a class="links" @click="$router.push('/home')" href="#">Главная</a><br><br><br>
+                        <a class="links" @click="$router.push('/schedule')" href="#">Расписание</a><br><br><br>
+                        <a class="links" @click="$store.commit('logout'); $router.push('/')" href="#">Сменить школу и класс</a>
                     </div>
                 </div>
             </div>
