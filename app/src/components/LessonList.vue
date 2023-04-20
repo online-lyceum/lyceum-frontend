@@ -62,15 +62,19 @@ export default {
         //TODO: make this fun work
         isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
             let currentDate = new Date()
-            console.log(startTimeHours)
-            console.log(endTimeHours)
-            console.log(startTimeMinutes)
-            console.log(endTimeMinutes+60)
-            let res = currentDate.getHours() >= startTimeHours &&
-                currentDate.getHours() <= endTimeHours &&
-                currentDate.getMinutes() >= startTimeMinutes &&
-                currentDate.getMinutes() <= endTimeMinutes+60
-            console.log(res)
+            let hours = currentDate.getHours()
+            let minutes = currentDate.getMinutes()
+            let dateToday = new Date(`1995-12-17T03:${hours}:${minutes}`)
+            let lessonStarts = new Date(`1995-12-17T03:${startTimeHours}:${startTimeMinutes}`)
+            let lessonEnds = new Date(`1995-12-17T03:${endTimeHours}:${endTimeMinutes}`)
+            console.log(dateToday)
+            console.log(lessonStarts)
+            console.log(lessonEnds)
+            // let res = currentDate.getHours() >= startTimeHours &&
+            //     currentDate.getHours() <= endTimeHours &&
+            //     currentDate.getMinutes() >= startTimeMinutes &&
+            //     currentDate.getMinutes() <= endTimeMinutes+60
+            let res = (dateToday <= lessonStarts && dateToday >= lessonEnds)
             console.log((res) ? "realtime-subject" : "subject")
             return (res) ? "realtime-subject" : "subject"
         },

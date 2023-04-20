@@ -20,7 +20,8 @@
         <main>
             <ul style="margin-top: 20px">
                 <li v-for="lesson in lesson_list" :key="lesson.lesson_id"
-                    class="subject">
+                    :class="isCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
+                    lesson.end_time.hour, lesson.end_time.minute)">
                     <h3>{{ lesson.name }}</h3>
                     <div>
                         <time>{{
@@ -68,16 +69,34 @@ export default {
 
         },
         async showList() {
-            await axios.get(`${this.$store.state.TIME_API}/lessons?subgroup_id=15&weekday=${this.chosenDay - 1}`,
+            await axios.get(`${this.$store.state.TIME_API}/lessons`,
                 {
                     params: {
-                        subgroup_id: this.$store.state.subgroupID
+                        subgroup_id: this.$store.state.subgroupID,
+                        weekday: this.chosenDay
                     }
                 })
                 .then(
                     async (res) => {
                         this.lesson_list = await res.data.lessons
                     })
+        },
+        isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+            let currentDate = new Date()
+            let hours = currentDate.getHours()
+            let minutes = currentDate.getMinutes()
+            let dateToday = new Date(`0000-${hours}-${minutes}T00:00:00`)
+            let lessonStarts = new Date(`0000-${startTimeHours}-${startTimeMinutes}T00:00:00`)
+            let lessonEnds = new Date(`0000-${endTimeHours}-${endTimeMinutes}T00:00:00`)
+            console.log(currentDate)
+            // let res = currentDate.getHours() >= startTimeHours &&
+            //     currentDate.getHours() <= endTimeHours &&
+            //     currentDate.getMinutes() >= startTimeMinutes &&
+            //     currentDate.getMinutes() <= endTimeMinutes+60
+            let res = dateToday <= lessonStarts && dateToday >= lessonEnds
+            console.log(res)
+            console.log((res) ? "realtime-subject" : "subject")
+            return (res) ? "realtime-subject" : "subject"
         },
     },
     mounted() {
@@ -235,6 +254,19 @@ main {
     color: black;
     border-radius: 16px;
     background-color: #FFFFFF;
+
+    justify-content: space-between;
+}
+
+.realtime-subject {
+
+    display: flex;
+
+    padding: 16px 14px 5px 14px;
+
+    color: white;
+    border-radius: 16px;
+    background-color: #6d9773;
 
     justify-content: space-between;
 }
