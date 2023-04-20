@@ -87,11 +87,12 @@ export default {
     },
     methods: {
         async getClassNumsLetters() {
-            let res = await fetch(`${this.$store.state.TIME_API}/subgroups/${this.$store.state.subgroupID}`)
-            let classID = (await res.json()).class_id
-            res = await fetch(`${this.$store.state.TIME_API}/classes/${classID}`)
-            let schoolID = (await res.json()).school_id
-            res = await fetch(`${this.$store.state.TIME_API}/classes?school_id=${schoolID}`)
+            let res = await axios.get(`${this.$store.state.TIME_API}/classes`,
+                {params: {
+                        school_id: this.schoolID
+                    }
+                }
+            )
             const jsonRes = await res.json()
             for (let i = 0; i < jsonRes.classes.length; i++) {
                 this.classNums.add(jsonRes.classes[i].number)
@@ -104,23 +105,23 @@ export default {
             await this.selectClass()
         },
         increaseClassNum() {
-            if (this.class_number < this.classNums[this.classNums.length-1]){
+            if (this.class_number < this.classNums[this.classNums.length - 1]) {
                 this.class_number++
             }
         },
         decreaseClassNum() {
-            if (this.class_number > this.classNums[0]){
+            if (this.class_number > this.classNums[0]) {
                 this.class_number--
             }
         },
         increaseClassLetter() {
-            if (this.letterIndex < this.classLetters.length-1){
+            if (this.letterIndex < this.classLetters.length - 1) {
                 this.letterIndex++
                 this.class_letter = this.classLetters[this.letterIndex]
             }
         },
         decreaseClassLetter() {
-            if (this.letterIndex > 0){
+            if (this.letterIndex > 0) {
                 this.letterIndex--
                 this.class_letter = this.classLetters[this.letterIndex]
             }
