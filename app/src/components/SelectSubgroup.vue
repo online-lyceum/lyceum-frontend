@@ -31,7 +31,6 @@
                     v-model="subgroupID"
                     v-if="need_to_select_subgroup"
             >
-                <option disabled value="">Подгруппа</option>
                 <option
                         v-for="subgroup in subgroupsForClass"
                         :key="subgroup.subgroup_id"
@@ -80,29 +79,22 @@ export default {
             disabled: true
         }
     },
-    mounted() {
-        this.loadClasses();
-        this.loadSubgroups();
+    async mounted() {
+        await this.loadClasses()
+        await this.loadSubgroups()
         this.getClassNumsLetters()
+        await this.selectClass()
     },
     methods: {
-        async getClassNumsLetters() {
-            let res = await axios.get(`${this.$store.state.TIME_API}/classes`,
-                {params: {
-                        school_id: this.schoolID
-                    }
-                }
-            )
-            const jsonRes = await res.json()
-            for (let i = 0; i < jsonRes.classes.length; i++) {
-                this.classNums.add(jsonRes.classes[i].number)
-                this.classLetters.add(jsonRes.classes[i].letter)
+        getClassNumsLetters() {
+            for (let i = 0; i < this.classes.length; i++) {
+                this.classNums.add(this.classes[i].number)
+                this.classLetters.add(this.classes[i].letter)
             }
             this.classNums = [...this.classNums]
             this.classLetters = [...this.classLetters]
             this.class_number = this.classNums[0]
             this.class_letter = this.classLetters[this.letterIndex]
-            await this.selectClass()
         },
         increaseClassNum() {
             if (this.class_number < this.classNums[this.classNums.length - 1]) {
@@ -143,10 +135,10 @@ export default {
                 const flt = (subgroup) => (subgroup.class_id === class_id)
                 this.subgroupsForClass = this.subgroups.filter(flt)
                 if (this.subgroupsForClass.length === 1) {
-                    this.subgroupID = this.subgroupsForClass[0].subgroup_id;
+                    this.subgroupID = this.subgroupsForClass[0].subgroup_id
                     this.need_to_select_subgroup = false;
                 } else if (this.subgroupsForClass.length > 1) {
-                    this.subgroupID = null;
+                    this.subgroupID = this.subgroupsForClass[0].subgroup_id
                     this.need_to_select_subgroup = true;
                 } else {
                     this.subgroupID = null;
