@@ -12,7 +12,7 @@
                 </div>
                 <div class="modal-body">
                     <a class="links" @click="$router.push('/home')" href="#">Главная</a><br><br><br>
-                    <a class="links" @click="$router.push('/schedule')" href="#">Расписание</a><br><br><br>
+                    <a class="links" @click="$router.push('/schedule'); this.$store.state.isAnotherClassShow = false" href="#">Расписание</a><br><br><br>
                     <a class="links" @click="$router.push('/events')" href="#">Мероприятия</a><br><br><br>
                     <a class="links" href="#openQuestionModal">Сменить школу и класс</a>
                 </div>
@@ -27,8 +27,10 @@
                     <a href="#" title="Close" class="close">×</a>
                 </div>
                 <div class="modal-body">
+                    <p>Вы действительно хотите сменить школу и класс?</p>
                     <a class="links" href="#">Нет</a>
                     <a class="links" @click="$store.commit('logout'); $router.push('/')" href="#">Да</a>
+                    <!--                        <select-subgroup :school_id="$route.params.school_id"/>-->
                 </div>
             </div>
         </div>
@@ -38,7 +40,12 @@
 
 
 <script>
-export default {}
+import SelectSubgroup from "@/components/SelectSubgroup.vue";
+import SelectSchool from "@/components/SelectSchool.vue";
+
+export default {
+    components: {SelectSchool, SelectSubgroup}
+}
 </script>
 
 <style scoped>

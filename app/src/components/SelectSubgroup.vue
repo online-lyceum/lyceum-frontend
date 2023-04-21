@@ -161,16 +161,6 @@ export default {
                 alert('Error');
                 this.classes = []
             }
-            this.max_class_number = 1;
-            this.min_class_number = 100;
-            for (let i = 0; i < this.classes.length; i++) {
-                this.max_class_number = Math.max(
-                    this.max_class_number, this.classes[i].number
-                );
-                this.min_class_number = Math.min(
-                    this.min_class_number, this.classes[i].number
-                );
-            }
         },
         async loadSubgroups() {
             try {
@@ -186,8 +176,13 @@ export default {
         },
         async selectSubgroup() {
             if (this.subgroupID !== null) {
-                this.$store.commit('setSubgroupID', this.subgroupID);
-                this.$router.push('/home');
+                if (this.$store.state.isAnotherClassShow){
+                    this.$store.commit('setAnotherSubgroupID', this.subgroupID);
+                    this.$router.push('/schedule');
+                }else{
+                    this.$store.commit('setSubgroupID', this.subgroupID);
+                    this.$router.push('/home');
+                }
             }
         }
     },

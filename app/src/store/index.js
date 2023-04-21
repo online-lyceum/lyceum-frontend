@@ -4,7 +4,10 @@ import axios from "axios";
 export default createStore({
     state: {
         subgroupID: null,
-        TIME_API: (process.env.VUE_APP_TIME_API_URL !== undefined) ? process.env.VUE_APP_TIME_API_URL : '/api'
+        anotherSubgroupID: null,
+        TIME_API: (process.env.VUE_APP_TIME_API_URL !== undefined) ? process.env.VUE_APP_TIME_API_URL : '/api',
+        nearestDayIndex: null,
+        isAnotherClassShow: null,
     },
     getters: {
         isLogin(state) {
@@ -28,8 +31,17 @@ export default createStore({
         setSubgroupID(state, subgroup_id) {
             state.subgroupID = subgroup_id
         },
+        setAnotherSubgroupID(state, subgroup_id){
+            state.anotherSubgroupID = subgroup_id
+        },
+        setAnotherSubgroupIDFalse(state){
+            state.anotherSubgroupID = false
+        },
         logout(state) {
             state.subgroupID = null
+        },
+        setNearestDayIndex(state, day){
+            state.nearestDayIndex = day
         }
     },
     actions: {},

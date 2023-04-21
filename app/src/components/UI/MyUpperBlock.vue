@@ -1,10 +1,10 @@
 <template>
     <div style="color: #FFFFFF">
         <div class="upper-block">
-            <div class="day-of-week" style="color: #000">{{ weekday_names[new Date().getDay()-1] }}</div>
+            <div class="day-of-week" style="color: #000">{{ this.weekday_names[this.$store.state.nearestDayIndex] }}</div>
             <a
                 class="scheduleBtn"
-                @click="$router.push('/schedule')"
+                @click="$router.push('/schedule'); this.$store.state.isAnotherClassShow = false"
             >
                 Расписание
             </a>

@@ -55,6 +55,7 @@ export default {
                 .then(
                     async (res) => {
                         this.lesson_list = await res.data.lessons
+                        this.$store.commit('setNearestDayIndex', this.lesson_list[0].weekday)
                     })
 
 
