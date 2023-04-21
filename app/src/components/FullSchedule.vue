@@ -65,7 +65,7 @@ export default {
     methods: {
         getWeekDay() {
             let a = new Date()
-            this.chosenDay = a.getDay()
+            this.chosenDay = a.getDay() - 1
 
         },
         async showList() {
@@ -82,20 +82,25 @@ export default {
                     })
         },
         isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+            if (startTimeHours < 10){
+                startTimeHours = `0${startTimeHours}`
+            }
+            if (startTimeMinutes < 10){
+                startTimeMinutes = `0${startTimeMinutes}`
+            }
+            if (endTimeHours < 10){
+                endTimeHours = `0${endTimeHours}`
+            }
+            if (endTimeMinutes < 10){
+                endTimeMinutes = `0${endTimeMinutes}`
+            }
             let currentDate = new Date()
             let hours = currentDate.getHours()
             let minutes = currentDate.getMinutes()
-            let dateToday = new Date(`0000-${hours}-${minutes}T00:00:00`)
-            let lessonStarts = new Date(`0000-${startTimeHours}-${startTimeMinutes}T00:00:00`)
-            let lessonEnds = new Date(`0000-${endTimeHours}-${endTimeMinutes}T00:00:00`)
-            console.log(currentDate)
-            // let res = currentDate.getHours() >= startTimeHours &&
-            //     currentDate.getHours() <= endTimeHours &&
-            //     currentDate.getMinutes() >= startTimeMinutes &&
-            //     currentDate.getMinutes() <= endTimeMinutes+60
-            let res = dateToday <= lessonStarts && dateToday >= lessonEnds
-            console.log(res)
-            console.log((res) ? "realtime-subject" : "subject")
+            let dateToday = new Date(0, 0, 0, hours, minutes, 0, 0)
+            let lessonStarts = new Date(0, 0, 0, startTimeHours, startTimeMinutes, 0, 0)
+            let lessonEnds = new Date(0, 0, 0, endTimeHours, endTimeMinutes, 0, 0)
+            let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
             return (res) ? "realtime-subject" : "subject"
         },
     },
