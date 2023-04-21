@@ -6,7 +6,7 @@
                 class="scheduleBtn"
                 @click="$router.push('/schedule'); this.$store.state.isAnotherClassShow = false"
             >
-                Расписание
+                Полное расписание
             </a>
         </div>
     </div>

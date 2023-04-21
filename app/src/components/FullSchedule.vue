@@ -352,7 +352,7 @@ body {
 
 @media (min-width: 576px) {
     .modal-dialog {
-        max-width: 500px;
+        max-width: 1000px;
         margin: 30px auto; /* для отображения модального окна по центру */
     }
 }

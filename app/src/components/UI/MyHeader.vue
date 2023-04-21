@@ -1,7 +1,7 @@
 <template>
     <div class="block">
-        <div class="my-header">ЛИЦЕЙ В ЦИФРЕ</div>
-        <a href="#openModal" style="font-size: 20px; color: #000; text-decoration: none">(-)</a>
+        <a href="#openModal" style="font-size: 25px; color: #000; text-decoration: none">≡</a>
+        <a href="#openModal" class="my-header" style="color: #000; text-decoration: none">ЛИЦЕЙ В ЦИФРЕ</a>
     </div>
     <div id="openModal" class="modal">
         <div class="modal-dialog">
@@ -54,8 +54,8 @@ export default {
     /*flex-direction: row;*/
     display: flex;
     background-color: #fff;
-
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
 }
 
 .links {
