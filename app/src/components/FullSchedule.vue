@@ -82,6 +82,8 @@ export default {
                     })
         },
         isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+            if (this.chosenDay !== new Date().getDay()-1)
+                return 'subject'
             if (startTimeHours < 10){
                 startTimeHours = `0${startTimeHours}`
             }
