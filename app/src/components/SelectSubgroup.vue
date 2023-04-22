@@ -27,6 +27,7 @@
             </div>
 
             <select
+                    class="select-input"
                     name="select_subgroup"
                     v-model="subgroupID"
                     v-if="need_to_select_subgroup"
@@ -192,10 +193,6 @@ export default {
 <style scoped>
 
 .blocks {
-    display: inline-block;
-    height: 100px;
-    width: 100%;
-    margin: 50px 0 0;
 }
 
 .input_box {
@@ -227,5 +224,8 @@ export default {
 
 p {
     margin: 10px 0;
+}
+.select-input {
+    margin-top: 50px;
 }
 </style>
