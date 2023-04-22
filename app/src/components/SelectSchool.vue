@@ -77,6 +77,7 @@ export default {
     border-radius: 16px;
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px;
 }
 
 .button {
