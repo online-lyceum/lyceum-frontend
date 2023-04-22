@@ -3,25 +3,25 @@
         <form @submit.prevent>
             <div class="input_box">
                 <div class="blocks">
-                    <button @click="decreaseClassNum(); selectClass();">ТУДА</button>
+                    <button @click="decreaseClassNum(); selectClass();" style="font-size: 50px">←</button>
                     <input
                             class="input"
                             @input="selectClass"
                             type="number"
                             v-model="class_number"
                     >
-                    <button @click="increaseClassNum(); selectClass();">СЮДА</button>
+                    <button @click="increaseClassNum(); selectClass();" style="font-size: 50px">→</button>
                 </div>
 
                 <div class="blocks">
-                    <button @click="decreaseClassLetter(); selectClass();">ТУДА</button>
+                    <button @click="decreaseClassLetter(); selectClass();" style="font-size: 50px">←</button>
                     <input
                             class="input"
                             @input="selectClass"
                             type="text"
                             v-model="class_letter"
                     >
-                    <button @click="increaseClassLetter(); selectClass();">СЮДА</button>
+                    <button @click="increaseClassLetter(); selectClass();" style="font-size: 50px">→</button>
                 </div>
 
             </div>
@@ -161,16 +161,6 @@ export default {
                 alert('Error');
                 this.classes = []
             }
-            this.max_class_number = 1;
-            this.min_class_number = 100;
-            for (let i = 0; i < this.classes.length; i++) {
-                this.max_class_number = Math.max(
-                    this.max_class_number, this.classes[i].number
-                );
-                this.min_class_number = Math.min(
-                    this.min_class_number, this.classes[i].number
-                );
-            }
         },
         async loadSubgroups() {
             try {
@@ -186,8 +176,13 @@ export default {
         },
         async selectSubgroup() {
             if (this.subgroupID !== null) {
-                this.$store.commit('setSubgroupID', this.subgroupID);
-                this.$router.push('/home');
+                if (this.$store.state.isAnotherClassShow){
+                    this.$store.commit('setAnotherSubgroupID', this.subgroupID);
+                    this.$router.push('/schedule');
+                }else{
+                    this.$store.commit('setSubgroupID', this.subgroupID);
+                    this.$router.push('/home');
+                }
             }
         }
     },
@@ -199,13 +194,15 @@ export default {
 .blocks {
     display: inline-block;
     height: 100px;
-    width: 20%;
-    margin: 50px 50px 0;
+    width: 100%;
+    margin: 50px 0 0;
 }
 
 .input_box {
-    flex-direction: row;
-    margin: 0 25px;
+    display: flex;
+    background-color: #fff;
+    align-items: center;
+    justify-content: center;
 }
 
 .input {

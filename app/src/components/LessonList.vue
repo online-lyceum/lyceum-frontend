@@ -55,27 +55,31 @@ export default {
                 .then(
                     async (res) => {
                         this.lesson_list = await res.data.lessons
+                        this.$store.commit('setNearestDayIndex', this.lesson_list[0].weekday)
                     })
 
 
         },
-        //TODO: make this fun work
         isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+            if (startTimeHours < 10){
+                startTimeHours = `0${startTimeHours}`
+            }
+            if (startTimeMinutes < 10){
+                startTimeMinutes = `0${startTimeMinutes}`
+            }
+            if (endTimeHours < 10){
+                endTimeHours = `0${endTimeHours}`
+            }
+            if (endTimeMinutes < 10){
+                endTimeMinutes = `0${endTimeMinutes}`
+            }
             let currentDate = new Date()
             let hours = currentDate.getHours()
             let minutes = currentDate.getMinutes()
-            let dateToday = new Date(`1995-12-17T03:${hours}:${minutes}`)
-            let lessonStarts = new Date(`1995-12-17T03:${startTimeHours}:${startTimeMinutes}`)
-            let lessonEnds = new Date(`1995-12-17T03:${endTimeHours}:${endTimeMinutes}`)
-            console.log(dateToday)
-            console.log(lessonStarts)
-            console.log(lessonEnds)
-            // let res = currentDate.getHours() >= startTimeHours &&
-            //     currentDate.getHours() <= endTimeHours &&
-            //     currentDate.getMinutes() >= startTimeMinutes &&
-            //     currentDate.getMinutes() <= endTimeMinutes+60
-            let res = (dateToday <= lessonStarts && dateToday >= lessonEnds)
-            console.log((res) ? "realtime-subject" : "subject")
+            let dateToday = new Date(0, 0, 0, hours, minutes, 0, 0)
+            let lessonStarts = new Date(0, 0, 0, startTimeHours, startTimeMinutes, 0, 0)
+            let lessonEnds = new Date(0, 0, 0, endTimeHours, endTimeMinutes, 0, 0)
+            let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
             return (res) ? "realtime-subject" : "subject"
         },
     },
