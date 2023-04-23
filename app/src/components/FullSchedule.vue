@@ -56,7 +56,7 @@
         </main>
         <button
                 class="btn"
-                @click="$router.back()"
+                @click="$router.push('/home')"
         >
             Назад
         </button>
