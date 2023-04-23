@@ -34,9 +34,6 @@ export default createStore({
         setAnotherSubgroupID(state, subgroup_id){
             state.anotherSubgroupID = subgroup_id
         },
-        setAnotherSubgroupIDFalse(state){
-            state.anotherSubgroupID = false
-        },
         logout(state) {
             state.subgroupID = null
         },

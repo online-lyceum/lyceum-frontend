@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <main>
+            <div :class="isLoading()">
                 <ul>
                     <li
                             v-for="lesson in lesson_list" :key="lesson.lesson_id"
@@ -24,7 +24,10 @@
                         </div>
                     </li>
                 </ul>
-            </main>
+            </div>
+        </div>
+        <div>
+
         </div>
     </div>
 </template>
@@ -40,8 +43,6 @@ export default {
     data() {
         return {
             lesson_list: [],
-            weekday_names: ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"],
-            currentWeekday: null
         }
     },
     methods: {
@@ -57,20 +58,22 @@ export default {
                         this.lesson_list = await res.data.lessons
                         this.$store.commit('setNearestDayIndex', this.lesson_list[0].weekday)
                     })
-
+                .catch(
+                    this.$store.commit('initialiseVars')
+                )
 
         },
         isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
-            if (startTimeHours < 10){
+            if (startTimeHours < 10) {
                 startTimeHours = `0${startTimeHours}`
             }
-            if (startTimeMinutes < 10){
+            if (startTimeMinutes < 10) {
                 startTimeMinutes = `0${startTimeMinutes}`
             }
-            if (endTimeHours < 10){
+            if (endTimeHours < 10) {
                 endTimeHours = `0${endTimeHours}`
             }
-            if (endTimeMinutes < 10){
+            if (endTimeMinutes < 10) {
                 endTimeMinutes = `0${endTimeMinutes}`
             }
             let currentDate = new Date()
@@ -80,7 +83,13 @@ export default {
             let lessonStarts = new Date(0, 0, 0, startTimeHours, startTimeMinutes, 0, 0)
             let lessonEnds = new Date(0, 0, 0, endTimeHours, endTimeMinutes, 0, 0)
             let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
+
             return (res) ? "realtime-subject" : "subject"
+
+        },
+        isLoading(){
+            //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
+            return (this.lesson_list.length === 0) ? "loader" : "main"
         },
     },
     props: {},
@@ -143,7 +152,7 @@ h2 {
     margin: 0;
 }
 
-main {
+.main {
     display: flex;
     flex-direction: column;
 
@@ -188,6 +197,27 @@ main {
     color: #ffc936;
 }
 
+/* Loading Data */
+.loader {
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #888888;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+    display: flex;
+    justify-content: center;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /*.description-subject {*/
 /*    display: flex;*/
 
@@ -195,4 +225,5 @@ main {
 
 /*    justify-content: space-between;*/
 /*}*/
+
 </style>
