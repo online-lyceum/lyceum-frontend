@@ -7,20 +7,37 @@
 import MyHeader from "@/components/UI/MyHeader.vue"
 
 import MyButton from "@/components/UI/MyButton.vue"
+import axios from "axios";
 
 
 export default {
     name: "App",
     components: {MyButton, MyHeader},
-    beforeMount() {
-        document.title = "Лицей в Цифре"
+    async beforeCreate() {
         this.$store.commit('initialiseVars')
         if (this.$store.state.subgroupID !== undefined &&
             this.$store.state.subgroupID !== "" &&
             this.$store.state.subgroupID !== null) {
             this.$router.push('/home')
         } else {
+            console.log("subgroupID equals null")
             this.$router.push('/')
+        }
+    },
+    beforeMount() {
+        document.title = "Лицей в Цифре"
+    },
+    methods: {
+        async checkSubgroupID(){
+            if (this.$store.state.subgroupID !== '' &&
+                this.$store.state.subgroupID !== null &&
+                this.$store.state.subgroupID !== undefined) {
+                let data = await axios.get(`${state.TIME_API}/subgroups/${subgroupID}`)
+                if (data.status !== 200) {
+                    console.log("Logout by deprecated subgroupID in localStorage")
+                    this.$store.commit('logout')
+                }
+            }
         }
     }
 }

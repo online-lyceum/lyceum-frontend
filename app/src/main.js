@@ -6,7 +6,7 @@ import store from './store'
 
 
 store.subscribe( (mutation, state) => {
-    localStorage.setItem('subgroup_id', JSON.stringify(state.subgroupID));
+    localStorage.setItem('subgroupID', JSON.stringify(state.subgroupID));
 })
 
 createApp(App).use(store).use(router).mount('#app')
