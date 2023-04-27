@@ -16,34 +16,24 @@ export default createStore({
     },
     mutations: {
         async initialiseVars(state) {
-            if (localStorage.getItem('subgroup_id')) {
-                let subgroupID = JSON.parse(localStorage.subgroup_id)
-                if (subgroupID !== '' && subgroupID !== null && subgroupID !== undefined) {
-                    let data = await axios.get(`${state.TIME_API}/subgroups/${subgroupID}`)
-                    if (data.status !== 200) {
-                        console.log("Logout by deprecated subgroupID in localStorage")
-                        return
-                    }
-                }
+            if (localStorage.getItem('subgroupID')) {
+                let subgroupID = JSON.parse(localStorage.subgroupID)
                 state.subgroupID = subgroupID
             }
         },
-        setSubgroupID(state, subgroup_id) {
-            state.subgroupID = subgroup_id
+        setSubgroupID(state, subgroupID) {
+            state.subgroupID = subgroupID
         },
-        setAnotherSubgroupID(state, subgroup_id){
-            state.anotherSubgroupID = subgroup_id
-        },
-        setAnotherSubgroupIDFalse(state){
-            state.anotherSubgroupID = false
+        setAnotherSubgroupID(state, subgroupID){
+            state.anotherSubgroupID = subgroupID
         },
         logout(state) {
+            console.log('Log out')
             state.subgroupID = null
         },
         setNearestDayIndex(state, day){
             state.nearestDayIndex = day
         }
     },
-    actions: {},
     modules: {}
 })

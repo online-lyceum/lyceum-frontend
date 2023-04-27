@@ -164,23 +164,18 @@ export default {
             }
         },
         async loadSubgroups() {
-            try {
-                const res = await axios.get(
-                    `${this.$store.state.TIME_API}/subgroups`,
-                    {params: {school_id: this.schoolID}}
-                );
-                this.subgroups = res.data.subgroups;
-            } catch (e) {
-                alert('Error');
-                this.subgroups = []
-            }
+            const res = await axios.get(
+                `${this.$store.state.TIME_API}/subgroups`,
+                {params: {school_id: this.schoolID}}
+            )
+            this.subgroups = res.data.subgroups
         },
         async selectSubgroup() {
             if (this.subgroupID !== null) {
-                if (this.$store.state.isAnotherClassShow){
+                if (this.$store.state.isAnotherClassShow) {
                     this.$store.commit('setAnotherSubgroupID', this.subgroupID);
                     this.$router.push('/schedule');
-                }else{
+                } else {
                     this.$store.commit('setSubgroupID', this.subgroupID);
                     this.$router.push('/home');
                 }

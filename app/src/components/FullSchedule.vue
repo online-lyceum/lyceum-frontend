@@ -32,7 +32,7 @@
             <button class="btnDay" @click="this.chosenDay = 4; showList()">Пт</button>
             <button class="btnDay" @click="this.chosenDay = 5; showList()">Сб</button>
         </div>
-        <main>
+        <div :class="isLoading()">
             <ul style="margin-top: 20px">
                 <li v-for="lesson in lesson_list" :key="lesson.lesson_id"
                     :class="isCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
@@ -53,10 +53,10 @@
                     </div>
                 </li>
             </ul>
-        </main>
+        </div>
         <button
                 class="btn"
-                @click="$router.back()"
+                @click="$router.push('/home')"
         >
             Назад
         </button>
@@ -99,6 +99,9 @@ export default {
                         this.lesson_list = await res.data.lessons
                         this.currentClass = this.lesson_list[0].lesson_id
                     })
+                .catch(
+                    this.$store.commit('initialiseVars')
+                )
         },
         isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
             if (this.chosenDay !== new Date().getDay() - 1)
@@ -124,6 +127,10 @@ export default {
             let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
             return (res) ? "realtime-subject" : "subject"
         },
+        isLoading(){
+            //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
+            return (this.lesson_list.length === 0) ? "loader" : "main"
+        },
         setAnotherClassShowTrue() {
             this.$store.state.isAnotherClassShow = true
         },
@@ -136,6 +143,27 @@ export default {
 </script>
 
 <style scoped>
+/* Loading Data */
+.loader {
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #888888;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+    display: flex;
+    justify-content: center;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .btn {
     margin: 20px;
     width: 50%;
@@ -263,7 +291,7 @@ h2 {
     margin: 0;
 }
 
-main {
+.main {
     display: flex;
     flex-direction: column;
 
