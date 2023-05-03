@@ -40,8 +40,12 @@
                 </div>
                 <div class="modal-body">
                     <p>Вы действительно хотите сменить школу и класс?</p>
-                    <div class="links"><a href="#">Нет</a></div>
-                    <div class="links"><a @click="$store.commit('logout'); $router.push('/')" href="#">Да</a></div>
+                    <a class="links-a" href="#">
+                        <div class="links">Отмена</div>
+                    </a>
+                    <a class="links-a" @click="$store.commit('logout'); $router.push('/')" href="#">
+                        <div class="links">Сменить</div>
+                    </a>
                 </div>
             </div>
         </div>
