@@ -1,6 +1,7 @@
 <template>
     <header class="block">
-        <a href="#openModal" class="my-header" style="color: #000; text-decoration: none"><span class="menu-symbol">≡</span> ЛИЦЕЙ В ЦИФРЕ</a>
+        <a href="#openModal" class="my-header" style="color: #000; text-decoration: none"><span
+                class="menu-symbol">≡</span> ЛИЦЕЙ В ЦИФРЕ</a>
     </header>
     <div id="openModal" class="modal">
         <div class="modal-dialog">
@@ -10,17 +11,20 @@
                     <a href="#" title="Close" class="close">×</a>
                 </div>
                 <div class="modal-body">
-                    <div class="links">
-                        <a @click="$router.push('/home')" href="#">Главная</a>
-                    </div>
-                    <div class="links">
-                        <a
-                                @click="$router.push('/schedule'); this.$store.state.isAnotherClassShow = false"
-                                href="#"
-                        >Расписание</a>
-                    </div>
-                    <div class="links"><a @click="$router.push('/events')" href="#">Мероприятия</a></div>
-                    <div class="links"><a href="#openQuestionModal">Сменить школу и класс</a></div>
+                    <a class="links-a" @click="$router.push('/home')" href="#">
+                        <div class="links">Главная</div>
+                    </a>
+                    <a class="links-a" @click="$router.push('/schedule');
+                    this.$store.state.isAnotherClassShow = false"
+                       href="#">
+                        <div class="links">Расписание</div>
+                    </a>
+                    <a class="links-a" @click="$router.push('/events')" href="#">
+                        <div class="links">Мероприятия</div>
+                    </a>
+                    <a class="links-a" href="#openQuestionModal">
+                        <div class="links">Сменить школу и класс</div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -70,9 +74,11 @@ export default {
     text-align: center;
     padding: 14px;
     background-color: #6d9773;
+    color: #ffffff;
+    text-decoration: none;
 }
 
-.links a {
+.links-a {
     color: #ffffff;
     text-decoration: none;
 }
@@ -238,7 +244,8 @@ header {
     border-radius: 0 0 16px 16px;
     background-color: #fff;
 }
-.menu-symbol{
+
+.menu-symbol {
     font-size: larger;
 }
 </style>
