@@ -21,9 +21,6 @@
                        href="#">
                         <div class="links">Расписание</div>
                     </a>
-                    <a class="links-a" @click="$router.push('/events')" href="#">
-                        <div class="links">Мероприятия</div>
-                    </a>
                     <a class="links-a" href="#openQuestionModal">
                         <div class="links">Сменить школу и класс</div>
                     </a>
