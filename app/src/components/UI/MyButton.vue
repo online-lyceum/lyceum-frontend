@@ -1,8 +1,8 @@
 <template>
   <div class="field-btn">
-    <button class="btn">
+    <div class="btn">
       <slot>Выбрать</slot>
-    </button>
+    </div>
   </div>
 </template>
 
@@ -14,6 +14,7 @@ export default {
 
 <style scoped>
 .btn {
+
   background: #6D9773;
   margin: 0;
   padding: 10px;

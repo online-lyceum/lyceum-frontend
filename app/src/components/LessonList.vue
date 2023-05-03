@@ -1,33 +1,32 @@
 <template>
     <div>
-        <div>
-            <div :class="isLoading()">
-                <ul>
-                    <li
-                            v-for="lesson in lesson_list" :key="lesson.lesson_id"
-                            :class="isCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
-                    lesson.end_time.hour, lesson.end_time.minute)"
-                    >
-                        <h3>{{ lesson.name }}</h3>
-                        <div>
-                            <time>{{
-                                lesson.start_time.hour
-                                }}:{{
-                                (lesson.start_time.minute < 10 ? '0' : '') + lesson.start_time.minute
-                                }} -
-                                {{
-                                lesson.end_time.hour
-                                }}:{{
-                                (lesson.end_time.minute < 10 ? '0' : '') + lesson.end_time.minute
-                                }}
-                            </time>
-                        </div>
-                    </li>
-                </ul>
+        <main v-if="!isLoading()" class="upper-block">
+            <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
+                 :class="getCurrentTimeClass(
+                                lesson.start_time[0].hour, lesson.start_time[0].minute,
+                                lesson.end_time[1].hour, lesson.end_time[1].minute)">
+                <div>
+                    <h3 class="cut-text">{{ lesson.name }}</h3>
+                    <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
+                </div>
+                <div>
+                    <time v-for="i in [0, 1]">
+                        {{
+                            lesson.start_time[i].hour
+                        }}:{{
+                            (lesson.start_time[i].minute < 10 ? '0' : '') + lesson.start_time[i].minute
+                        }} -
+                        {{
+                            lesson.end_time[i].hour
+                        }}:{{
+                            (lesson.end_time[i].minute < 10 ? '0' : '') + lesson.end_time[i].minute
+                        }}<br>
+                    </time>
+                </div>
             </div>
-        </div>
-        <div>
-
+        </main>
+        <div v-else>
+            Загрузка...
         </div>
     </div>
 </template>
@@ -50,7 +49,8 @@ export default {
             await axios.get(`${this.$store.state.TIME_API}/lessons/nearest_day`,
                 {
                     params: {
-                        subgroup_id: this.$store.state.subgroupID
+                        subgroup_id: this.$store.state.subgroupID,
+                        do_double: true
                     }
                 })
                 .then(
@@ -63,7 +63,7 @@ export default {
                 )
 
         },
-        isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+        getCurrentTimeClass(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
             if (startTimeHours < 10) {
                 startTimeHours = `0${startTimeHours}`
             }
@@ -87,9 +87,13 @@ export default {
             return (res) ? "realtime-subject" : "subject"
 
         },
-        isLoading(){
+        getLoadingClass() {
             //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
             return (this.lesson_list.length === 0) ? "loader" : "main"
+        },
+        isLoading() {
+            //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
+            return this.lesson_list.length === 0
         },
     },
     props: {},
@@ -132,6 +136,21 @@ header {
 }
 
 /* Content */
+/* upper-block */
+
+.upper-block {
+    display: flex;
+
+    margin: 0 12px 32px;
+
+    border-radius: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+
+    justify-content: space-between;
+}
+
+
 /* main */
 
 h3 {
@@ -143,6 +162,8 @@ h3 {
 
 time {
     font-size: 19px;
+    white-space: nowrap;
+
 }
 
 h2 {
@@ -152,7 +173,7 @@ h2 {
     margin: 0;
 }
 
-.main {
+main {
     display: flex;
     flex-direction: column;
 
@@ -169,18 +190,13 @@ h2 {
 
     padding: 16px 14px 5px 14px;
 
-    color: black;
-    border-radius: 16px;
-    background-color: #FFFFFF;
-
     justify-content: space-between;
 }
 
 .realtime-subject {
-
     display: flex;
 
-    padding: 16px 14px 5px 14px;
+    padding: 16px 14px 20px 14px;
 
     color: white;
     border-radius: 16px;
@@ -189,41 +205,37 @@ h2 {
     justify-content: space-between;
 }
 
-/*.realtime-subject h3 {*/
-/*    color: #ffc936;*/
-/*}*/
+.realtime-subject h3 {
+    color: #ffc936;
+}
 
 .realtime-subject time span {
     color: #ffc936;
 }
 
-/* Loading Data */
-.loader {
-    border: 5px solid #f3f3f3; /* Light grey */
-    border-top: 5px solid #888888;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 2s linear infinite;
-    display: flex;
-    justify-content: center;
+/* 	aside */
+
+aside {
+    margin: 32px 14px 58px;
+
+    text-align: center;
+
+    border-radius: 16px;
+    background-color: #fff;
 }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+aside img {
+    width: 100%;
+
+    border-radius: 16px;
 }
 
-/*.description-subject {*/
-/*    display: flex;*/
+aside p {
+    margin: 12px 0 19px;
+}
 
-/*    border-bottom: 1px solid #fff;*/
-
-/*    justify-content: space-between;*/
-/*}*/
+.cut-text {
+    overflow: hidden;
+}
 
 </style>

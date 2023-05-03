@@ -1,8 +1,7 @@
 <template>
-    <div class="block">
-        <a href="#openModal" style="font-size: 25px; color: #000; text-decoration: none">≡</a>
-        <a href="#openModal" class="my-header" style="color: #000; text-decoration: none">ЛИЦЕЙ В ЦИФРЕ</a>
-    </div>
+    <header class="block">
+        <a href="#openModal" class="my-header" style="color: #000; text-decoration: none"><span class="menu-symbol">≡</span> ЛИЦЕЙ В ЦИФРЕ</a>
+    </header>
     <div id="openModal" class="modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -11,10 +10,17 @@
                     <a href="#" title="Close" class="close">×</a>
                 </div>
                 <div class="modal-body">
-                    <a class="links" @click="$router.push('/home')" href="#">Главная</a><br><br><br>
-                    <a class="links" @click="$router.push('/schedule'); this.$store.state.isAnotherClassShow = false" href="#">Расписание</a><br><br><br>
-                    <a class="links" @click="$router.push('/events')" href="#">Мероприятия</a><br><br><br>
-                    <a class="links" href="#openQuestionModal">Сменить школу и класс</a>
+                    <div class="links">
+                        <a @click="$router.push('/home')" href="#">Главная</a>
+                    </div>
+                    <div class="links">
+                        <a
+                                @click="$router.push('/schedule'); this.$store.state.isAnotherClassShow = false"
+                                href="#"
+                        >Расписание</a>
+                    </div>
+                    <div class="links"><a @click="$router.push('/events')" href="#">Мероприятия</a></div>
+                    <div class="links"><a href="#openQuestionModal">Сменить школу и класс</a></div>
                 </div>
             </div>
         </div>
@@ -28,9 +34,8 @@
                 </div>
                 <div class="modal-body">
                     <p>Вы действительно хотите сменить школу и класс?</p>
-                    <a class="links" href="#">Нет</a>
-                    <a class="links" @click="$store.commit('logout'); $router.push('/')" href="#">Да</a>
-                    <!--                        <select-subgroup :school_id="$route.params.school_id"/>-->
+                    <div class="links"><a href="#">Нет</a></div>
+                    <div class="links"><a @click="$store.commit('logout'); $router.push('/')" href="#">Да</a></div>
                 </div>
             </div>
         </div>
@@ -59,13 +64,17 @@ export default {
 }
 
 .links {
-    color: #000;
-    text-decoration: none;
-    padding: 10px 10px;
-    text-align: center;
     border-radius: 16px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
     margin: 10px;
+    text-align: center;
+    padding: 14px;
+    background-color: #6d9773;
+}
+
+.links a {
+    color: #ffffff;
+    text-decoration: none;
 }
 
 .links:focus, .links:hover {
@@ -94,6 +103,8 @@ body {
 
 /* свойства модального окна по умолчанию */
 .modal {
+
+    text-align: center;
     position: fixed; /* фиксированное положение */
     top: 0;
     right: 0;
@@ -214,5 +225,20 @@ body {
     flex: 1 1 auto;
     padding: 15px;
     overflow: auto;
+}
+
+header {
+    font-size: 16px;
+
+    height: 50px;
+    margin: 0 12px 30px;
+
+    text-align: center;
+
+    border-radius: 0 0 16px 16px;
+    background-color: #fff;
+}
+.menu-symbol{
+    font-size: larger;
 }
 </style>
