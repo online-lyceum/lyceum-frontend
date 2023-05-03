@@ -78,6 +78,8 @@ export default {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
+    text-align: center;
+
 }
 
 .button {

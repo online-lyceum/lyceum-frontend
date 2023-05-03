@@ -214,6 +214,7 @@ export default {
     /*padding: 20px;*/
     border-radius: 16px;
     display: flex;
+    text-align: center;
     flex-direction: column;
 }
 
