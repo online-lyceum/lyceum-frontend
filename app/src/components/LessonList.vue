@@ -1,32 +1,31 @@
 <template>
     <div>
-        <main v-if="!isLoading()" class="upper-block">
-            <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
-                 :class="getCurrentTimeClass(
+        <div>
+            <div :class="isLoading()">
+                <li v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
+                     :class="getCurrentTimeClass(
                                 lesson.start_time[0].hour, lesson.start_time[0].minute,
                                 lesson.end_time[1].hour, lesson.end_time[1].minute)">
-                <div>
-                    <h3 class="cut-text">{{ lesson.name }}</h3>
-                    <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
-                </div>
-                <div>
-                    <time v-for="i in [0, 1]">
-                        {{
+                    <div>
+                        <h3>{{ lesson.name }}</h3>
+                        <p>{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
+                    </div>
+                    <div>
+                        <time v-for="i in [0, 1]">
+                            {{
                             lesson.start_time[i].hour
-                        }}:{{
+                            }}:{{
                             (lesson.start_time[i].minute < 10 ? '0' : '') + lesson.start_time[i].minute
-                        }} -
-                        {{
+                            }} -
+                            {{
                             lesson.end_time[i].hour
-                        }}:{{
+                            }}:{{
                             (lesson.end_time[i].minute < 10 ? '0' : '') + lesson.end_time[i].minute
-                        }}<br>
-                    </time>
-                </div>
+                            }}<br>
+                        </time>
+                    </div>
+                </li>
             </div>
-        </main>
-        <div v-else>
-            Загрузка...
         </div>
     </div>
 </template>
@@ -83,17 +82,12 @@ export default {
             let lessonStarts = new Date(0, 0, 0, startTimeHours, startTimeMinutes, 0, 0)
             let lessonEnds = new Date(0, 0, 0, endTimeHours, endTimeMinutes, 0, 0)
             let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
-
             return (res) ? "realtime-subject" : "subject"
 
         },
-        getLoadingClass() {
-            //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
-            return (this.lesson_list.length === 0) ? "loader" : "main"
-        },
         isLoading() {
             //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
-            return this.lesson_list.length === 0
+            return this.lesson_list.length === 0 ? "loader" : ""
         },
     },
     props: {},
@@ -135,22 +129,6 @@ header {
     background-color: #fff;
 }
 
-/* Content */
-/* upper-block */
-
-.upper-block {
-    display: flex;
-
-    margin: 0 12px 32px;
-
-    border-radius: 16px;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-
-    justify-content: space-between;
-}
-
-
 /* main */
 
 h3 {
@@ -158,6 +136,13 @@ h3 {
     font-weight: normal;
 
     margin: 0;
+
+    text-align: left;
+}
+
+p {
+    margin: 12px 0 19px;
+    text-align: left;
 }
 
 time {
@@ -173,46 +158,57 @@ h2 {
     margin: 0;
 }
 
-main {
-    display: flex;
-    flex-direction: column;
-
-    height: auto;
-    margin: 0 12px;
-
-    border-radius: 16px;
-    background: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-}
-
 .subject {
     display: flex;
 
     padding: 16px 14px 5px 14px;
-
+    border-radius: 16px;
+    border: 3px solid #6d9773;
     justify-content: space-between;
+
+    height: auto;
+    margin: 5px 12px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 }
 
 .realtime-subject {
-    display: flex;
 
+    display: flex;
+    /*треть число потестить 205 */
     padding: 16px 14px 20px 14px;
+    border-radius: 16px;
+    border: 3px solid #364b39;
+    justify-content: space-between;
 
     color: white;
-    border-radius: 16px;
-    background-color: #6d9773;
-
-    justify-content: space-between;
+    height: auto;
+    margin: 5px 12px;
+    background: #6d9773;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 }
 
 .realtime-subject h3 {
     color: #ffc936;
 }
 
-.realtime-subject time span {
+/*.realtime-subject time {
     color: #ffc936;
+}*/
+
+/* Loading Data */
+.loader {
+    border: 10px solid #f3f3f3; /* Light grey */
+    border-top: 10px solid #888888;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    display: flex;
+    margin: auto;
 }
 
+/*тест класса от лавра*/
 /* 	aside */
 
 aside {
@@ -237,5 +233,22 @@ aside p {
 .cut-text {
     overflow: hidden;
 }
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*.description-subject {*/
+/*    display: flex;*/
+
+/*    border-bottom: 1px solid #fff;*/
+
+/*    justify-content: space-between;*/
+/*}*/
 
 </style>
