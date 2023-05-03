@@ -1,8 +1,10 @@
 <template>
-    <header class="block">
-        <a href="#openModal" class="my-header" style="color: #000; text-decoration: none"><span
-                class="menu-symbol">≡</span> ЛИЦЕЙ В ЦИФРЕ</a>
-    </header>
+    <a style="text-decoration: none;" href="#openModal">
+        <header class="block">
+            <span class="my-header" style="color: #000; text-decoration: none"><span
+                    class="menu-symbol">≡</span> ЛИЦЕЙ В ЦИФРЕ</span>
+        </header>
+    </a>
     <div id="openModal" class="modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -95,6 +97,7 @@ export default {
     padding: 10px;
     background-color: white;
     border-radius: 0 0 16px 16px;
+    text-decoration: none;
 }
 
 /* стилизация содержимого страницы */
