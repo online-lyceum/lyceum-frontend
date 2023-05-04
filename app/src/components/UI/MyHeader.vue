@@ -56,7 +56,7 @@ import SelectSubgroup from "@/components/SelectSubgroup.vue";
 import SelectSchool from "@/components/SelectSchool.vue";
 
 export default {
-    components: {SelectSchool, SelectSubgroup},
+    components: {SelectSchool, SelectSubgroup}
 }
 </script>
 

@@ -33,27 +33,26 @@
             <button class="btnDay" @click="this.chosenDay = 5; showList()">Сб</button>
         </div>
         <div :class="isLoading()">
-            <li v-for="lesson in lesson_list" :key="lesson.lesson_id"
-                :class="isCurrentLesson(lesson.start_time.hour, lesson.start_time.minute,
+            <ul style="margin-top: 20px">
+                <li v-for="lesson in lesson_list" :key="lesson.lesson_id"
+                    :class="isCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
                     lesson.end_time.hour, lesson.end_time.minute)">
-                <div class="subject-info">
                     <h3>{{ lesson.name }}</h3>
-                    <p>{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
-                </div>
-                <div>
-                    <time>{{
-                        lesson.start_time.hour
-                        }}:{{
-                        (lesson.start_time.minute < 10 ? '0' : '') + lesson.start_time.minute
-                        }} -
-                        {{
-                        lesson.end_time.hour
-                        }}:{{
-                        (lesson.end_time.minute < 10 ? '0' : '') + lesson.end_time.minute
-                        }}
-                    </time>
-                </div>
-            </li>
+                    <div>
+                        <time>{{
+                            lesson.start_time.hour
+                            }}:{{
+                            (lesson.start_time.minute < 10 ? '0' : '') + lesson.start_time.minute
+                            }} -
+                            {{
+                            lesson.end_time.hour
+                            }}:{{
+                            (lesson.end_time.minute < 10 ? '0' : '') + lesson.end_time.minute
+                            }}
+                        </time>
+                    </div>
+                </li>
+            </ul>
         </div>
         <button
                 class="btn"
@@ -104,7 +103,7 @@ export default {
                     this.$store.commit('initialiseVars')
                 )
         },
-        isCurrentLesson(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+        isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
             if (this.chosenDay !== new Date().getDay() - 1)
                 return 'subject'
             if (startTimeHours < 10) {
@@ -128,9 +127,9 @@ export default {
             let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
             return (res) ? "realtime-subject" : "subject"
         },
-        isLoading() {
+        isLoading(){
             //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
-            return (this.lesson_list.length === 0) ? "loader" : ""
+            return (this.lesson_list.length === 0) ? "loader" : "main"
         },
         setAnotherClassShowTrue() {
             this.$store.state.isAnotherClassShow = true
@@ -146,14 +145,14 @@ export default {
 <style scoped>
 /* Loading Data */
 .loader {
-    border: 10px solid #f3f3f3; /* Light grey */
-    border-top: 10px solid #888888;
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #888888;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 20px;
+    height: 20px;
     animation: spin 2s linear infinite;
     display: flex;
-    margin: auto;
+    justify-content: center;
 }
 
 @keyframes spin {
@@ -279,13 +278,6 @@ h3 {
     font-weight: normal;
 
     margin: 0;
-
-    text-align: left;
-}
-
-p {
-    margin: 12px 0 19px;
-    text-align: left;
 }
 
 time {
@@ -299,39 +291,41 @@ h2 {
     margin: 0;
 }
 
-.subject {
+.main {
     display: flex;
-    padding: 16px 14px 5px 14px;
-    border-radius: 16px;
-    border: 3px solid #6d9773;
-    justify-content: space-between;
+    flex-direction: column;
 
     height: auto;
-    margin: 5px 12px;
+    margin: 0 12px;
+
+    border-radius: 16px;
     background: #fff;
     box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 }
 
-.realtime-subject {
+.subject {
     display: flex;
+
     padding: 16px 14px 5px 14px;
+
+    color: black;
     border-radius: 16px;
-    border: 3px solid #364b39;
+    background-color: #FFFFFF;
+
     justify-content: space-between;
+}
+
+.realtime-subject {
+
+    display: flex;
+
+    padding: 16px 14px 5px 14px;
 
     color: white;
-    height: auto;
-    margin: 5px 12px;
-    background: #6d9773;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-}
+    border-radius: 16px;
+    background-color: #6d9773;
 
-.realtime-subject h3 {
-    color: #ffc936;
-}
-
-.realtime-subject time {
-    color: #ffc936;
+    justify-content: space-between;
 }
 
 /*.description-subject {*/
@@ -342,6 +336,15 @@ h2 {
 /*    justify-content: space-between;*/
 /*}*/
 
+/* стилизация содержимого страницы */
+body {
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #292b2c;
+    background-color: #fff;
+}
 
 /* свойства модального окна по умолчанию */
 .modal {
