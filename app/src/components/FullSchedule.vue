@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div class="field-btn">
+            <router-link class="btn" to="/home">Назад</router-link>
+        </div>
         <div class="upper-block">
             <!--            TODO: window to choose class-->
             <div class="current-class" style="color: #000">Ваш класс</div>
@@ -24,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div class="choose-day">
+        <div class="upper-block">
             <button class="btnDay" @click="this.chosenDay = 0; showList()">Пн</button>
             <button class="btnDay" @click="this.chosenDay = 1; showList()">Вт</button>
             <button class="btnDay" @click="this.chosenDay = 2; showList()">Ср</button>
@@ -45,25 +48,19 @@
                 <div>
                     <time v-for="i in lesson.start_time.length">
                         {{
-                            lesson.start_time[i - 1].hour
+                        lesson.start_time[i - 1].hour
                         }}:{{
-                            (lesson.start_time[i - 1].minute < 10 ? '0' : '') + lesson.start_time[i - 1].minute
+                        (lesson.start_time[i - 1].minute < 10 ? '0' : '') + lesson.start_time[i - 1].minute
                         }} -
                         {{
-                            lesson.end_time[i - 1].hour
+                        lesson.end_time[i - 1].hour
                         }}:{{
-                            (lesson.end_time[i - 1].minute < 10 ? '0' : '') + lesson.end_time[i - 1].minute
+                        (lesson.end_time[i - 1].minute < 10 ? '0' : '') + lesson.end_time[i - 1].minute
                         }}<br>
                     </time>
                 </div>
             </div>
         </main>
-        <button
-                class="btn"
-                @click="$router.push('/home')"
-        >
-            Назад
-        </button>
     </div>
 </template>
 
@@ -149,18 +146,6 @@ export default {
 </script>
 
 <style scoped>
-.btn {
-    margin: 20px;
-    width: 50%;
-    padding: 10px 10px;
-
-    text-align: center;
-
-    color: #fff;
-    border-radius: 16px;
-    background-color: #6d9773;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-}
 
 .btnDay {
     margin: 10px;
@@ -171,23 +156,13 @@ export default {
 
     color: #fff;
     border-radius: 16px;
+    border: none;
     background-color: #6d9773;
     box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 }
 
 .btnDay:focus {
     background-color: #405b44;
-}
-
-.choose-day {
-    width: 100%;
-    padding: 10px 0;
-    display: flex;
-    margin: 0 0 20px 0;
-    text-align: center;
-
-    border-radius: 16px;
-    background-color: white;
 }
 
 .upper-block {
@@ -455,5 +430,28 @@ body {
     padding: 15px;
     overflow: auto;
 }
+.btn {
 
+    background: #6D9773;
+    margin: 0;
+    padding: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 16px;
+    color: white;
+}
+
+.field-btn {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    text-align: center;
+    margin: 0 12px;
+}
+
+.btn:disabled {
+    background: #D63D6D;
+}
 </style>
