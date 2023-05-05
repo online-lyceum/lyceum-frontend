@@ -37,7 +37,7 @@
             <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
                  :class="getCurrentTimeClass(
                                 lesson.start_time[0].hour, lesson.start_time[0].minute,
-                                lesson.end_time[1].hour, lesson.end_time[1].minute)">
+                                lesson.end_time[lesson.end_time.length - 1].hour, lesson.end_time[lesson.end_time.length - 1].minute)">
                 <div>
                     <h3 class="cut-text">{{ lesson.name }}</h3>
                     <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
@@ -149,27 +149,6 @@ export default {
 </script>
 
 <style scoped>
-/* Loading Data */
-.loader {
-    border: 5px solid #f3f3f3; /* Light grey */
-    border-top: 5px solid #888888;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 2s linear infinite;
-    display: flex;
-    justify-content: center;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
 .btn {
     margin: 20px;
     width: 50%;
