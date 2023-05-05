@@ -10,7 +10,7 @@
                     <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
                 </div>
                 <div>
-                    <time v-for="i in [0, 1]">
+                    <time v-for="i in lesson.start_time.length">
                         {{
                             lesson.start_time[i].hour
                         }}:{{
