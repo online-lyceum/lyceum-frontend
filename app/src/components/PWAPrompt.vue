@@ -24,7 +24,7 @@ export default {
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault()
             this.installEvent = e
-            this.shown = true
+            this.shown = false
         })
     },
 
