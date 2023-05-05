@@ -32,28 +32,32 @@
             <button class="btnDay" @click="this.chosenDay = 4; showList()">Пт</button>
             <button class="btnDay" @click="this.chosenDay = 5; showList()">Сб</button>
         </div>
-        <div :class="isLoading()">
-            <ul style="margin-top: 20px">
-                <li v-for="lesson in lesson_list" :key="lesson.lesson_id"
-                    :class="isCurrentTime(lesson.start_time.hour, lesson.start_time.minute,
-                    lesson.end_time.hour, lesson.end_time.minute)">
-                    <h3>{{ lesson.name }}</h3>
-                    <div>
-                        <time>{{
-                            lesson.start_time.hour
-                            }}:{{
-                            (lesson.start_time.minute < 10 ? '0' : '') + lesson.start_time.minute
-                            }} -
-                            {{
-                            lesson.end_time.hour
-                            }}:{{
-                            (lesson.end_time.minute < 10 ? '0' : '') + lesson.end_time.minute
-                            }}
-                        </time>
-                    </div>
-                </li>
-            </ul>
-        </div>
+        <my-loader v-if="isLoading()"></my-loader>
+        <main v-else class="upper-block">
+            <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
+                 :class="getCurrentTimeClass(
+                                lesson.start_time[0].hour, lesson.start_time[0].minute,
+                                lesson.end_time[1].hour, lesson.end_time[1].minute)">
+                <div>
+                    <h3 class="cut-text">{{ lesson.name }}</h3>
+                    <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
+                </div>
+                <div>
+                    <time v-for="i in lesson.start_time.length">
+                        {{
+                            lesson.start_time[i - 1].hour
+                        }}:{{
+                            (lesson.start_time[i - 1].minute < 10 ? '0' : '') + lesson.start_time[i - 1].minute
+                        }} -
+                        {{
+                            lesson.end_time[i - 1].hour
+                        }}:{{
+                            (lesson.end_time[i - 1].minute < 10 ? '0' : '') + lesson.end_time[i - 1].minute
+                        }}<br>
+                    </time>
+                </div>
+            </div>
+        </main>
         <button
                 class="btn"
                 @click="$router.push('/home')"
@@ -68,9 +72,10 @@ import MyButton from "@/App.vue";
 import LessonList from "@/components/LessonList.vue";
 import axios from "axios";
 import SelectSubgroup from "@/components/SelectSubgroup.vue";
+import MyLoader from "@/components/UI/MyLoader.vue";
 
 export default {
-    components: {SelectSubgroup, LessonList, MyButton},
+    components: {MyLoader, SelectSubgroup, LessonList, MyButton},
     data() {
         return {
             chosenDay: null,
@@ -91,7 +96,8 @@ export default {
                     params: {
                         subgroup_id: (this.$store.state.isAnotherClassShow) ?
                             this.$store.state.anotherSubgroupID : this.$store.state.subgroupID,
-                        weekday: this.chosenDay
+                        weekday: this.chosenDay,
+                        do_double: true,
                     }
                 })
                 .then(
@@ -103,7 +109,7 @@ export default {
                     this.$store.commit('initialiseVars')
                 )
         },
-        isCurrentTime(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+        getCurrentTimeClass(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
             if (this.chosenDay !== new Date().getDay() - 1)
                 return 'subject'
             if (startTimeHours < 10) {
@@ -127,9 +133,9 @@ export default {
             let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
             return (res) ? "realtime-subject" : "subject"
         },
-        isLoading(){
+        isLoading() {
             //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
-            return (this.lesson_list.length === 0) ? "loader" : "main"
+            return (this.lesson_list.length === 0) ? "loader" : ""
         },
         setAnotherClassShowTrue() {
             this.$store.state.isAnotherClassShow = true
@@ -291,7 +297,7 @@ h2 {
     margin: 0;
 }
 
-.main {
+main {
     display: flex;
     flex-direction: column;
 
@@ -308,24 +314,25 @@ h2 {
 
     padding: 16px 14px 5px 14px;
 
-    color: black;
-    border-radius: 16px;
-    background-color: #FFFFFF;
-
     justify-content: space-between;
+
+    border-bottom: 1px solid black;
 }
 
 .realtime-subject {
-
     display: flex;
 
-    padding: 16px 14px 5px 14px;
+    padding: 16px 14px 20px 14px;
 
     color: white;
     border-radius: 16px;
     background-color: #6d9773;
 
     justify-content: space-between;
+}
+
+.cut-text {
+    overflow: hidden;
 }
 
 /*.description-subject {*/

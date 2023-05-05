@@ -1,6 +1,7 @@
 <template>
     <div>
-        <main v-if="!isLoading()" class="upper-block">
+        <my-loader v-if="isLoading()"></my-loader>
+        <main v-else class="upper-block">
             <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
                  :class="getCurrentTimeClass(
                                 lesson.start_time[0].hour, lesson.start_time[0].minute,
@@ -25,9 +26,6 @@
                 </div>
             </div>
         </main>
-        <div v-else>
-            Загрузка...
-        </div>
     </div>
 </template>
 
@@ -36,9 +34,10 @@ import axios from "axios";
 import MyEvent from "@/components/UI/MyEvent.vue";
 import MyButton from "@/components/UI/MyButton.vue";
 import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
+import MyLoader from "@/components/UI/MyLoader.vue";
 
 export default {
-    components: {MyUpperBlock, MyButton, MyEvent},
+    components: {MyLoader, MyUpperBlock, MyButton, MyEvent},
     data() {
         return {
             lesson_list: [],
@@ -89,10 +88,6 @@ export default {
 
             return (res) ? "realtime-subject" : "subject"
 
-        },
-        getLoadingClass() {
-            //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
-            return (this.lesson_list.length === 0) ? "loader" : "main"
         },
         isLoading() {
             //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
@@ -194,6 +189,8 @@ main {
     padding: 16px 14px 5px 14px;
 
     justify-content: space-between;
+
+    border-bottom: 1px solid black;
 }
 
 .realtime-subject {
