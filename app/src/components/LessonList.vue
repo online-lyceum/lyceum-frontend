@@ -5,7 +5,7 @@
             <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
                  :class="getCurrentTimeClass(
                                 lesson.start_time[0].hour, lesson.start_time[0].minute,
-                                lesson.end_time[1].hour, lesson.end_time[1].minute)">
+                                lesson.end_time[lesson.end_time.length - 1].hour, lesson.end_time[lesson.end_time.length - 1].minute)">
                 <div>
                     <h3 class="cut-text">{{ lesson.name }}</h3>
                     <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
