@@ -3,7 +3,7 @@
         <p>Добавить сайт на главный экран?</p>
 
         <div class="btns">
-            <button class="btn" @click="installPWA">
+            <button class="btn" @click="installPWA()">
                 Да, конечно!
             </button>
 
