@@ -43,16 +43,18 @@
 
 
         </form>
-        <my-button
-                @click="selectSubgroup()"
-                class="select-button"
-        >
-            {{
-            subgroupID === null ?
-                'Выбирите класс и подгруппу' :
-                'Выбрать'
-            }}
-        </my-button>
+        <a class="select-link" href="#">
+            <my-button
+                    @click="selectSubgroup()"
+                    class="select-button"
+            >
+                {{
+                subgroupID === null ?
+                    'Выбирите класс и подгруппу' :
+                    'Выбрать'
+                }}
+            </my-button>
+        </a>
     </div>
 </template>
 
@@ -220,6 +222,9 @@ export default {
 
 p {
     margin: 10px 0;
+}
+.select-link {
+    text-decoration: none;
 }
 .select-input {
     margin-top: 50px;
