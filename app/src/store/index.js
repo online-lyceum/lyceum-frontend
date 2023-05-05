@@ -1,5 +1,4 @@
 import {createStore} from 'vuex'
-import axios from "axios";
 
 export default createStore({
     state: {
@@ -17,8 +16,7 @@ export default createStore({
     mutations: {
         async initialiseVars(state) {
             if (localStorage.getItem('subgroupID')) {
-                let subgroupID = JSON.parse(localStorage.subgroupID)
-                state.subgroupID = subgroupID
+                state.subgroupID = JSON.parse(localStorage.subgroupID)
             }
         },
         setSubgroupID(state, subgroupID) {

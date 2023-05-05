@@ -1,21 +1,23 @@
 <template>
-    <div v-if="shown">
-        Добавить сайт на главный экран?
+    <div v-if="shown" class="my-card">
+        <p>Добавить сайт на главный экран?</p>
 
-        <button @click="installPWA">
-            Да, конечно!
-        </button>
+        <div class="btns">
+            <button class="btn" @click="installPWA">
+                Да, конечно!
+            </button>
 
-        <button @click="dismissPrompt">
-            Нет, спасибо
-        </button>
+            <button style="margin-left: 12px" class="btn" @click="dismissPrompt">
+                Нет, спасибо
+            </button>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
     data: () => ({
-        shown: false,
+        shown: true,
     }),
 
     beforeMount() {
@@ -45,3 +47,23 @@ export default {
     }
 }
 </script>
+<style scoped>
+.my-card {
+    background-color: #fff;
+    border-radius: 16px;
+}
+.btns {
+    display: flex;
+    flex-direction: row;
+}
+.btn {
+    width: 50%;
+    padding: 10px 10px;
+    text-align: center;
+    color: #fff;
+    border-radius: 16px;
+    border: none;
+    background-color: #6d9773;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+}
+</style>

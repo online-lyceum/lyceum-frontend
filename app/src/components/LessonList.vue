@@ -12,14 +12,14 @@
                 <div>
                     <time v-for="i in lesson.start_time.length">
                         {{
-                            lesson.start_time[i].hour
+                            lesson.start_time[i - 1].hour
                         }}:{{
-                            (lesson.start_time[i].minute < 10 ? '0' : '') + lesson.start_time[i].minute
+                            (lesson.start_time[i - 1].minute < 10 ? '0' : '') + lesson.start_time[i - 1].minute
                         }} -
                         {{
-                            lesson.end_time[i].hour
+                            lesson.end_time[i - 1].hour
                         }}:{{
-                            (lesson.end_time[i].minute < 10 ? '0' : '') + lesson.end_time[i].minute
+                            (lesson.end_time[i - 1].minute < 10 ? '0' : '') + lesson.end_time[i - 1].minute
                         }}<br>
                     </time>
                 </div>
@@ -59,7 +59,10 @@ export default {
                         this.$store.commit('setNearestDayIndex', this.lesson_list[0].weekday)
                     })
                 .catch(
-                    this.$store.commit('initialiseVars')
+                    () => {
+                        this.$store.commit('logout')
+                        this.$router.push('/')
+                    }
                 )
 
         },
