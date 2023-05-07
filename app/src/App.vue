@@ -1,5 +1,6 @@
 <template>
-    <header class="block">
+    <div id="app">
+        <header class="block">
             <span class="my-header"
                   style="color: #000; text-decoration: none"
                   @click="openPopup"
@@ -8,13 +9,14 @@
                       @click="openPopup">≡</span>
                 ЛИЦЕЙ В ЦИФРЕ
             </span>
-    </header>
-    <my-header
-            :is-open="isPopupOpen"
-            @close="isPopupOpen = false"
-            is-confirm>
-    </my-header>
-    <router-view/>
+        </header>
+        <my-header
+                :is-open="isPopupOpen"
+                @close="isPopupOpen = false"
+                is-confirm>
+        </my-header>
+        <router-view/>
+    </div>
 </template>
 
 <script>

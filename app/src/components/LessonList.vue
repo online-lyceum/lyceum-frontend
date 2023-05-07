@@ -55,7 +55,11 @@ export default {
                         continue
                     }
                 }
-                result.push('subject')
+                if (this.lessonList.length > i + 1 && this.isStarted(this.lessonList[i + 1].start_time)){
+                    result.push('subject')
+                    continue
+                }
+                result.push('subject subject-hr')
             }
             return result
         }
@@ -124,7 +128,9 @@ h2 {
     padding: 16px 14px 5px 14px;
 
     justify-content: space-between;
+}
 
+.subject-hr {
     border-bottom: 1px solid black;
 }
 
