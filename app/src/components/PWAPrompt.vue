@@ -49,6 +49,7 @@ export default {
 </script>
 <style scoped>
 .my-card {
+    margin-top: 30px;
     background-color: #fff;
     border-radius: 16px;
 }
