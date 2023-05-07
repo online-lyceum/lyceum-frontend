@@ -96,7 +96,7 @@ export default {
     border-radius: 0 0 16px 16px;
     position: relative;
     margin: 0 auto;
-    max-width: 700px;
+    max-width: 640px;
 }
 
 .popup h3 {

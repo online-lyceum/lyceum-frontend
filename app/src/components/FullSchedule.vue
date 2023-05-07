@@ -84,7 +84,7 @@ export default {
     methods: {
         getWeekDay() {
             let a = new Date()
-            this.chosenDay = a.getDay() - 1
+            this.chosenDay = (a.getDay() + 6) % 7
 
         },
         async showList() {
