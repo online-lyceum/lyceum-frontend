@@ -1,23 +1,21 @@
 <template>
     <div v-if="shown" class="my-card">
-        <p>Добавить сайт на главный экран?</p>
-
+        <p>Установить мобильное приложение?</p>
         <div class="btns">
-            <button class="btn" @click="installPWA()">
-                Да, конечно!
-            </button>
-
-            <button style="margin-left: 12px" class="btn" @click="dismissPrompt">
-                Нет, спасибо
-            </button>
+            <my-button @click="installPWA()">
+                Да, установить!
+            </my-button>
         </div>
     </div>
 </template>
 
 <script>
+import MyButton from "@/components/UI/MyButton.vue";
+
 export default {
+    components: {MyButton},
     data: () => ({
-        shown: true,
+        shown: false,
     }),
 
     beforeMount() {
@@ -55,7 +53,7 @@ export default {
 }
 .btns {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 .btn {
     width: 50%;

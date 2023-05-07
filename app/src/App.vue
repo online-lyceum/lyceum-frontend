@@ -72,7 +72,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    margin: auto;
+    margin: 0 auto;
     max-width: 700px;
 }
 
@@ -98,8 +98,9 @@ export default {
 }
 
 body {
-    padding-top: 0;
+    padding: 0;
     margin: 0;
     background-color: #0C3B2E;
 }
+
 </style>

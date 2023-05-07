@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div class="field-btn">
-            <router-link class="btn" to="/home">Назад</router-link>
-        </div>
+        <my-button @click="$router.push('/home')">Назад</my-button>
         <div class="lesson-list-content">
             <!--            TODO: window to choose class-->
             <div class="current-class" style="color: #000">Ваш класс</div>
@@ -65,7 +63,7 @@
 </template>
 
 <script>
-import MyButton from "@/App.vue";
+import MyButton from "@/components/UI/MyButton.vue";
 import LessonList from "@/components/NearestLessonList.vue";
 import axios from "axios";
 import SelectSubgroup from "@/components/SelectSubgroup.vue";
@@ -422,6 +420,7 @@ body {
     padding: 15px;
     overflow: auto;
 }
+
 .btn {
 
     background: #6D9773;
