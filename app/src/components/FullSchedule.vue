@@ -289,14 +289,6 @@ main {
     overflow: hidden;
 }
 
-/*.description-subject {*/
-/*    display: flex;*/
-
-/*    border-bottom: 1px solid #fff;*/
-
-/*    justify-content: space-between;*/
-/*}*/
-
 /* стилизация содержимого страницы */
 body {
     font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

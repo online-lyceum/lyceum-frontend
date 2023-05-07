@@ -12,6 +12,7 @@
             </div>
         </div>
 
+
         <div v-else class="popup" @click.stop>
             <h3>Лицей в Цифре</h3>
             <div class="footer">
@@ -90,22 +91,17 @@ export default {
 
 <style>
 .popup {
-    top: 50px;
     padding: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 101;
     background-color: white;
-
-    border-radius: 16px;
+    border-radius: 0 0 16px 16px;
     position: relative;
-    width: auto;
     margin: 0 auto;
+    max-width: 700px;
 }
 
 .popup h3 {
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 30px;
     line-height: 1.5;
     font-size: 1.25rem;
     font-weight: 500;
