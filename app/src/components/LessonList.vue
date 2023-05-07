@@ -1,156 +1,96 @@
 <template>
-    <div>
-        <my-loader v-if="isLoading()"></my-loader>
-        <main v-else class="upper-block">
-            <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
-                 :class="getCurrentTimeClass(
-                                lesson.start_time[0].hour, lesson.start_time[0].minute,
-                                lesson.end_time[lesson.end_time.length - 1].hour, lesson.end_time[lesson.end_time.length - 1].minute)">
-                <div>
-                    <h3 class="cut-text">{{ lesson.name }}</h3>
-                    <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
-                </div>
-                <div>
-                    <time v-for="i in lesson.start_time.length">
-                        {{
-                            lesson.start_time[i - 1].hour
-                        }}:{{
-                            (lesson.start_time[i - 1].minute < 10 ? '0' : '') + lesson.start_time[i - 1].minute
-                        }} -
-                        {{
-                            lesson.end_time[i - 1].hour
-                        }}:{{
-                            (lesson.end_time[i - 1].minute < 10 ? '0' : '') + lesson.end_time[i - 1].minute
-                        }}<br>
-                    </time>
-                </div>
+    <div class="lesson-list">
+        <div v-for="i in lessonList.length" :key="lessonList[i - 1].lesson_id[0]"
+             :class="lessonCSSClasses[i - 1]">
+            <div>
+                <h3 class="cut-text">{{ lessonList[i - 1].name }}</h3>
+                <p class="cut-text">{{ lessonList[i - 1].room }}<br>{{ lessonList[i - 1].teacher.name }}</p>
             </div>
-        </main>
+            <div>
+                <time v-for="j in lessonList[i - 1].start_time.length">
+                    {{
+                    lessonList[i - 1].start_time[j - 1].hour
+                    }}:{{
+                    (lessonList[i - 1].start_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].start_time[j - 1].minute
+                    }} -
+                    {{
+                    lessonList[i - 1].end_time[j - 1].hour
+                    }}:{{
+                    (lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].end_time[j - 1].minute
+                    }}<br>
+                </time>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import axios from "axios";
 import MyEvent from "@/components/UI/MyEvent.vue";
 import MyButton from "@/components/UI/MyButton.vue";
 import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
-import MyLoader from "@/components/UI/MyLoader.vue";
 
 export default {
-    components: {MyLoader, MyUpperBlock, MyButton, MyEvent},
-    data() {
-        return {
-            lesson_list: [],
+    components: {MyUpperBlock, MyButton, MyEvent},
+    props: {
+        lessonList: Array,
+    },
+    computed: {
+        lessonCSSClasses() {
+            let result = []
+            for (let i = 0; i < this.lessonList.length; i++) {
+                if (this.isCurrentLesson(i)) {
+                    result.push('current-subject')
+                    continue
+                }
+                let isStarted = this.isStarted(this.lessonList[i].start_time)
+                if (i === 0) {
+                    if (!isStarted) {
+                        result.push('next-subject')
+                        continue
+                    }
+                } else {
+                    let isEnded = this.isEnded(this.lessonList[i - 1].end_time)
+                    if (isEnded && !isStarted) {
+                        result.push('next-subject')
+                        continue
+                    }
+                }
+                result.push('subject')
+            }
+            return result
         }
     },
     methods: {
-        async showList() {
-            await axios.get(`${this.$store.state.TIME_API}/lessons/nearest_day`,
-                {
-                    params: {
-                        subgroup_id: this.$store.state.subgroupID,
-                        do_double: true
-                    }
-                })
-                .then(
-                    async (res) => {
-                        this.lesson_list = await res.data.lessons
-                        this.$store.commit('setNearestDayIndex', this.lesson_list[0].weekday)
-                    })
-                .catch(
-                    () => {
-                        this.$store.commit('logout')
-                        this.$router.push('/')
-                    }
-                )
+        isEnded(endTime, now = new Date()) {
+            return now.getHours() * 60 + now.getMinutes() >= endTime.hours * 60 + endTime.minutes
+        },
+        isStarted(startTime, now = new Date()) {
+            return now.getHours() * 60 + now.getMinutes() > startTime.hours * 60 + startTime.minutes
+        },
+        isCurrentLesson(index) {
+            let lesson = this.lessonList[index]
+            return this.isCurrentTime(
+                lesson.weekday,
+                lesson.start_time[0],
+                lesson.end_time[lesson.end_time.length]
+            )
+        },
+        isCurrentTime(weekday, startTime, endTime, now = new Date()) {
+            let is_current_time = (now.weekday + 6) % 7 !== weekday
+            is_current_time &&= this.isStarted(startTime, now)
+            return is_current_time && this.isEnded(endTime, now)
 
         },
-        getCurrentTimeClass(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
-            if (startTimeHours < 10) {
-                startTimeHours = `0${startTimeHours}`
-            }
-            if (startTimeMinutes < 10) {
-                startTimeMinutes = `0${startTimeMinutes}`
-            }
-            if (endTimeHours < 10) {
-                endTimeHours = `0${endTimeHours}`
-            }
-            if (endTimeMinutes < 10) {
-                endTimeMinutes = `0${endTimeMinutes}`
-            }
-            let currentDate = new Date()
-            let hours = currentDate.getHours()
-            let minutes = currentDate.getMinutes()
-            let dateToday = new Date(0, 0, 0, hours, minutes, 0, 0)
-            let lessonStarts = new Date(0, 0, 0, startTimeHours, startTimeMinutes, 0, 0)
-            let lessonEnds = new Date(0, 0, 0, endTimeHours, endTimeMinutes, 0, 0)
-            let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
+        getCurrentTimeClass(weekday, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
+            let is_current_time = this.isCurrentTime(weekday, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes)
+            return (is_current_time) ? "realtime-subject" : "subject"
 
-            return (res) ? "realtime-subject" : "subject"
-
-        },
-        isLoading() {
-            //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
-            return this.lesson_list.length === 0
         },
     },
-    props: {},
-    mounted() {
-        this.showList()
-
-    }
 }
 </script>
 
 <style scoped>
-/* Global */
-
-body {
-    font-family: sans-serif;
-
-    margin: 0;
-
-    background-color: #0c3b2e;
-}
-
-a {
-    text-decoration: none;
-    color: black;
-}
-
-/* Main Page */
-/* header */
-
-header {
-    font-size: 16px;
-
-    height: 50px;
-    margin: 0 12px 30px;
-
-    text-align: center;
-
-    border-radius: 0 0 16px 16px;
-    background-color: #fff;
-}
-
-/* Content */
-/* upper-block */
-
-.upper-block {
-    display: flex;
-
-    margin: 0 12px 32px;
-
-    border-radius: 16px;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-
-    justify-content: space-between;
-}
-
-
-/* main */
-
 h3 {
     font-size: 20px;
     font-weight: normal;
@@ -171,7 +111,7 @@ h2 {
     margin: 0;
 }
 
-main {
+.lesson-list {
     display: flex;
     flex-direction: column;
 
@@ -193,6 +133,17 @@ main {
     border-bottom: 1px solid black;
 }
 
+.next-subject {
+    display: flex;
+
+    padding: 16px 14px 5px 14px;
+
+    justify-content: space-between;
+
+    border: 5px solid #6d9773;
+    border-radius: 16px;
+}
+
 .realtime-subject {
     display: flex;
 
@@ -201,6 +152,20 @@ main {
     color: white;
     border-radius: 16px;
     background-color: #6d9773;
+
+    justify-content: space-between;
+}
+
+/* upper-block */
+
+.lesson-list-content {
+    display: flex;
+
+    margin: 0 12px 32px;
+
+    border-radius: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 
     justify-content: space-between;
 }
