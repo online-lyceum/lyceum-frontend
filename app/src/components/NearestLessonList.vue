@@ -1,6 +1,6 @@
 <template>
     <div>
-        <my-loader v-if="isLoading()"></my-loader>
+        <my-loader v-if="isLoading"></my-loader>
         <lesson-list :lesson-list="lesson_list"/>
     </div>
 </template>
@@ -17,11 +17,13 @@ export default {
     components: {LessonList, MyLoader, MyUpperBlock, MyButton, MyEvent},
     data() {
         return {
+            isLoading: false,
             lesson_list: [],
         }
     },
     methods: {
-        async showList() {
+        async loadLessons() {
+            this.isLoading = true
             await axios.get(`${this.$store.state.TIME_API}/lessons/nearest_day`,
                 {
                     params: {
@@ -40,40 +42,11 @@ export default {
                         this.$router.push('/')
                     }
                 )
-
-        },
-        getCurrentTimeClass(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
-            if (startTimeHours < 10) {
-                startTimeHours = `0${startTimeHours}`
-            }
-            if (startTimeMinutes < 10) {
-                startTimeMinutes = `0${startTimeMinutes}`
-            }
-            if (endTimeHours < 10) {
-                endTimeHours = `0${endTimeHours}`
-            }
-            if (endTimeMinutes < 10) {
-                endTimeMinutes = `0${endTimeMinutes}`
-            }
-            let currentDate = new Date()
-            let hours = currentDate.getHours()
-            let minutes = currentDate.getMinutes()
-            let dateToday = new Date(0, 0, 0, hours, minutes, 0, 0)
-            let lessonStarts = new Date(0, 0, 0, startTimeHours, startTimeMinutes, 0, 0)
-            let lessonEnds = new Date(0, 0, 0, endTimeHours, endTimeMinutes, 0, 0)
-            let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
-
-            return (res) ? "realtime-subject" : "subject"
-
-        },
-        isLoading() {
-            //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
-            return this.lesson_list.length === 0
-        },
+            this.isLoading = false
+        }
     },
     created() {
-        this.showList()
-
+        this.loadLessons()
     }
 }
 </script>

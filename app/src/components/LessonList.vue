@@ -80,12 +80,7 @@ export default {
             is_current_time &&= this.isStarted(startTime, now)
             return is_current_time && this.isEnded(endTime, now)
 
-        },
-        getCurrentTimeClass(weekday, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
-            let is_current_time = this.isCurrentTime(weekday, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes)
-            return (is_current_time) ? "realtime-subject" : "subject"
-
-        },
+        }
     },
 }
 </script>
