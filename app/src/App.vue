@@ -71,6 +71,9 @@ export default {
     font-family: sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    margin: auto;
+    max-width: 700px;
 }
 
 .block {
