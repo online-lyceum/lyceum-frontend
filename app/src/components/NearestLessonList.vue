@@ -1,7 +1,7 @@
 <template>
     <div>
         <my-loader v-if="isLoading"></my-loader>
-        <lesson-list :lesson-list="lesson_list"/>
+        <lesson-list :lesson-list="lessonList"/>
     </div>
 </template>
 
@@ -18,7 +18,7 @@ export default {
     data() {
         return {
             isLoading: false,
-            lesson_list: [],
+            lessonList: [],
         }
     },
     methods: {
@@ -33,8 +33,8 @@ export default {
                 })
                 .then(
                     async (res) => {
-                        this.lesson_list = await res.data.lessons
-                        this.$store.commit('setNearestDayIndex', this.lesson_list[0].weekday)
+                        this.lessonList = await res.data.lessons
+                        this.$store.commit('setNearestDayIndex', this.lessonList[0].weekday)
                     })
                 .catch(
                     () => {
