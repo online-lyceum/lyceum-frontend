@@ -7,7 +7,10 @@
                 :class="{'next-subject': lessonStatus[i - 1] === 'next', 'current-subject': lessonStatus[i - 1] === 'current'}"
         >
             <div class="subject-content">
-                <div class="description-subject">
+                <div
+                    class="description-subject"
+                    :class="{'subject-hr': lessonStatus[i - 1] === 'hr'}"
+                >
                     <div class="info-subject">
                         <h3 class="cut-text">{{ lessonList[i - 1].name }}</h3>
                         <p class="cut-text">{{ lessonList[i - 1].room }}<br>{{ lessonList[i - 1].teacher.name }}</p>
@@ -34,7 +37,7 @@
                         </time>
                     </div>
                 </div>
-                <p v-if="lessonStatus[i - 1] === 'current'" class="start-time-label">
+                <p v-if="lessonStatus[i - 1] === 'current' || lessonStatus[i - 1] === 'next'" class="start-time-label">
                     {{ getLessonStatusText(lessonList[i - 1]) }}</p>
             </div>
 
@@ -49,77 +52,105 @@ import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
 
 export default {
     components: {MyUpperBlock, MyButton, MyEvent},
+    data() {
+        return {
+            now: new Date()
+        }
+    },
+    created() {
+        setInterval(() => {
+            this.now = new Date()
+        }, 1000)
+    },
     props: {
         lessonList: Array,
     },
     computed: {
         lessonStatus() {
-            let now = new Date()
             let result = []
             for (let i = 0; i < this.lessonList.length; i++) {
-                if (this.isCurrentLesson(i, now)) {
+                if (this.isCurrentLesson(i)) {
                     result.push('current')
                     continue
                 }
-                let isStarted = this.isStarted(this.lessonList[i].start_time[0], now)
-                let isEnded = this.isEnded(this.lessonList[i].end_time[this.lessonList[i].end_time.length - 1], now)
-                console.log(isStarted, isEnded)
+                let isStarted = this.isStarted(this.lessonList[i].start_time[0])
+                let isEnded = this.isEnded(this.lessonList[i].end_time[this.lessonList[i].end_time.length - 1])
                 if (i === 0) {
                     if (!isStarted && !isEnded) {
                         result.push('next')
                         continue
                     }
                 } else {
-                    let isPreviousEnded = this.isEnded(this.lessonList[i - 1].end_time[this.lessonList[i - 1].end_time.length - 1], now)
+                    let isPreviousEnded = this.isEnded(this.lessonList[i - 1].end_time[this.lessonList[i - 1].end_time.length - 1])
                     if (isPreviousEnded && !isStarted) {
                         result.push('next')
                         continue
                     }
                 }
-                if (this.lessonList.length > i + 1 && this.isStarted(this.lessonList[i + 1].start_time[0], now)) {
-                    result.push('')
-                    continue
-                }
                 result.push('hr')
+            }
+            for (let i = 1; i < this.lessonList.length; i++){
+                if (result[i] === 'current' || result[i] === 'next'){
+                    result[i - 1] = ''
+                }
             }
             return result
         },
     },
-    updated() {
-        console.log('Updated')
-    },
     methods: {
+        timeBefore(someTime) {
+            let nowSeconds = this.now.getHours() * 3600 + this.now.getMinutes() * 60 + this.now.getSeconds()
+            let someTimeSeconds = someTime.hour * 3600 + someTime.minute * 60
+            let diff = someTimeSeconds - nowSeconds
+            let hour = Math.floor(diff / 3600)
+            let minute = Math.floor(diff % 3600 / 60)
+            let second = diff % 60
+            return {hour, minute, second}
+        },
         getLessonStatusText(lesson) {
             for (let i = 0; i < lesson.start_time.length; i++) {
                 if (!this.isStarted(lesson.start_time[i])) {
-                    return 'Начало через 5:12'
+                    let beforeStart = this.timeBefore(lesson.start_time[i])
+                    if (beforeStart.hour === 1) {
+                        return 'До начала больше часа'
+                    }
+                    if (beforeStart.hour > 0) {
+                        return 'До начала больше ' + beforeStart.hour + ' часов'
+                    }
+                    return 'Начало через ' + beforeStart.minute + ((beforeStart < 10) ? ': 0' : ':') + beforeStart.second
                 }
                 if (this.isCurrentTime(lesson.weekday, lesson.start_time[i], lesson.end_time[i])) {
-                    return 'Конец через 5:12'
+                    let beforeEnd = this.timeBefore(lesson.end_time[i])
+                    if (beforeEnd.hour === 1) {
+                        return 'До конца больше часа'
+                    }
+                    if (beforeEnd.hour > 0) {
+                        return 'До конца больше ' + before.hour + ' часов'
+                    }
+                    return 'Конец через ' + beforeEnd.minute + ((beforeEnd < 10) ? ': 0' : ':') + beforeEnd.second
                 }
             }
-            return ''
+            return 'qwe'
         },
-        isEnded(endTime, now = new Date()) {
-            return now.getHours() * 60 + now.getMinutes() >= endTime.hour * 60 + endTime.minute
+        isEnded(endTime) {
+            return this.now.getHours() * 60 + this.now.getMinutes() >= endTime.hour * 60 + endTime.minute
         },
-        isStarted(startTime, now = new Date()) {
-            return now.getHours() * 60 + now.getMinutes() > startTime.hour * 60 + startTime.minute
+        isStarted(startTime) {
+            return this.now.getHours() * 60 + this.now.getMinutes() > startTime.hour * 60 + startTime.minute
         },
-        isCurrentLesson(index, now = new Date()) {
+        isCurrentLesson(index) {
             let lesson = this.lessonList[index]
             return this.isCurrentTime(
                 lesson.weekday,
                 lesson.start_time[0],
-                lesson.end_time[lesson.end_time.length - 1],
-                now
+                lesson.end_time[lesson.end_time.length - 1]
             )
         },
-        isCurrentTime(weekday, startTime, endTime, now = new Date()) {
+        isCurrentTime(weekday, startTime, endTime) {
 
-            let is_current_time = (now.weekday + 6) % 7 !== weekday
-            is_current_time &&= this.isStarted(startTime, now)
-            is_current_time &&= !this.isEnded(endTime, now)
+            let is_current_time = (this.now.weekday + 6) % 7 !== weekday
+            is_current_time &&= this.isStarted(startTime)
+            is_current_time &&= !this.isEnded(endTime)
             return is_current_time
 
         }
@@ -179,7 +210,9 @@ h2 {
     border: 5px solid #6d9773;
     border-radius: 16px;
 }
-
+.subject-hr {
+    border-bottom: 2px solid black;
+}
 .current-subject {
     display: flex;
 
