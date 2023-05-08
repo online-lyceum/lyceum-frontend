@@ -36,26 +36,29 @@ export default {
     },
     computed: {
         lessonCSSClasses() {
+            let now = new Date()
             let result = []
             for (let i = 0; i < this.lessonList.length; i++) {
-                if (this.isCurrentLesson(i)) {
+                if (this.isCurrentLesson(i, now)) {
                     result.push('current-subject')
                     continue
                 }
-                let isStarted = this.isStarted(this.lessonList[i].start_time)
+                let isStarted = this.isStarted(this.lessonList[i].start_time[0], now)
+                let isEnded = this.isEnded(this.lessonList[i].end_time[this.lessonList[i].end_time.length - 1], now)
+                console.log(isStarted, isEnded)
                 if (i === 0) {
-                    if (!isStarted) {
+                    if (!isStarted && !isEnded) {
                         result.push('next-subject')
                         continue
                     }
                 } else {
-                    let isEnded = this.isEnded(this.lessonList[i - 1].end_time)
-                    if (isEnded && !isStarted) {
+                    let isPreviousEnded = this.isEnded(this.lessonList[i - 1].end_time[this.lessonList[i - 1].end_time.length - 1], now)
+                    if (isPreviousEnded && !isStarted) {
                         result.push('next-subject')
                         continue
                     }
                 }
-                if (this.lessonList.length > i + 1 && this.isStarted(this.lessonList[i + 1].start_time)){
+                if (this.lessonList.length > i + 1 && this.isStarted(this.lessonList[i + 1].start_time[0], now)) {
                     result.push('subject')
                     continue
                 }
@@ -66,23 +69,26 @@ export default {
     },
     methods: {
         isEnded(endTime, now = new Date()) {
-            return now.getHours() * 60 + now.getMinutes() >= endTime.hours * 60 + endTime.minutes
+            return now.getHours() * 60 + now.getMinutes() >= endTime.hour * 60 + endTime.minute
         },
         isStarted(startTime, now = new Date()) {
-            return now.getHours() * 60 + now.getMinutes() > startTime.hours * 60 + startTime.minutes
+            return now.getHours() * 60 + now.getMinutes() > startTime.hour * 60 + startTime.minute
         },
-        isCurrentLesson(index) {
+        isCurrentLesson(index, now = new Date()) {
             let lesson = this.lessonList[index]
             return this.isCurrentTime(
                 lesson.weekday,
                 lesson.start_time[0],
-                lesson.end_time[lesson.end_time.length]
+                lesson.end_time[lesson.end_time.length - 1],
+                now
             )
         },
         isCurrentTime(weekday, startTime, endTime, now = new Date()) {
+
             let is_current_time = (now.weekday + 6) % 7 !== weekday
             is_current_time &&= this.isStarted(startTime, now)
-            return is_current_time && this.isEnded(endTime, now)
+            is_current_time &&= !this.isEnded(endTime, now)
+            return is_current_time
 
         }
     },
@@ -146,7 +152,7 @@ h2 {
     border-radius: 16px;
 }
 
-.realtime-subject {
+.current-subject {
     display: flex;
 
     padding: 16px 14px 20px 14px;
