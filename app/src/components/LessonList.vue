@@ -1,25 +1,43 @@
 <template>
     <div class="lesson-list">
-        <div v-for="i in lessonList.length" :key="lessonList[i - 1].lesson_id[0]"
-             :class="lessonCSSClasses[i - 1]">
-            <div>
-                <h3 class="cut-text">{{ lessonList[i - 1].name }}</h3>
-                <p class="cut-text">{{ lessonList[i - 1].room }}<br>{{ lessonList[i - 1].teacher.name }}</p>
+        <div
+                v-for="i in lessonList.length"
+                :key="lessonList[i - 1].lesson_id[0]"
+                class="subject"
+                :class="{'next-subject': lessonStatus[i - 1] === 'next', 'current-subject': lessonStatus[i - 1] === 'current'}"
+        >
+            <div class="subject-content">
+                <div class="description-subject">
+                    <div class="info-subject">
+                        <h3 class="cut-text">{{ lessonList[i - 1].name }}</h3>
+                        <p class="cut-text">{{ lessonList[i - 1].room }}<br>{{ lessonList[i - 1].teacher.name }}</p>
+                    </div>
+                    <div class="time-subject">
+                        <time>
+                            <span
+                                    v-for="j in lessonList[i - 1].start_time.length"
+                                    :class="{'current-time': isCurrentTime(lessonList[i - 1].weekday, lessonList[i - 1].start_time[j - 1], lessonList[i - 1].end_time[j - 1])}"
+                            >
+                                {{
+                                lessonList[i - 1].start_time[j - 1].hour
+                                }}:{{
+                                (lessonList[i - 1].start_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].start_time[j - 1].minute
+                                }}
+                                -
+                                {{
+                                lessonList[i - 1].end_time[j - 1].hour
+                                }}:{{
+                                (lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].end_time[j - 1].minute
+                                }}
+                                <br>
+                            </span>
+                        </time>
+                    </div>
+                </div>
+                <p v-if="lessonStatus[i - 1] === 'current'" class="start-time-label">
+                    {{ getLessonStatusText(lessonList[i - 1]) }}</p>
             </div>
-            <div>
-                <time v-for="j in lessonList[i - 1].start_time.length">
-                    {{
-                    lessonList[i - 1].start_time[j - 1].hour
-                    }}:{{
-                    (lessonList[i - 1].start_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].start_time[j - 1].minute
-                    }} -
-                    {{
-                    lessonList[i - 1].end_time[j - 1].hour
-                    }}:{{
-                    (lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].end_time[j - 1].minute
-                    }}<br>
-                </time>
-            </div>
+
         </div>
     </div>
 </template>
@@ -35,12 +53,12 @@ export default {
         lessonList: Array,
     },
     computed: {
-        lessonCSSClasses() {
+        lessonStatus() {
             let now = new Date()
             let result = []
             for (let i = 0; i < this.lessonList.length; i++) {
                 if (this.isCurrentLesson(i, now)) {
-                    result.push('current-subject')
+                    result.push('current')
                     continue
                 }
                 let isStarted = this.isStarted(this.lessonList[i].start_time[0], now)
@@ -48,26 +66,40 @@ export default {
                 console.log(isStarted, isEnded)
                 if (i === 0) {
                     if (!isStarted && !isEnded) {
-                        result.push('next-subject')
+                        result.push('next')
                         continue
                     }
                 } else {
                     let isPreviousEnded = this.isEnded(this.lessonList[i - 1].end_time[this.lessonList[i - 1].end_time.length - 1], now)
                     if (isPreviousEnded && !isStarted) {
-                        result.push('next-subject')
+                        result.push('next')
                         continue
                     }
                 }
                 if (this.lessonList.length > i + 1 && this.isStarted(this.lessonList[i + 1].start_time[0], now)) {
-                    result.push('subject')
+                    result.push('')
                     continue
                 }
-                result.push('subject subject-hr')
+                result.push('hr')
             }
             return result
-        }
+        },
+    },
+    updated() {
+        console.log('Updated')
     },
     methods: {
+        getLessonStatusText(lesson) {
+            for (let i = 0; i < lesson.start_time.length; i++) {
+                if (!this.isStarted(lesson.start_time[i])) {
+                    return 'Начало через 5:12'
+                }
+                if (this.isCurrentTime(lesson.weekday, lesson.start_time[i], lesson.end_time[i])) {
+                    return 'Конец через 5:12'
+                }
+            }
+            return ''
+        },
         isEnded(endTime, now = new Date()) {
             return now.getHours() * 60 + now.getMinutes() >= endTime.hour * 60 + endTime.minute
         },
@@ -137,10 +169,6 @@ h2 {
     justify-content: space-between;
 }
 
-.subject-hr {
-    border-bottom: 1px solid black;
-}
-
 .next-subject {
     display: flex;
 
@@ -164,11 +192,7 @@ h2 {
     justify-content: space-between;
 }
 
-.realtime-subject h3 {
-    color: #ffc936;
-}
-
-.realtime-subject time span {
+.current-time {
     color: #ffc936;
 }
 
@@ -197,4 +221,29 @@ aside p {
     overflow: hidden;
 }
 
+.description-subject {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.current-subject .description-subject {
+    border-bottom: 2px solid #fff;
+}
+
+.next-subject .description-subject {
+    border-bottom: 2px solid #6d9773;
+}
+
+.subject-content {
+    width: 100%;
+}
+
+.start-time-label {
+    text-align: center;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
 </style>
