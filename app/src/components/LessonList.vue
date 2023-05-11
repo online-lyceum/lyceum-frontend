@@ -97,7 +97,7 @@ export default {
                     let end_time = this.lessonList[i].end_time[last_end_time_index]
                     isEnded = this.isEnded(end_time)
                 } else {
-                    isEnded = true
+                    isEnded = false
                 }
                 if (i === 0) {
                     if (!isStarted && !isEnded) {
@@ -146,7 +146,7 @@ export default {
                     if (beforeStart.hour > 0) {
                         return 'До начала больше ' + beforeStart.hour + ' часов'
                     }
-                    return 'Начало через ' + beforeStart.minute + ((beforeStart.second < 10) ? ': 0' : ':') + beforeStart.second
+                    return 'Начало через ' + beforeStart.minute + ((beforeStart.second < 10) ? ':0' : ':') + beforeStart.second
                 }
                 if (this.isCurrentTime(lesson.weekday, lesson.start_time[i], lesson.end_time[i])) {
                     let beforeEnd = this.timeBefore(lesson.end_time[i])
@@ -156,7 +156,7 @@ export default {
                     if (beforeEnd.hour > 0) {
                         return 'До конца больше ' + beforeEnd.hour + ' часов'
                     }
-                    return 'Конец через ' + beforeEnd.minute + ((beforeEnd.second < 10) ? ': 0' : ':') + beforeEnd.second
+                    return 'Конец через ' + beforeEnd.minute + ((beforeEnd.second < 10) ? ':0' : ':') + beforeEnd.second
                 }
             }
             return ''
@@ -165,7 +165,7 @@ export default {
             return this.now.getHours() * 60 + this.now.getMinutes() >= endTime.hour * 60 + endTime.minute
         },
         isStarted(startTime) {
-            return this.now.getHours() * 60 + this.now.getMinutes() > startTime.hour * 60 + startTime.minute
+            return this.now.getHours() * 60 + this.now.getMinutes() >= startTime.hour * 60 + startTime.minute
         },
         isCurrentLesson(index) {
             let lesson = this.lessonList[index]
