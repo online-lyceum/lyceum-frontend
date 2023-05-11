@@ -70,7 +70,7 @@
 
 <script>
 import MyButton from "@/components/UI/MyButton.vue";
-import LessonList from "@/components/NearestLessonList.vue";
+import LessonList from "@/components/LessonList.vue";
 import axios from "axios";
 import SelectSubgroup from "@/components/SelectSubgroup.vue";
 import MyLoader from "@/components/UI/MyLoader.vue";
@@ -142,7 +142,6 @@ export default {
             this.$store.state.isAnotherClassShow = true
         },
         checkCurrentDay(day) {
-            let a = new Date()
             return this.chosenDay === day
         },
         checkTodayDay(today) {
@@ -297,10 +296,6 @@ main {
     background-color: #6d9773;
 
     justify-content: space-between;
-}
-
-.cut-text {
-    overflow: hidden;
 }
 
 /* стилизация содержимого страницы */
