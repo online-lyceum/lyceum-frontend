@@ -1,13 +1,11 @@
 <template>
     <div id="app">
         <div class="app-content">
-            <header class="block">
+            <header class="block" @click="openPopup">
             <span class="my-header"
                   style="color: #000; text-decoration: none"
-                  @click="openPopup"
             >
-                <span class="menu-symbol"
-                      @click="openPopup">≡</span>
+                <span class="menu-symbol">≡</span>
                 ЛИЦЕЙ В ЦИФРЕ
             </span>
             </header>
