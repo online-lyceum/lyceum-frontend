@@ -49,18 +49,6 @@ export default {
     methods: {
         openPopup() {
             this.isPopupOpen = true;
-        },
-
-        async checkSubgroupID() {
-            if (this.$store.state.subgroupID !== '' &&
-                this.$store.state.subgroupID !== null &&
-                this.$store.state.subgroupID !== undefined) {
-                let data = await axios.get(`${state.TIME_API}/subgroups/${subgroupID}`)
-                if (data.status !== 200) {
-                    console.log("Logout by deprecated subgroupID in localStorage")
-                    this.$store.commit('logout')
-                }
-            }
         }
     }
 }
