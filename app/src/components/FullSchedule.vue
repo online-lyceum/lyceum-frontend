@@ -178,7 +178,6 @@ export default {
 <style scoped>
 
 .btnDay {
-    margin: 10px;
     width: 50%;
     padding: 10px 10px;
 
@@ -188,7 +187,7 @@ export default {
     border-radius: 16px;
     border: none;
     background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+    font-size: 19px;
 }
 
 .btnDaySelected {
