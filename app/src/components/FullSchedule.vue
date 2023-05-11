@@ -26,45 +26,51 @@
             </div>
         </div>
         <div class="lesson-list-content">
-            <button class="btnDay" @click="this.chosenDay = 0; showList()">Пн</button>
-            <button class="btnDay" @click="this.chosenDay = 1; showList()">Вт</button>
-            <button class="btnDay" @click="this.chosenDay = 2; showList()">Ср</button>
-            <button class="btnDay" @click="this.chosenDay = 3; showList()">Чт</button>
-            <button class="btnDay" @click="this.chosenDay = 4; showList()">Пт</button>
-            <button class="btnDay" @click="this.chosenDay = 5; showList()">Сб</button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(0) ||  checkCurrentDay(6),
+                'btnDayToday' : checkTodayDay(0) ||  checkTodayDay(6),
+                'btnDay' : !checkCurrentDay(0) ||  !checkCurrentDay(6),
+            }" @click="this.chosenDay = 0; showList()">Пн
+            </button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(1),
+                'btnDayToday' : checkTodayDay(1),
+                'btnDay' : !checkCurrentDay(1)
+            }" @click="this.chosenDay = 1; showList()">Вт
+            </button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(2),
+                'btnDayToday' : checkTodayDay(2),
+                'btnDay' : !checkCurrentDay(2)
+            }" @click="this.chosenDay = 2; showList()">Ср
+            </button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(3),
+                'btnDayToday' : checkTodayDay(3),
+                'btnDay' : !checkCurrentDay(3)
+            }" @click="this.chosenDay = 3; showList()">Чт
+            </button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(4),
+                'btnDayToday' : checkTodayDay(4),
+                'btnDay' : !checkCurrentDay(4)
+            }" @click="this.chosenDay = 4; showList()">Пт
+            </button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(5),
+                'btnDayToday' : checkTodayDay(5),
+                'btnDay' : !checkCurrentDay(5)
+            }" @click="this.chosenDay = 5; showList()">Сб
+            </button>
         </div>
         <my-loader v-if="isLoading()"></my-loader>
-        <main v-else class="lesson-list-content">
-            <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
-                 :class="getCurrentTimeClass(
-                                lesson.start_time[0].hour, lesson.start_time[0].minute,
-                                lesson.end_time[lesson.end_time.length - 1].hour, lesson.end_time[lesson.end_time.length - 1].minute)">
-                <div>
-                    <h3 class="cut-text">{{ lesson.name }}</h3>
-                    <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
-                </div>
-                <div>
-                    <time v-for="i in lesson.start_time.length">
-                        {{
-                        lesson.start_time[i - 1].hour
-                        }}:{{
-                        (lesson.start_time[i - 1].minute < 10 ? '0' : '') + lesson.start_time[i - 1].minute
-                        }} -
-                        {{
-                        lesson.end_time[i - 1].hour
-                        }}:{{
-                        (lesson.end_time[i - 1].minute < 10 ? '0' : '') + lesson.end_time[i - 1].minute
-                        }}<br>
-                    </time>
-                </div>
-            </div>
-        </main>
+        <lesson-list v-else :lesson-list="lesson_list"></lesson-list>
     </div>
 </template>
 
 <script>
 import MyButton from "@/components/UI/MyButton.vue";
-import LessonList from "@/components/NearestLessonList.vue";
+import LessonList from "@/components/LessonList.vue";
 import axios from "axios";
 import SelectSubgroup from "@/components/SelectSubgroup.vue";
 import MyLoader from "@/components/UI/MyLoader.vue";
@@ -91,7 +97,7 @@ export default {
                     params: {
                         subgroup_id: (this.$store.state.isAnotherClassShow) ?
                             this.$store.state.anotherSubgroupID : this.$store.state.subgroupID,
-                        weekday: this.chosenDay,
+                        weekday: (this.chosenDay === 6) ? 0 : this.chosenDay,
                         do_double: true,
                     }
                 })
@@ -135,42 +141,52 @@ export default {
         setAnotherClassShowTrue() {
             this.$store.state.isAnotherClassShow = true
         },
+        checkCurrentDay(day) {
+            return this.chosenDay === day
+        },
+        checkTodayDay(today) {
+            let a = new Date()
+            return today === (a.getDay() + 6) % 7
+        }
     },
     mounted() {
         this.getWeekDay()
         this.showList()
-    }
+    },
 }
 </script>
 
 <style scoped>
 
 .btnDay {
-    margin: 10px;
     width: 50%;
     padding: 10px 10px;
 
     text-align: center;
 
-    color: #fff;
+    color: #000;
     border-radius: 16px;
     border: none;
-    background-color: #6d9773;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+    background-color: #fff;
+    font-size: 19px;
 }
 
-.btnDay:focus {
-    background-color: #405b44;
+.btnDaySelected {
+    background-color: #6d9773;
+    color: white;
+}
+
+.btnDayToday {
+    border: solid #6d9773 2px;
 }
 
 .lesson-list-content {
     display: flex;
 
-    margin: 20px 12px 20px;
+    margin: 20px 0;
 
     border-radius: 16px;
     background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 
     justify-content: space-between;
 }
@@ -254,7 +270,6 @@ main {
     flex-direction: column;
 
     height: auto;
-    margin: 0 12px;
 
     border-radius: 16px;
     background: #fff;
@@ -281,10 +296,6 @@ main {
     background-color: #6d9773;
 
     justify-content: space-between;
-}
-
-.cut-text {
-    overflow: hidden;
 }
 
 /* стилизация содержимого страницы */
@@ -421,28 +432,4 @@ body {
     overflow: auto;
 }
 
-.btn {
-
-    background: #6D9773;
-    margin: 0;
-    padding: 10px;
-    padding-left: 40px;
-    padding-right: 40px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 16px;
-    color: white;
-}
-
-.field-btn {
-    display: flex;
-    flex-direction: column;
-    border-radius: 16px;
-    text-align: center;
-    margin: 0 12px;
-}
-
-.btn:disabled {
-    background: #D63D6D;
-}
 </style>

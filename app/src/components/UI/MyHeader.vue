@@ -21,7 +21,7 @@
                 </a>
                 <a @click="$router.push('/schedule');
                     this.$store.state.isAnotherClassShow = false; close()">
-                    <div class="link">Расписание</div>
+                    <div class="link">Полное расписание</div>
                 </a>
                 <a>
                     <div class="link"
@@ -96,7 +96,7 @@ export default {
     border-radius: 0 0 16px 16px;
     position: relative;
     margin: 0 auto;
-    max-width: 640px;
+    max-width: 638px;
 }
 
 .popup h3 {

@@ -1,21 +1,21 @@
 <template>
     <div id="app">
-        <header class="block">
+        <div class="app-content">
+            <header class="block" @click="openPopup">
             <span class="my-header"
                   style="color: #000; text-decoration: none"
-                  @click="openPopup"
             >
-                <span class="menu-symbol"
-                      @click="openPopup">≡</span>
+                <span class="menu-symbol">≡</span>
                 ЛИЦЕЙ В ЦИФРЕ
             </span>
-        </header>
-        <my-header
-                :is-open="isPopupOpen"
-                @close="isPopupOpen = false"
-                is-confirm>
-        </my-header>
-        <router-view/>
+            </header>
+            <my-header
+                    :is-open="isPopupOpen"
+                    @close="isPopupOpen = false"
+                    is-confirm>
+            </my-header>
+            <router-view/>
+        </div>
     </div>
 </template>
 
@@ -49,18 +49,6 @@ export default {
     methods: {
         openPopup() {
             this.isPopupOpen = true;
-        },
-
-        async checkSubgroupID() {
-            if (this.$store.state.subgroupID !== '' &&
-                this.$store.state.subgroupID !== null &&
-                this.$store.state.subgroupID !== undefined) {
-                let data = await axios.get(`${state.TIME_API}/subgroups/${subgroupID}`)
-                if (data.status !== 200) {
-                    console.log("Logout by deprecated subgroupID in localStorage")
-                    this.$store.commit('logout')
-                }
-            }
         }
     }
 }
@@ -76,12 +64,16 @@ export default {
     max-width: 700px;
 }
 
+.app-content {
+    margin: 0 12px;
+}
+
 .block {
     display: flex;
     background-color: #fff;
     align-items: center;
     justify-content: center;
-    margin: 0 12px;
+    margin-bottom: 30px;
     border-radius: 0 0 16px 16px;
 }
 
