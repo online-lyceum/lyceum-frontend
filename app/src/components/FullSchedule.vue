@@ -30,59 +30,41 @@
                 'btnDaySelected' : checkCurrentDay(0) ||  checkCurrentDay(6),
                 'btnDayToday' : checkTodayDay(0) ||  checkTodayDay(6),
                 'btnDay' : !checkCurrentDay(0) ||  !checkCurrentDay(6),
-            }" @click="this.chosenDay = 0; showList()">Пн</button>
+            }" @click="this.chosenDay = 0; showList()">Пн
+            </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(1),
                 'btnDayToday' : checkTodayDay(1),
                 'btnDay' : !checkCurrentDay(1)
-            }" @click="this.chosenDay = 1; showList()">Вт</button>
+            }" @click="this.chosenDay = 1; showList()">Вт
+            </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(2),
                 'btnDayToday' : checkTodayDay(2),
                 'btnDay' : !checkCurrentDay(2)
-            }" @click="this.chosenDay = 2; showList()">Ср</button>
+            }" @click="this.chosenDay = 2; showList()">Ср
+            </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(3),
                 'btnDayToday' : checkTodayDay(3),
                 'btnDay' : !checkCurrentDay(3)
-            }" @click="this.chosenDay = 3; showList()">Чт</button>
+            }" @click="this.chosenDay = 3; showList()">Чт
+            </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(4),
                 'btnDayToday' : checkTodayDay(4),
                 'btnDay' : !checkCurrentDay(4)
-            }" @click="this.chosenDay = 4; showList()">Пт</button>
+            }" @click="this.chosenDay = 4; showList()">Пт
+            </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(5),
                 'btnDayToday' : checkTodayDay(5),
                 'btnDay' : !checkCurrentDay(5)
-            }" @click="this.chosenDay = 5; showList()">Сб</button>
+            }" @click="this.chosenDay = 5; showList()">Сб
+            </button>
         </div>
         <my-loader v-if="isLoading()"></my-loader>
-        <main v-else class="lesson-list-content">
-            <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
-                 :class="getCurrentTimeClass(
-                                lesson.start_time[0].hour, lesson.start_time[0].minute,
-                                lesson.end_time[lesson.end_time.length - 1].hour, lesson.end_time[lesson.end_time.length - 1].minute)">
-                <div>
-                    <h3 class="cut-text">{{ lesson.name }}</h3>
-                    <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
-                </div>
-                <div>
-                    <time v-for="i in lesson.start_time.length">
-                        {{
-                        lesson.start_time[i - 1].hour
-                        }}:{{
-                        (lesson.start_time[i - 1].minute < 10 ? '0' : '') + lesson.start_time[i - 1].minute
-                        }} -
-                        {{
-                        lesson.end_time[i - 1].hour
-                        }}:{{
-                        (lesson.end_time[i - 1].minute < 10 ? '0' : '') + lesson.end_time[i - 1].minute
-                        }}<br>
-                    </time>
-                </div>
-            </div>
-        </main>
+        <lesson-list v-else :lesson-list="lesson_list"></lesson-list>
     </div>
 </template>
 
@@ -159,11 +141,11 @@ export default {
         setAnotherClassShowTrue() {
             this.$store.state.isAnotherClassShow = true
         },
-        checkCurrentDay(day){
+        checkCurrentDay(day) {
             let a = new Date()
             return this.chosenDay === day
         },
-        checkTodayDay(today){
+        checkTodayDay(today) {
             let a = new Date()
             return today === (a.getDay() + 6) % 7
         }
