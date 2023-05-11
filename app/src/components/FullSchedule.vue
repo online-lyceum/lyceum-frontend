@@ -26,12 +26,36 @@
             </div>
         </div>
         <div class="lesson-list-content">
-            <button class="btnDay" @click="this.chosenDay = 0; showList()">Пн</button>
-            <button class="btnDay" @click="this.chosenDay = 1; showList()">Вт</button>
-            <button class="btnDay" @click="this.chosenDay = 2; showList()">Ср</button>
-            <button class="btnDay" @click="this.chosenDay = 3; showList()">Чт</button>
-            <button class="btnDay" @click="this.chosenDay = 4; showList()">Пт</button>
-            <button class="btnDay" @click="this.chosenDay = 5; showList()">Сб</button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(0),
+                'btnDayToday' : checkTodayDay(0),
+                'btnDay' : !checkCurrentDay(0)
+            }" @click="this.chosenDay = 0; showList()">Пн</button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(1),
+                'btnDayToday' : checkTodayDay(1),
+                'btnDay' : !checkCurrentDay(1)
+            }" @click="this.chosenDay = 1; showList()">Вт</button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(2),
+                'btnDayToday' : checkTodayDay(2),
+                'btnDay' : !checkCurrentDay(2)
+            }" @click="this.chosenDay = 2; showList()">Ср</button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(3),
+                'btnDayToday' : checkTodayDay(3),
+                'btnDay' : !checkCurrentDay(3)
+            }" @click="this.chosenDay = 3; showList()">Чт</button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(4),
+                'btnDayToday' : checkTodayDay(4),
+                'btnDay' : !checkCurrentDay(4)
+            }" @click="this.chosenDay = 4; showList()">Пт</button>
+            <button class="btnDay" :class="{
+                'btnDaySelected' : checkCurrentDay(5),
+                'btnDayToday' : checkTodayDay(5),
+                'btnDay' : !checkCurrentDay(5)
+            }" @click="this.chosenDay = 5; showList()">Сб</button>
         </div>
         <my-loader v-if="isLoading()"></my-loader>
         <main v-else class="lesson-list-content">
@@ -135,11 +159,19 @@ export default {
         setAnotherClassShowTrue() {
             this.$store.state.isAnotherClassShow = true
         },
+        checkCurrentDay(day){
+            let a = new Date()
+            return this.chosenDay === day
+        },
+        checkTodayDay(today){
+            let a = new Date()
+            return today === (a.getDay() + 6) % 7
+        }
     },
     mounted() {
         this.getWeekDay()
         this.showList()
-    }
+    },
 }
 </script>
 
@@ -152,15 +184,20 @@ export default {
 
     text-align: center;
 
-    color: #fff;
+    color: #000;
     border-radius: 16px;
     border: none;
-    background-color: #6d9773;
+    background-color: #fff;
     box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 }
 
-.btnDay:focus {
-    background-color: #405b44;
+.btnDaySelected {
+    background-color: #6d9773;
+    color: white;
+}
+
+.btnDayToday {
+    border: solid #6d9773;
 }
 
 .lesson-list-content {
