@@ -27,9 +27,9 @@
         </div>
         <div class="lesson-list-content">
             <button class="btnDay" :class="{
-                'btnDaySelected' : checkCurrentDay(0),
-                'btnDayToday' : checkTodayDay(0),
-                'btnDay' : !checkCurrentDay(0)
+                'btnDaySelected' : checkCurrentDay(0) ||  checkCurrentDay(6),
+                'btnDayToday' : checkTodayDay(0) ||  checkTodayDay(6),
+                'btnDay' : !checkCurrentDay(0) ||  !checkCurrentDay(6),
             }" @click="this.chosenDay = 0; showList()">Пн</button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(1),
@@ -115,7 +115,7 @@ export default {
                     params: {
                         subgroup_id: (this.$store.state.isAnotherClassShow) ?
                             this.$store.state.anotherSubgroupID : this.$store.state.subgroupID,
-                        weekday: this.chosenDay,
+                        weekday: (this.chosenDay === 6) ? 0 : this.chosenDay,
                         do_double: true,
                     }
                 })
@@ -196,7 +196,7 @@ export default {
 }
 
 .btnDayToday {
-    border: solid #6d9773;
+    border: solid #6d9773 2px;
 }
 
 .lesson-list-content {
@@ -206,7 +206,6 @@ export default {
 
     border-radius: 16px;
     background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
 
     justify-content: space-between;
 }
