@@ -189,7 +189,8 @@ export default {
 
 <style scoped>
 
-.blocks {
+form {
+    padding-top: 40px;
 }
 
 .input_box {

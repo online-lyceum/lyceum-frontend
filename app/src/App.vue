@@ -1,6 +1,22 @@
- <template>
-    <my-header/>
-    <router-view/>
+<template>
+    <div id="app">
+        <header class="block">
+            <span class="my-header"
+                  style="color: #000; text-decoration: none"
+                  @click="openPopup"
+            >
+                <span class="menu-symbol"
+                      @click="openPopup">≡</span>
+                ЛИЦЕЙ В ЦИФРЕ
+            </span>
+        </header>
+        <my-header
+                :is-open="isPopupOpen"
+                @close="isPopupOpen = false"
+                is-confirm>
+        </my-header>
+        <router-view/>
+    </div>
 </template>
 
 <script>
@@ -13,6 +29,9 @@ import axios from "axios";
 export default {
     name: "App",
     components: {MyButton, MyHeader},
+    data() {
+        return {isPopupOpen: false, isConfirm: false};
+    },
     async beforeCreate() {
         this.$store.commit('initialiseVars')
         if (this.$store.state.subgroupID !== undefined &&
@@ -28,7 +47,11 @@ export default {
         document.title = "Лицей в Цифре"
     },
     methods: {
-        async checkSubgroupID(){
+        openPopup() {
+            this.isPopupOpen = true;
+        },
+
+        async checkSubgroupID() {
             if (this.$store.state.subgroupID !== '' &&
                 this.$store.state.subgroupID !== null &&
                 this.$store.state.subgroupID !== undefined) {
@@ -48,11 +71,36 @@ export default {
     font-family: sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+.block {
+    display: flex;
+    background-color: #fff;
+    align-items: center;
+    justify-content: center;
+    margin: 0 12px;
+    border-radius: 0 0 16px 16px;
+}
+
+.my-header {
+    margin: 0 12px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 0 0 16px 16px;
+    text-decoration: none;
+}
+
+.menu-symbol {
+    font-size: larger;
 }
 
 body {
-    padding-top: 0;
+    padding: 0;
     margin: 0;
     background-color: #0C3B2E;
 }
+
 </style>

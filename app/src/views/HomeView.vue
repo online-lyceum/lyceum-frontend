@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import LessonList from "@/components/LessonList.vue";
+import LessonList from "@/components/NearestLessonList.vue";
 import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
 
 export default {

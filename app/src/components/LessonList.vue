@@ -1,155 +1,164 @@
 <template>
-    <div>
-        <my-loader v-if="isLoading()"></my-loader>
-        <main v-else class="upper-block">
-            <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
-                 :class="getCurrentTimeClass(
-                                lesson.start_time[0].hour, lesson.start_time[0].minute,
-                                lesson.end_time[lesson.end_time.length - 1].hour, lesson.end_time[lesson.end_time.length - 1].minute)">
-                <div>
-                    <h3 class="cut-text">{{ lesson.name }}</h3>
-                    <p class="cut-text">{{ lesson.room }}<br>{{ lesson.teacher.name }}</p>
+    <div class="lesson-list">
+        <div
+                v-for="i in lessonList.length"
+                :key="lessonList[i - 1].lesson_id[0]"
+                class="subject"
+                :class="{'next-subject': lessonStatus[i - 1] === 'next', 'current-subject': lessonStatus[i - 1] === 'current'}"
+        >
+            <div class="subject-content">
+                <div
+                    class="description-subject"
+                    :class="{'subject-hr': lessonStatus[i - 1] === 'hr'}"
+                >
+                    <div class="info-subject">
+                        <h3 class="cut-text">{{ lessonList[i - 1].name }}</h3>
+                        <p class="cut-text">{{ lessonList[i - 1].room }}<br>{{ lessonList[i - 1].teacher.name }}</p>
+                    </div>
+                    <div class="time-subject">
+                        <time>
+                            <span
+                                    v-for="j in lessonList[i - 1].start_time.length"
+                                    :class="{'current-time': isCurrentTime(lessonList[i - 1].weekday, lessonList[i - 1].start_time[j - 1], lessonList[i - 1].end_time[j - 1])}"
+                            >
+                                {{
+                                lessonList[i - 1].start_time[j - 1].hour
+                                }}:{{
+                                (lessonList[i - 1].start_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].start_time[j - 1].minute
+                                }}
+                                -
+                                {{
+                                lessonList[i - 1].end_time[j - 1].hour
+                                }}:{{
+                                (lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].end_time[j - 1].minute
+                                }}
+                                <br>
+                            </span>
+                        </time>
+                    </div>
                 </div>
-                <div>
-                    <time v-for="i in lesson.start_time.length">
-                        {{
-                            lesson.start_time[i - 1].hour
-                        }}:{{
-                            (lesson.start_time[i - 1].minute < 10 ? '0' : '') + lesson.start_time[i - 1].minute
-                        }} -
-                        {{
-                            lesson.end_time[i - 1].hour
-                        }}:{{
-                            (lesson.end_time[i - 1].minute < 10 ? '0' : '') + lesson.end_time[i - 1].minute
-                        }}<br>
-                    </time>
-                </div>
+                <p v-if="lessonStatus[i - 1] === 'current' || lessonStatus[i - 1] === 'next'" class="start-time-label">
+                    {{ getLessonStatusText(lessonList[i - 1]) }}</p>
             </div>
-        </main>
+
+        </div>
     </div>
 </template>
 
 <script>
-import axios from "axios";
 import MyEvent from "@/components/UI/MyEvent.vue";
 import MyButton from "@/components/UI/MyButton.vue";
 import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
-import MyLoader from "@/components/UI/MyLoader.vue";
 
 export default {
-    components: {MyLoader, MyUpperBlock, MyButton, MyEvent},
+    components: {MyUpperBlock, MyButton, MyEvent},
     data() {
         return {
-            lesson_list: [],
+            now: new Date()
         }
     },
-    methods: {
-        async showList() {
-            await axios.get(`${this.$store.state.TIME_API}/lessons/nearest_day`,
-                {
-                    params: {
-                        subgroup_id: this.$store.state.subgroupID,
-                        do_double: true
+    created() {
+        setInterval(() => {
+            this.now = new Date()
+        }, 1000)
+    },
+    props: {
+        lessonList: Array,
+    },
+    computed: {
+        lessonStatus() {
+            let result = []
+            for (let i = 0; i < this.lessonList.length; i++) {
+                if (this.isCurrentLesson(i)) {
+                    result.push('current')
+                    continue
+                }
+                let isStarted = this.isStarted(this.lessonList[i].start_time[0])
+                let isEnded = this.isEnded(this.lessonList[i].end_time[this.lessonList[i].end_time.length - 1])
+                if (i === 0) {
+                    if (!isStarted && !isEnded) {
+                        result.push('next')
+                        continue
                     }
-                })
-                .then(
-                    async (res) => {
-                        this.lesson_list = await res.data.lessons
-                        this.$store.commit('setNearestDayIndex', this.lesson_list[0].weekday)
-                    })
-                .catch(
-                    () => {
-                        this.$store.commit('logout')
-                        this.$router.push('/')
+                } else {
+                    let isPreviousEnded = this.isEnded(this.lessonList[i - 1].end_time[this.lessonList[i - 1].end_time.length - 1])
+                    if (isPreviousEnded && !isStarted) {
+                        result.push('next')
+                        continue
                     }
-                )
-
-        },
-        getCurrentTimeClass(startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes) {
-            if (startTimeHours < 10) {
-                startTimeHours = `0${startTimeHours}`
+                }
+                result.push('hr')
             }
-            if (startTimeMinutes < 10) {
-                startTimeMinutes = `0${startTimeMinutes}`
+            for (let i = 1; i < this.lessonList.length; i++){
+                if (result[i] === 'current' || result[i] === 'next'){
+                    result[i - 1] = ''
+                }
             }
-            if (endTimeHours < 10) {
-                endTimeHours = `0${endTimeHours}`
-            }
-            if (endTimeMinutes < 10) {
-                endTimeMinutes = `0${endTimeMinutes}`
-            }
-            let currentDate = new Date()
-            let hours = currentDate.getHours()
-            let minutes = currentDate.getMinutes()
-            let dateToday = new Date(0, 0, 0, hours, minutes, 0, 0)
-            let lessonStarts = new Date(0, 0, 0, startTimeHours, startTimeMinutes, 0, 0)
-            let lessonEnds = new Date(0, 0, 0, endTimeHours, endTimeMinutes, 0, 0)
-            let res = (dateToday <= lessonEnds && dateToday >= lessonStarts)
-
-            return (res) ? "realtime-subject" : "subject"
-
-        },
-        isLoading() {
-            //обработка на наличие ошибки + добавить это в выбор школы и мероприятие
-            return this.lesson_list.length === 0
+            return result
         },
     },
-    props: {},
-    mounted() {
-        this.showList()
+    methods: {
+        timeBefore(someTime) {
+            let nowSeconds = this.now.getHours() * 3600 + this.now.getMinutes() * 60 + this.now.getSeconds()
+            let someTimeSeconds = someTime.hour * 3600 + someTime.minute * 60
+            let diff = someTimeSeconds - nowSeconds
+            let hour = Math.floor(diff / 3600)
+            let minute = Math.floor(diff % 3600 / 60)
+            let second = diff % 60
+            return {hour, minute, second}
+        },
+        getLessonStatusText(lesson) {
+            for (let i = 0; i < lesson.start_time.length; i++) {
+                if (!this.isStarted(lesson.start_time[i])) {
+                    let beforeStart = this.timeBefore(lesson.start_time[i])
+                    if (beforeStart.hour === 1) {
+                        return 'До начала больше часа'
+                    }
+                    if (beforeStart.hour > 0) {
+                        return 'До начала больше ' + beforeStart.hour + ' часов'
+                    }
+                    return 'Начало через ' + beforeStart.minute + ((beforeStart < 10) ? ': 0' : ':') + beforeStart.second
+                }
+                if (this.isCurrentTime(lesson.weekday, lesson.start_time[i], lesson.end_time[i])) {
+                    let beforeEnd = this.timeBefore(lesson.end_time[i])
+                    if (beforeEnd.hour === 1) {
+                        return 'До конца больше часа'
+                    }
+                    if (beforeEnd.hour > 0) {
+                        return 'До конца больше ' + before.hour + ' часов'
+                    }
+                    return 'Конец через ' + beforeEnd.minute + ((beforeEnd < 10) ? ': 0' : ':') + beforeEnd.second
+                }
+            }
+            return 'qwe'
+        },
+        isEnded(endTime) {
+            return this.now.getHours() * 60 + this.now.getMinutes() >= endTime.hour * 60 + endTime.minute
+        },
+        isStarted(startTime) {
+            return this.now.getHours() * 60 + this.now.getMinutes() > startTime.hour * 60 + startTime.minute
+        },
+        isCurrentLesson(index) {
+            let lesson = this.lessonList[index]
+            return this.isCurrentTime(
+                lesson.weekday,
+                lesson.start_time[0],
+                lesson.end_time[lesson.end_time.length - 1]
+            )
+        },
+        isCurrentTime(weekday, startTime, endTime) {
 
-    }
+            let is_current_time = (this.now.weekday + 6) % 7 !== weekday
+            is_current_time &&= this.isStarted(startTime)
+            is_current_time &&= !this.isEnded(endTime)
+            return is_current_time
+
+        }
+    },
 }
 </script>
 
 <style scoped>
-/* Global */
-
-body {
-    font-family: sans-serif;
-
-    margin: 0;
-
-    background-color: #0c3b2e;
-}
-
-a {
-    text-decoration: none;
-    color: black;
-}
-
-/* Main Page */
-/* header */
-
-header {
-    font-size: 16px;
-
-    height: 50px;
-    margin: 0 12px 30px;
-
-    text-align: center;
-
-    border-radius: 0 0 16px 16px;
-    background-color: #fff;
-}
-
-/* Content */
-/* upper-block */
-
-.upper-block {
-    display: flex;
-
-    margin: 0 12px 32px;
-
-    border-radius: 16px;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-
-    justify-content: space-between;
-}
-
-
-/* main */
 
 h3 {
     font-size: 20px;
@@ -171,7 +180,7 @@ h2 {
     margin: 0;
 }
 
-main {
+.lesson-list {
     display: flex;
     flex-direction: column;
 
@@ -189,11 +198,22 @@ main {
     padding: 16px 14px 5px 14px;
 
     justify-content: space-between;
-
-    border-bottom: 1px solid black;
 }
 
-.realtime-subject {
+.next-subject {
+    display: flex;
+
+    padding: 16px 14px 5px 14px;
+
+    justify-content: space-between;
+
+    border: 5px solid #6d9773;
+    border-radius: 16px;
+}
+.subject-hr {
+    border-bottom: 2px solid black;
+}
+.current-subject {
     display: flex;
 
     padding: 16px 14px 20px 14px;
@@ -205,11 +225,7 @@ main {
     justify-content: space-between;
 }
 
-.realtime-subject h3 {
-    color: #ffc936;
-}
-
-.realtime-subject time span {
+.current-time {
     color: #ffc936;
 }
 
@@ -238,4 +254,29 @@ aside p {
     overflow: hidden;
 }
 
+.description-subject {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.current-subject .description-subject {
+    border-bottom: 2px solid #fff;
+}
+
+.next-subject .description-subject {
+    border-bottom: 2px solid #6d9773;
+}
+
+.subject-content {
+    width: 100%;
+}
+
+.start-time-label {
+    text-align: center;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
 </style>

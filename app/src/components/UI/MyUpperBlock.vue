@@ -1,6 +1,6 @@
 <template>
     <div style="color: #FFFFFF">
-        <div class="upper-block">
+        <div class="lesson-list-content">
             <div class="day-of-week" style="color: #000">{{ this.weekday_names[this.$store.state.nearestDayIndex] }}</div>
             <a
                 class="scheduleBtn"
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style scoped>
-.upper-block {
+.lesson-list-content {
     display: flex;
 
     margin: 0 12px 32px;

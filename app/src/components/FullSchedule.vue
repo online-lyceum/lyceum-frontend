@@ -1,9 +1,7 @@
 <template>
     <div>
-        <div class="field-btn">
-            <router-link class="btn" to="/home">Назад</router-link>
-        </div>
-        <div class="upper-block">
+        <my-button @click="$router.push('/home')">Назад</my-button>
+        <div class="lesson-list-content">
             <!--            TODO: window to choose class-->
             <div class="current-class" style="color: #000">Ваш класс</div>
             <a
@@ -27,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <div class="upper-block">
+        <div class="lesson-list-content">
             <button class="btnDay" @click="this.chosenDay = 0; showList()">Пн</button>
             <button class="btnDay" @click="this.chosenDay = 1; showList()">Вт</button>
             <button class="btnDay" @click="this.chosenDay = 2; showList()">Ср</button>
@@ -36,7 +34,7 @@
             <button class="btnDay" @click="this.chosenDay = 5; showList()">Сб</button>
         </div>
         <my-loader v-if="isLoading()"></my-loader>
-        <main v-else class="upper-block">
+        <main v-else class="lesson-list-content">
             <div v-for="lesson in lesson_list" :key="lesson.lesson_id[0]"
                  :class="getCurrentTimeClass(
                                 lesson.start_time[0].hour, lesson.start_time[0].minute,
@@ -65,8 +63,8 @@
 </template>
 
 <script>
-import MyButton from "@/App.vue";
-import LessonList from "@/components/LessonList.vue";
+import MyButton from "@/components/UI/MyButton.vue";
+import LessonList from "@/components/NearestLessonList.vue";
 import axios from "axios";
 import SelectSubgroup from "@/components/SelectSubgroup.vue";
 import MyLoader from "@/components/UI/MyLoader.vue";
@@ -84,7 +82,7 @@ export default {
     methods: {
         getWeekDay() {
             let a = new Date()
-            this.chosenDay = a.getDay() - 1
+            this.chosenDay = (a.getDay() + 6) % 7
 
         },
         async showList() {
@@ -165,7 +163,7 @@ export default {
     background-color: #405b44;
 }
 
-.upper-block {
+.lesson-list-content {
     display: flex;
 
     margin: 20px 12px 20px;
@@ -288,14 +286,6 @@ main {
 .cut-text {
     overflow: hidden;
 }
-
-/*.description-subject {*/
-/*    display: flex;*/
-
-/*    border-bottom: 1px solid #fff;*/
-
-/*    justify-content: space-between;*/
-/*}*/
 
 /* стилизация содержимого страницы */
 body {
@@ -430,6 +420,7 @@ body {
     padding: 15px;
     overflow: auto;
 }
+
 .btn {
 
     background: #6D9773;
