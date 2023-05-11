@@ -31,7 +31,7 @@ export default {
 .lesson-list-content {
     display: flex;
 
-    margin: 0 12px 32px;
+    margin: 32px 0;
 
     border-radius: 16px;
     background-color: #fff;

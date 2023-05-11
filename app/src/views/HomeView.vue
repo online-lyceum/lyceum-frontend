@@ -1,9 +1,6 @@
 <template>
     <div class="home">
-        <div class="day">
-            <h2></h2>
-        </div>
-        <my-upper-block></my-upper-block>
+        <my-upper-block/>
         <lesson-list/>
     </div>
 </template>
@@ -16,7 +13,7 @@ export default {
     name: 'HomeView',
     components: {
         MyUpperBlock,
-        LessonList,
+        LessonList
     },
 }
 </script>

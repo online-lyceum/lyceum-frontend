@@ -166,7 +166,7 @@ export default {
 .lesson-list-content {
     display: flex;
 
-    margin: 20px 12px 20px;
+    margin: 20px 0;
 
     border-radius: 16px;
     background-color: #fff;
@@ -254,7 +254,6 @@ main {
     flex-direction: column;
 
     height: auto;
-    margin: 0 12px;
 
     border-radius: 16px;
     background: #fff;
@@ -421,28 +420,4 @@ body {
     overflow: auto;
 }
 
-.btn {
-
-    background: #6D9773;
-    margin: 0;
-    padding: 10px;
-    padding-left: 40px;
-    padding-right: 40px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 16px;
-    color: white;
-}
-
-.field-btn {
-    display: flex;
-    flex-direction: column;
-    border-radius: 16px;
-    text-align: center;
-    margin: 0 12px;
-}
-
-.btn:disabled {
-    background: #D63D6D;
-}
 </style>

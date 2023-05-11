@@ -4,43 +4,60 @@
                 v-for="i in lessonList.length"
                 :key="lessonList[i - 1].lesson_id[0]"
                 class="subject"
-                :class="{'next-subject': lessonStatus[i - 1] === 'next', 'current-subject': lessonStatus[i - 1] === 'current'}"
+                :class="{
+                    'next-subject': lessonStatus[i - 1] === 'next',
+                    'current-subject': lessonStatus[i - 1] === 'current'
+                }"
         >
             <div class="subject-content">
                 <div
-                    class="description-subject"
-                    :class="{'subject-hr': lessonStatus[i - 1] === 'hr'}"
+                        class="description-subject"
+                        :class="{'subject-hr': lessonStatus[i - 1] === 'hr'}"
                 >
                     <div class="info-subject">
                         <h3 class="cut-text">{{ lessonList[i - 1].name }}</h3>
-                        <p class="cut-text">{{ lessonList[i - 1].room }}<br>{{ lessonList[i - 1].teacher.name }}</p>
+                        <p class="cut-text">
+                            {{ lessonList[i - 1].room }}
+                            <br>
+                            {{ lessonList[i - 1].teacher.name }}
+                        </p>
                     </div>
                     <div class="time-subject">
                         <time>
                             <span
                                     v-for="j in lessonList[i - 1].start_time.length"
-                                    :class="{'current-time': isCurrentTime(lessonList[i - 1].weekday, lessonList[i - 1].start_time[j - 1], lessonList[i - 1].end_time[j - 1])}"
+                                    :class="{
+                                        'current-time': isCurrentTime(
+                                            lessonList[i - 1].weekday,
+                                            lessonList[i - 1].start_time[j - 1],
+                                            lessonList[i - 1].end_time[j - 1]
+                                            )
+                                    }"
                             >
                                 {{
-                                lessonList[i - 1].start_time[j - 1].hour
+                                    lessonList[i - 1].start_time[j - 1].hour
                                 }}:{{
-                                (lessonList[i - 1].start_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].start_time[j - 1].minute
-                                }}
-                                -
-                                {{
-                                lessonList[i - 1].end_time[j - 1].hour
-                                }}:{{
-                                (lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : '') + lessonList[i - 1].end_time[j - 1].minute
+                                lessonList[i - 1].start_time[j - 1].minute < 10 ? '0' : ''
+                                }}{{
+                                    lessonList[i - 1].start_time[j - 1].minute
+                                }}-{{
+                                    lessonList[i - 1].end_time[j - 1].hour }}:{{
+                                    lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : ''
+                                }}{{
+                                    lessonList[i - 1].end_time[j - 1].minute
                                 }}
                                 <br>
                             </span>
                         </time>
                     </div>
                 </div>
-                <p v-if="lessonStatus[i - 1] === 'current' || lessonStatus[i - 1] === 'next'" class="start-time-label">
-                    {{ getLessonStatusText(lessonList[i - 1]) }}</p>
+                <p
+                        v-if="lessonStatus[i - 1] === 'current' || lessonStatus[i - 1] === 'next'"
+                        class="start-time-label"
+                >
+                    {{ getLessonStatusText(lessonList[i - 1]) }}
+                </p>
             </div>
-
         </div>
     </div>
 </template>
@@ -74,14 +91,23 @@ export default {
                     continue
                 }
                 let isStarted = this.isStarted(this.lessonList[i].start_time[0])
-                let isEnded = this.isEnded(this.lessonList[i].end_time[this.lessonList[i].end_time.length - 1])
+                let isEnded
+                if (i > 0) {
+                    let last_end_time_index = this.lessonList[i - 1].end_time.length - 1
+                    let end_time = this.lessonList[i].end_time[last_end_time_index]
+                    isEnded = this.isEnded(end_time)
+                } else {
+                    isEnded = true
+                }
                 if (i === 0) {
                     if (!isStarted && !isEnded) {
                         result.push('next')
                         continue
                     }
                 } else {
-                    let isPreviousEnded = this.isEnded(this.lessonList[i - 1].end_time[this.lessonList[i - 1].end_time.length - 1])
+                    let last_end_time_index = this.lessonList[i - 1].end_time.length - 1
+                    let end_time = this.lessonList[i - 1].end_time[last_end_time_index]
+                    let isPreviousEnded = this.isEnded(end_time)
                     if (isPreviousEnded && !isStarted) {
                         result.push('next')
                         continue
@@ -89,10 +115,13 @@ export default {
                 }
                 result.push('hr')
             }
-            for (let i = 1; i < this.lessonList.length; i++){
-                if (result[i] === 'current' || result[i] === 'next'){
+            for (let i = 1; i < this.lessonList.length; i++) {
+                if (result[i] === 'current' || result[i] === 'next') {
                     result[i - 1] = ''
                 }
+            }
+            if (result[result.length - 1] === 'hr') {
+                result[result.length - 1] = ''
             }
             return result
         },
@@ -117,7 +146,7 @@ export default {
                     if (beforeStart.hour > 0) {
                         return 'До начала больше ' + beforeStart.hour + ' часов'
                     }
-                    return 'Начало через ' + beforeStart.minute + ((beforeStart < 10) ? ': 0' : ':') + beforeStart.second
+                    return 'Начало через ' + beforeStart.minute + ((beforeStart.second < 10) ? ': 0' : ':') + beforeStart.second
                 }
                 if (this.isCurrentTime(lesson.weekday, lesson.start_time[i], lesson.end_time[i])) {
                     let beforeEnd = this.timeBefore(lesson.end_time[i])
@@ -125,12 +154,12 @@ export default {
                         return 'До конца больше часа'
                     }
                     if (beforeEnd.hour > 0) {
-                        return 'До конца больше ' + before.hour + ' часов'
+                        return 'До конца больше ' + beforeEnd.hour + ' часов'
                     }
-                    return 'Конец через ' + beforeEnd.minute + ((beforeEnd < 10) ? ': 0' : ':') + beforeEnd.second
+                    return 'Конец через ' + beforeEnd.minute + ((beforeEnd.second < 10) ? ': 0' : ':') + beforeEnd.second
                 }
             }
-            return 'qwe'
+            return ''
         },
         isEnded(endTime) {
             return this.now.getHours() * 60 + this.now.getMinutes() >= endTime.hour * 60 + endTime.minute
@@ -170,7 +199,6 @@ h3 {
 time {
     font-size: 19px;
     white-space: nowrap;
-
 }
 
 h2 {
@@ -185,7 +213,6 @@ h2 {
     flex-direction: column;
 
     height: auto;
-    margin: 0 12px;
 
     border-radius: 16px;
     background: #fff;
@@ -210,9 +237,11 @@ h2 {
     border: 5px solid #6d9773;
     border-radius: 16px;
 }
+
 .subject-hr {
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid #b3b3b3;
 }
+
 .current-subject {
     display: flex;
 
