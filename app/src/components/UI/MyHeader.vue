@@ -21,7 +21,7 @@
                 </a>
                 <a @click="$router.push('/schedule');
                     this.$store.state.isAnotherClassShow = false; close()">
-                    <div class="link">Расписание</div>
+                    <div class="link">Полное расписание</div>
                 </a>
                 <a>
                     <div class="link"
