@@ -82,6 +82,10 @@ export default {
     },
     props: {
         lessonList: Array,
+        alwaysDisplayNext: {
+            type: Boolean,
+            default: false
+        }
     },
     computed: {
         nowWeekday() {
@@ -90,9 +94,12 @@ export default {
         lessonStatus() {
             let result = []
             if (this.nowWeekday !== this.lessonList[0].weekday) {
-                result.push('next')
+                result.push((this.alwaysDisplayNext) ? 'next' : 'hr')
                 for (let i = 0; i < this.lessonList.length - 1; i++) {
                     result.push('hr')
+                }
+                if (result[result.length - 1] === 'hr'){
+                    result[result.length - 1] = ''
                 }
                 return result
             }

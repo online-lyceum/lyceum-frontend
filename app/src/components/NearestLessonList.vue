@@ -1,7 +1,7 @@
 <template>
     <div>
         <my-loader v-if="isLoading"></my-loader>
-        <lesson-list :lesson-list="lessonList"/>
+        <lesson-list always-display-next :lesson-list="lessonList"/>
     </div>
 </template>
 
