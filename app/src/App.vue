@@ -1,42 +1,26 @@
 <template>
     <div id="app">
         <div class="app-content">
-            <header class="block" @click="openPopup">
-            <span class="my-header"
-                  style="color: #000; text-decoration: none"
-            >
-                <span class="menu-symbol">≡</span>
-                ЛИЦЕЙ В ЦИФРЕ
-            </span>
-            </header>
-            <my-header
-                    :is-open="isPopupOpen"
-                    @close="isPopupOpen = false"
-                    is-confirm>
-            </my-header>
             <router-view/>
         </div>
     </div>
 </template>
 
 <script>
-import MyHeader from "@/components/UI/MyHeader.vue"
-
 import MyButton from "@/components/UI/MyButton.vue"
-import axios from "axios";
 
 
 export default {
     name: "App",
-    components: {MyButton, MyHeader},
-    data() {
-        return {isPopupOpen: false, isConfirm: false};
-    },
+    components: {MyButton},
     async beforeCreate() {
         this.$store.commit('initialiseVars')
-        if (this.$store.state.subgroupID !== undefined &&
+        if (
+            this.$store.state.subgroupID !== undefined &&
             this.$store.state.subgroupID !== "" &&
-            this.$store.state.subgroupID !== null) {
+            this.$store.state.subgroupID !== null &&
+            this.$store.state.subgroupID === this.$store.state.subgroupID
+        ) {
             this.$router.push('/home')
         } else {
             console.log("subgroupID equals null")
@@ -45,11 +29,6 @@ export default {
     },
     beforeMount() {
         document.title = "Лицей в Цифре"
-    },
-    methods: {
-        openPopup() {
-            this.isPopupOpen = true;
-        }
     }
 }
 </script>
@@ -68,26 +47,6 @@ export default {
     margin: 0 12px;
 }
 
-.block {
-    display: flex;
-    background-color: #fff;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 30px;
-    border-radius: 0 0 16px 16px;
-}
-
-.my-header {
-    margin: 0 12px;
-    padding: 10px;
-    background-color: white;
-    border-radius: 0 0 16px 16px;
-    text-decoration: none;
-}
-
-.menu-symbol {
-    font-size: larger;
-}
 
 body {
     padding: 0;

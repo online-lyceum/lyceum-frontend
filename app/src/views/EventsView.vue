@@ -1,4 +1,5 @@
 <template>
+    <my-header/>
     <div class="button-back">Назад</div>
     <section>
         <h3>День ничего не делания</h3>
@@ -11,8 +12,11 @@
     </section>
 </template>
 <script>
+import MyHeader from "@/components/UI/MyHeader.vue";
+
 export default {
-    name: "EventsView"
+    name: "EventsView",
+    components: {MyHeader}
 }
 </script>
 
@@ -22,6 +26,7 @@ body {
     margin: 0 12px;
     font-family: sans-serif;
 }
+
 header {
     display: flex;
     align-items: center;
@@ -32,40 +37,45 @@ header {
     text-align: center;
     height: 50px;
 }
+
 .button-back {
     display: flex;
     align-items: center;
     justify-content: center;
     background: #6D9773;
-    border-radius:16px;
+    border-radius: 16px;
     margin-top: 30px;
-    height:40px;
+    height: 40px;
     text-align: center;
     font-size: 16px;
-    color:white;
+    color: white;
 }
+
 h3 {
     text-align: center;
     font-size: 24px;
     font-weight: 200;
 }
+
 p {
     font-size: 16px;
     margin: 0 22.54px 10px;
 }
+
 section {
     margin: 30px 0;
-    background:white;
-    border-radius:16px;
+    background: white;
+    border-radius: 16px;
 }
+
 .link {
     display: flex;
     align-items: center;
     justify-content: center;
-    color:white;
+    color: white;
     background: #6D9773;
     text-decoration: none;
-    border-radius:16px;
+    border-radius: 16px;
     text-align: center;
     height: 40px;
 }

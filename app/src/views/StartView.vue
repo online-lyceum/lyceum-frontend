@@ -1,16 +1,18 @@
 <template>
+    <my-header disabled/>
     <div class="home">
         <select-school/>
     </div>
 </template>
 
 <script>
+import MyHeader from "@/components/UI/MyHeader.vue";
 import SelectSchool from "@/components/SelectSchool.vue";
 
 export default {
     name: 'StartView',
     components: {
-        SelectSchool
+        SelectSchool, MyHeader
     },
     beforeMount() {
         this.$store.state.isAnotherClassShow = false
