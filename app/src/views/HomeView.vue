@@ -9,7 +9,7 @@
 <script>
 import LessonList from "@/components/NearestLessonList.vue";
 import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
-import MyHeader from "@/components/UI/MyHeader.vue";
+import MyHeader from "@/components/MyHeader.vue";
 
 export default {
     name: 'HomeView',

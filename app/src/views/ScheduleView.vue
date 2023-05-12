@@ -8,7 +8,7 @@
 <script>
 import MyButton from "@/App.vue";
 import FullSchedule from "@/components/FullSchedule.vue";
-import MyHeader from "@/components/UI/MyHeader.vue";
+import MyHeader from "@/components/MyHeader.vue";
 
 export default {
     name: "ScheduleView",

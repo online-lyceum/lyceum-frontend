@@ -11,7 +11,7 @@
 <script>
 import SelectSubgroup from "@/components/SelectSubgroup.vue";
 import MyButton from "@/components/UI/MyButton.vue";
-import MyHeader from "@/components/UI/MyHeader.vue";
+import MyHeader from "@/components/MyHeader.vue";
 
 export default {
     name: 'HomeView',

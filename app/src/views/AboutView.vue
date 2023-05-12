@@ -5,5 +5,5 @@
     </div>
 </template>
 <script setup>
-import MyHeader from "@/components/UI/MyHeader.vue";
+import MyHeader from "@/components/MyHeader.vue";
 </script>

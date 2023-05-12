@@ -12,7 +12,7 @@
     </section>
 </template>
 <script>
-import MyHeader from "@/components/UI/MyHeader.vue";
+import MyHeader from "@/components/MyHeader.vue";
 
 export default {
     name: "EventsView",

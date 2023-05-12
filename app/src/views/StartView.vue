@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import MyHeader from "@/components/UI/MyHeader.vue";
+import MyHeader from "@/components/MyHeader.vue";
 import SelectSchool from "@/components/SelectSchool.vue";
 
 export default {
