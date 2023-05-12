@@ -1,5 +1,6 @@
 <template>
       <div>
+          <my-header/>
           <full-schedule></full-schedule>
       </div>
 </template>
@@ -7,10 +8,11 @@
 <script>
 import MyButton from "@/App.vue";
 import FullSchedule from "@/components/FullSchedule.vue";
+import MyHeader from "@/components/MyHeader.vue";
 
 export default {
     name: "ScheduleView",
-    components: {FullSchedule, MyButton}
+    components: {MyHeader, FullSchedule, MyButton}
 }
 </script>
 
