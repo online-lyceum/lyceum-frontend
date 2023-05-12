@@ -35,16 +35,17 @@
                                     }"
                             >
                                 {{
-                                    lessonList[i - 1].start_time[j - 1].hour
+                                lessonList[i - 1].start_time[j - 1].hour
                                 }}:{{
                                 lessonList[i - 1].start_time[j - 1].minute < 10 ? '0' : ''
                                 }}{{
-                                    lessonList[i - 1].start_time[j - 1].minute
+                                lessonList[i - 1].start_time[j - 1].minute
                                 }}-{{
-                                    lessonList[i - 1].end_time[j - 1].hour }}:{{
-                                    lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : ''
+                                lessonList[i - 1].end_time[j - 1].hour
+                                }}:{{
+                                lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : ''
                                 }}{{
-                                    lessonList[i - 1].end_time[j - 1].minute
+                                lessonList[i - 1].end_time[j - 1].minute
                                 }}
                                 <br>
                             </span>
@@ -83,8 +84,18 @@ export default {
         lessonList: Array,
     },
     computed: {
+        nowWeekday() {
+            return (this.now.getDay() + 6) % 7
+        },
         lessonStatus() {
             let result = []
+            if (this.nowWeekday !== this.lessonList[0].weekday) {
+                result.push('next')
+                for (let i = 0; i < this.lessonList.length - 1; i++) {
+                    result.push('hr')
+                }
+                return result
+            }
             for (let i = 0; i < this.lessonList.length; i++) {
                 if (this.isCurrentLesson(i)) {
                     result.push('current')
@@ -137,6 +148,12 @@ export default {
             return {hour, minute, second}
         },
         getLessonStatusText(lesson) {
+            if (this.nowWeekday + 1 === lesson.weekday) {
+                return 'Начало завтра'
+            }
+            if (this.nowWeekday !== lesson.weekday) {
+                return 'Начало не скоро'
+            }
             for (let i = 0; i < lesson.start_time.length; i++) {
                 if (!this.isStarted(lesson.start_time[i])) {
                     let beforeStart = this.timeBefore(lesson.start_time[i])
@@ -176,8 +193,7 @@ export default {
             )
         },
         isCurrentTime(weekday, startTime, endTime) {
-
-            let is_current_time = (this.now.weekday + 6) % 7 !== weekday
+            let is_current_time = this.nowWeekday === weekday
             is_current_time &&= this.isStarted(startTime)
             is_current_time &&= !this.isEnded(endTime)
             return is_current_time
