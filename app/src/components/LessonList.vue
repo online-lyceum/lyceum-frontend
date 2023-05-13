@@ -112,7 +112,7 @@ export default {
                 let isEnded
                 if (i > 0) {
                     let last_end_time_index = this.lessonList[i - 1].end_time.length - 1
-                    let end_time = this.lessonList[i].end_time[last_end_time_index]
+                    let end_time = this.lessonList[i - 1].end_time[last_end_time_index]
                     isEnded = this.isEnded(end_time)
                 } else {
                     isEnded = false
