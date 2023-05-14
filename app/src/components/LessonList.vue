@@ -155,7 +155,7 @@ export default {
             return {hour, minute, second}
         },
         getLessonStatusText(lesson) {
-            if (this.nowWeekday + 1 === lesson.weekday) {
+            if ((this.nowWeekday + 1) % 7 === lesson.weekday) {
                 return 'Начало завтра'
             }
             if (this.nowWeekday !== lesson.weekday) {
