@@ -1,5 +1,5 @@
 <template>
-    <div v-if="shown" class="my-card">
+    <div v-if="shown && !isError" class="my-card">
         <p>Установить мобильное приложение?</p>
         <div class="btns">
             <my-button class="button" @click="installPWA()">
@@ -7,6 +7,9 @@
             </my-button>
             <my-button class="button" @click="dismissPrompt()">Нет, спасибо</my-button>
         </div>
+    </div>
+    <div class="my-card" v-if="isError">
+        <p style="padding: 20px">Произошла ошибка, возможно, ваше устройство не поддерживается</p>
     </div>
 </template>
 
@@ -16,7 +19,8 @@ import MyButton from "@/components/UI/MyButton.vue";
 export default {
     components: {MyButton},
     data: () => ({
-        shown: false,
+        shown: true,
+        isError: false
     }),
 
     beforeMount() {
@@ -33,6 +37,11 @@ export default {
         },
 
         installPWA() {
+            if (this.installEvent === undefined){
+                this.dismissPrompt()
+                this.isError = true
+                return
+            }
             this.installEvent.prompt()
             this.installEvent.userChoice.then((choice) => {
                 this.dismissPrompt() // Hide the prompt once the user's clicked
@@ -51,6 +60,7 @@ export default {
     margin-top: 30px;
     background-color: #fff;
     border-radius: 16px;
+    text-align: center;
 }
 
 .btns {
