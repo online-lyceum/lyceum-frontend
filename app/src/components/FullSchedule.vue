@@ -27,39 +27,33 @@
         </div>
         <div class="lesson-list-content">
             <button class="btnDay" :class="{
-                'btnDaySelected' : checkCurrentDay(0) ||  checkCurrentDay(6),
-                'btnDayToday' : checkTodayDay(0) ||  checkTodayDay(6),
-                'btnDay' : !checkCurrentDay(0) ||  !checkCurrentDay(6),
+                'btnDaySelected' : checkCurrentDay(0),
+                'btnDayToday' : checkTodayDay(0),
             }" @click="this.chosenDay = 0; showList()">Пн
             </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(1),
                 'btnDayToday' : checkTodayDay(1),
-                'btnDay' : !checkCurrentDay(1)
             }" @click="this.chosenDay = 1; showList()">Вт
             </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(2),
                 'btnDayToday' : checkTodayDay(2),
-                'btnDay' : !checkCurrentDay(2)
             }" @click="this.chosenDay = 2; showList()">Ср
             </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(3),
                 'btnDayToday' : checkTodayDay(3),
-                'btnDay' : !checkCurrentDay(3)
             }" @click="this.chosenDay = 3; showList()">Чт
             </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(4),
                 'btnDayToday' : checkTodayDay(4),
-                'btnDay' : !checkCurrentDay(4)
             }" @click="this.chosenDay = 4; showList()">Пт
             </button>
             <button class="btnDay" :class="{
                 'btnDaySelected' : checkCurrentDay(5),
                 'btnDayToday' : checkTodayDay(5),
-                'btnDay' : !checkCurrentDay(5)
             }" @click="this.chosenDay = 5; showList()">Сб
             </button>
         </div>

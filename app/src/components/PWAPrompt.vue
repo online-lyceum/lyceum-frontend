@@ -1,11 +1,16 @@
 <template>
-    <div v-if="shown" class="my-card">
+    <div v-if="shown && !isError" class="my-card">
         <p>Установить мобильное приложение?</p>
         <div class="btns">
-            <my-button @click="installPWA()">
-                Да, установить!
+            <my-button class="button" @click="installPWA()">
+                Установить!
             </my-button>
+            <my-button class="button" @click="dismissPrompt()">Нет, спасибо</my-button>
         </div>
+    </div>
+    <div class="my-card" v-if="isError">
+        <p style="padding: 20px">Произошла ошибка, возможно, ваше устройство не поддерживается.
+            <br/>Попробуйте другой браузер</p>
     </div>
 </template>
 
@@ -16,13 +21,13 @@ export default {
     components: {MyButton},
     data: () => ({
         shown: true,
+        isError: false
     }),
 
     beforeMount() {
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault()
             this.installEvent = e
-            this.shown = false
         })
     },
 
@@ -32,6 +37,11 @@ export default {
         },
 
         installPWA() {
+            if (this.installEvent === undefined){
+                this.dismissPrompt()
+                this.isError = true
+                return
+            }
             this.installEvent.prompt()
             this.installEvent.userChoice.then((choice) => {
                 this.dismissPrompt() // Hide the prompt once the user's clicked
@@ -50,19 +60,16 @@ export default {
     margin-top: 30px;
     background-color: #fff;
     border-radius: 16px;
+    text-align: center;
 }
+
 .btns {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
 }
-.btn {
-    width: 50%;
-    padding: 10px 10px;
-    text-align: center;
-    color: #fff;
-    border-radius: 16px;
-    border: none;
-    background-color: #6d9773;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+
+.button {
+    width: 48%;
 }
 </style>

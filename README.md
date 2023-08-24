@@ -1,5 +1,10 @@
 # new_web
 
+## Change directory to app
+```
+cd app
+```
+
 ## Project setup
 ```
 npm install
