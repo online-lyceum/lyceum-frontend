@@ -59,7 +59,6 @@ export default {
 </script>
 
 <style scoped>
-
 .title_box {
     color: white;
     display: flex;

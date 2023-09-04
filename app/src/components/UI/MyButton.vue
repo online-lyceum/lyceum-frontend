@@ -14,18 +14,16 @@ export default {
 
 <style scoped>
 .btn {
-  background: #6D9773;
-  margin: 0;
-  padding: 10px;
-  padding-left: 40px;
-  padding-right: 40px;
   border: none;
-  border-radius: 16px;
-  color: white;
+  margin: 0;
 }
 
 .field-btn {
+  padding: 10px 40px;
+  background: #6D9773;
   text-align: center;
+  border-radius: 16px;
+  color: white;
 }
 
 .btn:disabled {

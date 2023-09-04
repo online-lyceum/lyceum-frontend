@@ -3,6 +3,7 @@ import {createStore} from 'vuex'
 export default createStore({
     state: {
         subgroupID: null,
+        token: null,
         anotherSubgroupID: null,
         TIME_API: (process.env.VUE_APP_TIME_API_URL !== undefined) ? process.env.VUE_APP_TIME_API_URL : '/api',
         nearestDayIndex: null,
@@ -17,6 +18,9 @@ export default createStore({
         async initialiseVars(state) {
             if (localStorage.getItem('subgroupID')) {
                 state.subgroupID = JSON.parse(localStorage.subgroupID)
+            }
+            if (localStorage.getItem('token')) {
+                state.token = JSON.parse(localStorage.token)
             }
         },
         setSubgroupID(state, subgroupID) {
