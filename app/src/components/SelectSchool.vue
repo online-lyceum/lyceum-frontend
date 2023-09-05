@@ -5,14 +5,14 @@
             <h1 class="title">Привет!</h1>
         </div>
         <div class="my-card-store">
-            <div class="my-card" v-for="school in schools" v-bind:key="school.school_id">
+            <div class="my-card" v-for="school in schools" v-bind:key="school.id">
                 <h3 class="lyceum-name">{{ school.name }}</h3>
                 <p style="color: grey;">{{ school.address }}</p>
 
                 <my-button
                         class="button"
-                        @click="$router.push('/schools/' + school.school_id)"
-                        :value="school.school_id"
+                        @click="$router.push('/schools/' + school.id)"
+                        :value="school.id"
                 >
                     Выбрать
                 </my-button>

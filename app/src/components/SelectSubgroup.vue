@@ -152,12 +152,12 @@ export default {
         async loadClasses() {
             try {
                 const res = await axios.get(
-                    `${this.$store.state.TIME_API}/classes`,
+                    `${this.$store.state.TIME_API}/groups`,
                     {
                         params: {school_id: this.schoolID}
                     }
                 );
-                this.classes = res.data.classes;
+                this.classes = res.data;
             } catch (e) {
                 alert('Error');
                 this.classes = []
@@ -168,7 +168,7 @@ export default {
                 `${this.$store.state.TIME_API}/subgroups`,
                 {params: {school_id: this.schoolID}}
             )
-            this.subgroups = res.data.subgroups
+            this.subgroups = res.data
         },
         async selectSubgroup() {
             if (this.subgroupID !== null) {
