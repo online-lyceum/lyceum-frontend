@@ -34,8 +34,8 @@
             >
                 <option
                         v-for="subgroup in subgroupsForClass"
-                        :key="subgroup.subgroup_id"
-                        :value="subgroup.subgroup_id"
+                        :key="subgroup.id"
+                        :value="subgroup.id"
                 >
                     {{ subgroup.name }}
                 </option>
@@ -121,7 +121,7 @@ export default {
         },
 
         async selectClass() {
-            let class_id = "";
+            let group_id = 0;
             this.subgroupID = null;
             this.need_to_select_subgroup = false;
 
@@ -129,17 +129,18 @@ export default {
                 if ((this.class_number === this.classes[i].number) &&
                     (this.class_letter.toUpperCase() ===
                         this.classes[i].letter.toUpperCase())) {
-                    class_id = this.classes[i].class_id
+                  group_id = this.classes[i].id
                 }
             }
-            if (class_id !== "" && class_id !== undefined) {
-                const flt = (subgroup) => (subgroup.class_id === class_id)
+            if (group_id !== 0 && group_id !== undefined) {
+                const flt = (subgroup) => (subgroup.group_id === group_id)
                 this.subgroupsForClass = this.subgroups.filter(flt)
                 if (this.subgroupsForClass.length === 1) {
-                    this.subgroupID = this.subgroupsForClass[0].subgroup_id
+                    this.subgroupID = this.subgroupsForClass[0].id
                     this.need_to_select_subgroup = false;
+                    console.log(this.subgroupsForClass[0])
                 } else if (this.subgroupsForClass.length > 1) {
-                    this.subgroupID = this.subgroupsForClass[0].subgroup_id
+                    this.subgroupID = this.subgroupsForClass[0].id
                     this.need_to_select_subgroup = true;
                 } else {
                     this.subgroupID = null;
