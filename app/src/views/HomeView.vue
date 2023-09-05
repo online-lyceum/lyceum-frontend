@@ -2,12 +2,12 @@
     <div class="home">
         <my-header/>
         <my-upper-block/>
-        <lesson-list/>
+        <nearest-lesson-list/>
     </div>
 </template>
 
 <script>
-import LessonList from "@/components/NearestLessonList.vue";
+import NearestLessonList from "@/components/NearestLessonList.vue";
 import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
 import MyHeader from "@/components/MyHeader.vue";
 
@@ -16,7 +16,7 @@ export default {
     components: {
         MyHeader,
         MyUpperBlock,
-        LessonList
+      NearestLessonList
     },
 }
 </script>
