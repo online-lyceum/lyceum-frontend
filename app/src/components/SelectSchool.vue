@@ -42,8 +42,7 @@ export default {
         async loadSchools() {
             const res = await fetch(`${this.$store.state.TIME_API}/schools`)
             if (res.status === 200) {
-                const json_res = await res.json()
-                this.schools = json_res['schools'];
+              this.schools = await res.json();
             }
         },
         // async isAPIworks() {

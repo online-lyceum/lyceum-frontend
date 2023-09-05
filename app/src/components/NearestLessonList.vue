@@ -24,11 +24,11 @@ export default {
     methods: {
         async loadLessons() {
             this.isLoading = true
-            await axios.get(`${this.$store.state.TIME_API}/lessons/nearest_day`,
+            let date = new Date().toISOString().split('T')[0]
+            await axios.get(`${this.$store.state.TIME_API}/lessons/${date}`,
                 {
                     params: {
-                        subgroup_id: this.$store.state.subgroupID,
-                        do_double: true
+                        subgroup_id: this.$store.state.subgroupID
                     }
                 })
                 .then(
