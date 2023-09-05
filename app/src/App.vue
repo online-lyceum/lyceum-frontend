@@ -26,12 +26,11 @@ export default {
       this.$router.push('/home')
     } else {
       console.log("subgroupID equals null")
-      this.$router.push('/auth')
     }
   },
   async isTokenValid() {
     try {
-      await axios.get(this.$store.state.TIME_API + "/users/me",)
+      await axios.get(this.$store.state.TIME_API + "/users/me")
     } catch (e) {
       console.log(e)
       return false

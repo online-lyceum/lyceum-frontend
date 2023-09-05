@@ -23,6 +23,9 @@ export default createStore({
                 state.token = JSON.parse(localStorage.token)
             }
         },
+        setToken(state, token) {
+            state.token = token
+        },
         setSubgroupID(state, subgroupID) {
             state.subgroupID = subgroupID
         },

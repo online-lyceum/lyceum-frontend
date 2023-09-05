@@ -23,6 +23,11 @@ export default {
       password: null
     }
   },
+  mounted() {
+    if (this.$store.state.token !== undefined) {
+      this.$router.push('/')
+    }
+  },
   methods: {
     async login() {
       let login_data;
@@ -40,7 +45,7 @@ export default {
         return;
       }
       this.$store.commit(
-          "token",
+          "setToken",
           login_data.data.token_type + " " + login_data.data.access_token
       );
       this.$router.push('/home')
