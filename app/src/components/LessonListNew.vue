@@ -2,7 +2,7 @@
   <div class="lesson-list">
     <div
         v-for="i in lessonList.length"
-        :key="lessonList[i - 1].lesson_id[0]"
+        :key="lessonList[i - 1].id"
         class="subject"
         :class="{
                     'next-subject': lessonStatus[i - 1] === 'next',
@@ -24,31 +24,31 @@
           </div>
           <div class="time-subject">
             <time>
-                            <span
-                                v-for="j in lessonList[i - 1].start_time.length"
-                                :class="{
-                                        'current-time': isCurrentTime(
-                                            lessonList[i - 1].weekday,
-                                            lessonList[i - 1].start_time[j - 1],
-                                            lessonList[i - 1].end_time[j - 1]
-                                            )
-                                    }"
-                            >
-                                {{
-                                lessonList[i - 1].start_time[j - 1].hour
-                              }}:{{
-                                lessonList[i - 1].start_time[j - 1].minute < 10 ? '0' : ''
-                              }}{{
-                                lessonList[i - 1].start_time[j - 1].minute
-                              }}-{{
-                                lessonList[i - 1].end_time[j - 1].hour
-                              }}:{{
-                                lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : ''
-                              }}{{
-                                lessonList[i - 1].end_time[j - 1].minute
-                              }}
-                                <br>
-                            </span>
+              <!--                            <span-->
+              <!--                                v-for="j in lessonList[i - 1].start_time.length"-->
+              <!--                                :class="{-->
+              <!--                                        'current-time': isCurrentTime(-->
+              <!--                                            lessonList[i - 1].weekday,-->
+              <!--                                            lessonList[i - 1].start_time[j - 1],-->
+              <!--                                            lessonList[i - 1].end_time[j - 1]-->
+              <!--                                            )-->
+              <!--                                    }"-->
+              <!--                            >-->
+              <!--                                {{-->
+              <!--                                lessonList[i - 1].start_time[j - 1].hour-->
+              <!--                              }}:{{-->
+              <!--                                lessonList[i - 1].start_time[j - 1].minute < 10 ? '0' : ''-->
+              <!--                              }}{{-->
+              <!--                                lessonList[i - 1].start_time[j - 1].minute-->
+              <!--                              }}-{{-->
+              <!--                                lessonList[i - 1].end_time[j - 1].hour-->
+              <!--                              }}:{{-->
+              <!--                                lessonList[i - 1].end_time[j - 1].minute < 10 ? '0' : ''-->
+              <!--                              }}{{-->
+              <!--                                lessonList[i - 1].end_time[j - 1].minute-->
+              <!--                              }}-->
+              <!--                                <br>-->
+              <!--                            </span>-->
             </time>
           </div>
         </div>
@@ -85,64 +85,12 @@ export default {
     alwaysDisplayNext: {
       type: Boolean,
       default: false
-    }
+    },
   },
   computed: {
-    nowWeekday() {
-      return (this.now.getDay() + 6) % 7
-    },
     lessonStatus() {
-      let result = []
-      if (this.nowWeekday !== this.lessonList[0].weekday) {
-        result.push((this.alwaysDisplayNext) ? 'next' : 'hr')
-        for (let i = 0; i < this.lessonList.length - 1; i++) {
-          result.push('hr')
-        }
-        if (result[result.length - 1] === 'hr') {
-          result[result.length - 1] = ''
-        }
-        return result
-      }
-      for (let i = 0; i < this.lessonList.length; i++) {
-        if (this.isCurrentLesson(i)) {
-          result.push('current')
-          continue
-        }
-        let isStarted = this.isStarted(this.lessonList[i].start_time[0])
-        let isEnded
-        if (i > 0) {
-          let last_end_time_index = this.lessonList[i - 1].end_time.length - 1
-          let end_time = this.lessonList[i - 1].end_time[last_end_time_index]
-          isEnded = this.isEnded(end_time)
-        } else {
-          isEnded = false
-        }
-        if (i === 0) {
-          if (!isStarted && !isEnded) {
-            result.push('next')
-            continue
-          }
-        } else {
-          let last_end_time_index = this.lessonList[i - 1].end_time.length - 1
-          let end_time = this.lessonList[i - 1].end_time[last_end_time_index]
-          let isPreviousEnded = this.isEnded(end_time)
-          if (isPreviousEnded && !isStarted) {
-            result.push('next')
-            continue
-          }
-        }
-        result.push('hr')
-      }
-      for (let i = 1; i < this.lessonList.length; i++) {
-        if (result[i] === 'current' || result[i] === 'next') {
-          result[i - 1] = ''
-        }
-      }
-      if (result[result.length - 1] === 'hr') {
-        result[result.length - 1] = ''
-      }
-      return result
-    },
+
+    }
   },
   methods: {
     timeBefore(someTime) {
@@ -191,19 +139,24 @@ export default {
     isStarted(startTime) {
       return this.now.getHours() * 60 + this.now.getMinutes() >= startTime.hour * 60 + startTime.minute
     },
+
     isCurrentLesson(index) {
       let lesson = this.lessonList[index]
+      let lessonDay = new Date(lesson.start_dt)
+      let today = new Date()
+      let isLessonDayToday = lessonDay.getFullYear() === lessonDay.getFullYear()
+      isLessonDayToday &&= lessonDay.getMonth() === today.getMonth()
+      isLessonDayToday &&= lessonDay.getDate() === today.getDate()
       return this.isCurrentTime(
-          lesson.weekday,
-          lesson.start_time[0],
-          lesson.end_time[lesson.end_time.length - 1]
+          isLessonDayToday,
+          lesson.start_dt.split('T')[1].slice(0, 5),
+          lesson.end_dt.split('T')[1].slice(0, 5)
       )
     },
-    isCurrentTime(weekday, startTime, endTime) {
-      let is_current_time = this.nowWeekday === weekday
-      is_current_time &&= this.isStarted(startTime)
-      is_current_time &&= !this.isEnded(endTime)
-      return is_current_time
+    isCurrentTime(date, startTime, endTime) {
+      date &&= this.isStarted(startTime)
+      date &&= !this.isEnded(endTime)
+      return date
 
     }
   },
