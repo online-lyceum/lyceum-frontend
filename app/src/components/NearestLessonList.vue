@@ -33,13 +33,14 @@ export default {
           })
           .then(
               async (res) => {
-                this.lessonList = await res.data.lessons
-                this.$store.commit('setNearestDayIndex', this.lessonList[0].weekday)
+                this.lessonList = await res.data
+                // this.$store.commit('setNearestDayIndex', this.lessonList[0].weekday)
               })
           .catch(
-              () => {
-                this.$store.commit('logout')
-                this.$router.push('/')
+              (e) => {
+                // this.$store.commit('logout')
+                // this.$router.push('/')
+                console.log(e)
               }
           )
       this.isLoading = false
