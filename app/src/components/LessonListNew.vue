@@ -82,15 +82,9 @@ export default {
   },
   props: {
     lessonList: Array,
-    alwaysDisplayNext: {
-      type: Boolean,
-      default: false
-    },
   },
   computed: {
-    lessonStatus() {
-
-    }
+    lessonStatus() {}
   },
   methods: {
     timeBefore(someTime) {
@@ -160,6 +154,9 @@ export default {
 
     }
   },
+  mounted() {
+    console.log(this.lessonList)
+  }
 }
 </script>
 

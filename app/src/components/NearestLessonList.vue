@@ -1,7 +1,7 @@
 <template>
   <div>
     <my-loader v-if="isLoading"></my-loader>
-    <lesson-list always-display-next :lesson-list="lessonList"/>
+    <lesson-list :lesson-list="lessonList"/>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import MyEvent from "@/components/UI/MyEvent.vue";
 import MyButton from "@/components/UI/MyButton.vue";
 import MyUpperBlock from "@/components/UI/MyUpperBlock.vue";
 import MyLoader from "@/components/UI/MyLoader.vue";
-import LessonList from "@/components/LessonList.vue";
+import LessonList from "@/components/LessonListNew.vue";
 
 export default {
   components: {LessonList, MyLoader, MyUpperBlock, MyButton, MyEvent},
@@ -25,7 +25,7 @@ export default {
     async loadLessons() {
       this.isLoading = true
       let date = new Date().toISOString().split('T')[0]
-      await axios.get(`${this.$store.state.TIME_API}/lessons/${date}`,
+      await axios.get(`${this.$store.state.TIME_API}/lessons/2023-09-05`,
           {
             params: {
               subgroup_id: this.$store.state.subgroupID
